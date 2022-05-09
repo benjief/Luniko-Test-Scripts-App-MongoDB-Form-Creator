@@ -1,0 +1,59 @@
+.MuiBox-root {
+    width: 100% !important;
+    display: flex;
+    margin-bottom: 15px !important;
+    /* margin-top: 5px; */
+}
+
+.material-text-field {
+    width: 100% !important;
+}
+
+.MuiFormControl-root {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.MuiOutlinedInput-root {
+    min-height: 50px !important;
+    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
+    font-size: 11pt !important;
+}
+
+.test-script-description .MuiOutlinedInput-root {
+    min-height: 200px !important;
+}
+
+.MuiOutlinedInput-input {
+    align-self: flex-start !important;
+    /* position: relative; */
+    /* top: -2.5px; */
+}
+
+.MuiInput-root input {
+    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
+}
+
+.MuiInputLabel-root {
+    top: -2.5px;
+    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
+    z-index: 1 !important;
+}
+
+.MuiError, .Mui-error {
+    color: #d32f2f !important;
+}
+
+.Mui-error .MuiOutlinedInput-notchedOutline {
+    border-color: #d32f2f !important;
+}
+
+/* .MuiInputLabel-shrink {
+    top: 0px !important;
+    color: var(--lunikoBlue) !important;
+} */
+
+/* .MuiOutlinedInput-notchedOutline {
+    border-color: var(--lunikoBlue) !important;
+} */

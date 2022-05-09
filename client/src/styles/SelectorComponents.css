@@ -1,0 +1,121 @@
+.MuiAutocomplete-root button {
+    box-shadow: none !important;
+}
+
+.MuiInputLabel-root {
+    display: flex !important;
+    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 10.5pt !important;
+    color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.MuiInputLabel-shrink {
+    font-size: 12pt !important;
+    background-color: var(--lunikoOrange);
+    margin: 0 !important;
+    padding-right: 5px !important;
+    /* margin-left: 5px !important;
+    margin-right: 1px !important; */
+    transform: translate(14px, -8.5px) scale(0.75) !important;
+}
+
+.enter-valid-load-sheet-name .MuiInputLabel-shrink {
+    background-color: var(--lunikoDarkGrey) !important;
+}
+
+.MuiInputLabel-root.Mui-error {
+    color: #d32f2f !important;
+}
+
+.MuiAutocomplete-input {
+    /* background-color: white !important; */
+    box-shadow: none !important;
+    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
+    font-size: 11pt !important;
+    color: rgba(83, 83, 83, 0.767) !important;
+    /* position: relative !important; */
+    /* top: -1.5px !important; */
+}
+
+.MuiAutocomplete-option {
+    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
+    font-size: 11pt !important;
+}
+
+.MuiAutocomplete-noOptions {
+    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
+    font-size: 11pt !important;
+    min-height: 64px !important;
+    align-self: center !important;
+    justify-self: center !important;
+    position: relative !important;
+    top: 5px !important;
+    border: none !important;
+}
+
+/* 
+.additional-processing ul {
+    height: 10px !important;
+    overflow-y: scroll;
+} */
+
+.MuiAutocomplete-popper[data-popper-reference-hidden] {
+    visibility: hidden;
+    /* opacity: 0; */
+    pointer-events: none;
+    /* transition: 100ms !important; */
+}
+
+.MuiAutocomplete-listbox {
+    max-height: 185px !important;
+}
+
+/* .MuiAutocomplete-popper[data-popper-escaped] {
+    visibility: hidden !important;
+    pointer-events: none !important;
+} */
+
+.MuiAutocomplete-root {
+    margin-bottom: 15px !important;
+}
+
+.MuiAutocomplete-input {
+    color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.MuiButtonBase-root {
+    height: 27px !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+    border-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.Mui-disabled .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(0, 0, 0, 0.38) !important;
+}
+
+/* .css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline,
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline,
+.css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+    border-color: #d32f2f !important;
+} */
+
+.MuiCheckbox-colorPrimary {
+    color: var(--lunikoBlue) !important;
+}
+
+.MuiTypography-root {
+    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
+    font-size: 11pt !important;
+    text-align: left;
+}
+
+.MuiFormControlLabel-root {
+    margin: 0 !important;
+}
+
+.Mui-disabled {
+    color: rgba(0, 0, 0, 0.38) !important;
+}

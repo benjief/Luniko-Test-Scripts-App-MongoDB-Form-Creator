@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes as Switch } from "react-router-dom"
-import LandingPage from "./pages/LandingPage";
+import CreateOrEditTestScript from "./pages/CreateOrEditTestScript";
 import './App.css';
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/" element={<LandingPage />} />
+          <Route exact path="/" element={<CreateOrEditTestScript />} />
         </Switch>
       </Router>
     </div>
