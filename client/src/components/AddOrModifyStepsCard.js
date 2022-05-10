@@ -41,6 +41,7 @@ export default function AddOrModifyStepsCard({
     existingSteps = [],
     addStep = false,
     addStepButtonDisabled = false,
+    updateStepDescription = {},
     goBack = false,
     displayFadingBalls = false
 }) {
@@ -48,9 +49,7 @@ export default function AddOrModifyStepsCard({
     const [addStepButtonColor, setAddStepButtonColor] = React.useState("var(--lunikoBlue)");
 
     const handleOnChange = (returnedObject) => {
-        const objectToReturn = { value: returnedObject.value, field: returnedObject.field };
-        const stringFunction = returnedObject.field + "(objectToReturn)";
-        eval(stringFunction);
+        updateStepDescription(returnedObject);
     }
 
     const handleAddStep = () => {
@@ -65,9 +64,10 @@ export default function AddOrModifyStepsCard({
         if (!addStepButtonDisabled) {
             setAddStepButtonColor("var(--lunikoBlue)");
         } else {
+            console.log("disabled");
             setAddStepButtonColor("#BFBFBF");
         }
-    }, [addStepButtonColor]);
+    }, [addStepButtonDisabled, addStepButtonColor]);
 
     return (
         <Card
@@ -116,7 +116,8 @@ export default function AddOrModifyStepsCard({
                                 return <ModifiableStep
                                     key={key}
                                     stepNumber={val.stepNumber}
-                                    stepDescription={val.stepDescription}>
+                                    stepDescription={val.stepDescription}
+                                    modify={handleOnChange}>
                                 </ModifiableStep>
                             })
                             : <div className="no-steps-placeholder">

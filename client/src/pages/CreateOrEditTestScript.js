@@ -66,6 +66,19 @@ function CreateOrEditTestScript() {
         }
     }
 
+    const handleUpdateStepDescription = (updateInfo) => {
+        const stepNumber = updateInfo["stepNumber"];
+        const updatedDescription = updateInfo["stepDescription"];
+        let copyOfSteps = testScriptSteps;
+        let stepToUpdate = copyOfSteps.filter(obj => {
+            return obj["stepNumber"] === stepNumber
+        });
+        stepToUpdate = stepToUpdate[0];
+        let indexOfStepToUpdate = copyOfSteps.indexOf(stepToUpdate);
+        stepToUpdate["stepDescription"] = updatedDescription;
+        setTestScriptSteps([...copyOfSteps]);
+    }
+
     const handleSubmit = (submitted) => {
         if (submitted) {
             setDisplayFadingBalls(true);
@@ -85,13 +98,14 @@ function CreateOrEditTestScript() {
             } else {
                 setSubmitButtonDisabled(true);
             }
-            if (testScriptSteps.length && !testScriptSteps.slice(-1)[0]["stepDescription"].trim.length) {
+            if (testScriptSteps.length && !testScriptSteps.slice(-1)[0]["stepDescription"].trim().length) {
                 setAddStepButtonDisabled(true);
             } else {
                 setAddStepButtonDisabled(false);
             }
+            console.log(addStepButtonDisabled);
         }
-    }, [rendering, formProps, testScriptSteps]);
+    }, [rendering, formProps, testScriptSteps, addStepButtonDisabled]);
 
     return (
         rendering
@@ -124,6 +138,7 @@ function CreateOrEditTestScript() {
                                     existingSteps={testScriptSteps}
                                     addStep={handleAddStep}
                                     addStepButtonDisabled={addStepButtonDisabled}
+                                    updateStepDescription={handleUpdateStepDescription}
                                     goBack={handleChangeCard}>
                                 </AddOrModifyStepsCard>
                             </div>
