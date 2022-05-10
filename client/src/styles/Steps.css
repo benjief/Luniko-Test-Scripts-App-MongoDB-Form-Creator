@@ -1,0 +1,38 @@
+.step-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    /* align-items: center; */
+    margin-bottom: 20px;
+}
+
+.step-number {
+    min-width: 11.5%;
+    position: relative;
+    top: 17px;
+}
+
+.step-description {
+    min-width: 80%;
+}
+
+.remove-step {
+    min-width: 8.5%;
+    position: relative;
+    top: 17px;
+}
+
+.step-description .MuiBox-root {
+    margin-bottom: 0 !important;
+    /* position: relative; */
+    /* top: 11px; */
+}
+
+img {
+    width: 25px;
+}
+
+.no-steps-placeholder {
+    font-size: 12pt;
+    margin-bottom: 25px;
+}

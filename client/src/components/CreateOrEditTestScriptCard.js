@@ -42,6 +42,7 @@ export default function CreateOrEditTestScriptCard({
     submittedOwnerLastName = "",
     ownerEmail = "",
     submittedOwnerEmail = "",
+    addOrModifySteps = false,
     submitted = false,
     submitButtonDisabled = true,
     displayFadingBalls = false
@@ -53,6 +54,10 @@ export default function CreateOrEditTestScriptCard({
         const objectToReturn = { value: returnedObject.value, field: returnedObject.field };
         const stringFunction = returnedObject.field + "(objectToReturn)";
         eval(stringFunction);
+    }
+
+    const handleAddOrModifySteps = () => {
+        addOrModifySteps(true);
     }
 
     const handleSubmit = () => {
@@ -77,7 +82,7 @@ export default function CreateOrEditTestScriptCard({
                 borderRadius: "10px",
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
                 transition: "0.5s",
-                backgroundColor: "var(--lunikoOrange)",
+                backgroundColor: "var(--lunikoDarkGrey)",
                 marginBottom: "20px"
             }}>
             <div className="card-content">
@@ -175,6 +180,11 @@ export default function CreateOrEditTestScriptCard({
                             showCharCounter={false}
                             field="ownerEmail" >
                         </MaterialTextField>
+                        <button
+                            className="add-or-modify-steps-button"
+                            onClick={handleAddOrModifySteps}>
+                            Add/Modify Steps
+                        </button>
                         <button
                             className="submit-test-script-button"
                             onClick={handleSubmit}

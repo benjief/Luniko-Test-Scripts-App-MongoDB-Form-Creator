@@ -25,6 +25,10 @@
     min-height: 200px !important;
 }
 
+.step-description .MuiOutlinedInput-root {
+    min-height: 150px !important;
+}
+
 .MuiOutlinedInput-input {
     align-self: flex-start !important;
     /* position: relative; */
@@ -36,7 +40,7 @@
 }
 
 .MuiInputLabel-root {
-    top: -2.5px;
+    top: 2px !important;
     font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
     z-index: 1 !important;
 }

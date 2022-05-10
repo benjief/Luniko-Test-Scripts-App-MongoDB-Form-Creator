@@ -9,12 +9,8 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// import MaterialSingleSelect from './MaterialSingleSelect';
-// import MaterialSingleSelectFreeSolo from './MaterialSingleSelectFreeSolo';
-// import MaterialTextField from './MaterialTextField';
-// import MaterialMultiSelect from './MaterialMultiSelect';
-// import MaterialMultiSelectFreeSolo from './MaterialMultiSelectFreeSolo';
-// import MaterialCheckBox from './MaterialCheckBox';
+import MaterialTextField from './MaterialTextField';
+import ModifiableStep from './ModifiableStep';
 import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 
 // const ExpandMore = styled((props) => {
@@ -28,34 +24,50 @@ import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 //     }),
 // }));
 
-export default function AddTestScriptStepsCard({
-    testScriptName = "",
-    testScriptDescription = "",
-    ownerFirstName = "",
-    ownerLastName = "",
-    ownerEmail = "",
-    submitted = false,
-    submitButtonDisabled = true,
-    // displayFadingBalls = false
+export default function AddOrModifyStepsCard({
+    // testScriptName = "",
+    // submittedTestScriptName = "",
+    // invalidTestScriptNames = [], // TODO: be careful with this and the above prop
+    // testScriptDescription = "",
+    // submittedTestScriptDescription = "",
+    // testScriptPrimaryWorkstream = "",
+    // submittedTestScriptPrimaryWorkstream = "",
+    // ownerFirstName = "",
+    // submittedOwnerFirstName = "",
+    // ownerLastName = "",
+    // submittedOwnerLastName = "",
+    // ownerEmail = "",
+    // submittedOwnerEmail = "",
+    existingSteps = [],
+    addStep = false,
+    addStepButtonDisabled = false,
+    goBack = false,
+    displayFadingBalls = false
 }) {
     const [expanded, setExpanded] = React.useState(true);
-    const [submitButtonColor, setSubmitButtonColor] = React.useState("#BFBFBF");
+    const [addStepButtonColor, setAddStepButtonColor] = React.useState("var(--lunikoBlue)");
 
-    const handleOnChangeCheck = (checkedFromCheckbox) => {
-        checked(checkedFromCheckbox);
+    const handleOnChange = (returnedObject) => {
+        const objectToReturn = { value: returnedObject.value, field: returnedObject.field };
+        const stringFunction = returnedObject.field + "(objectToReturn)";
+        eval(stringFunction);
     }
 
-    const handleSubmitChecklist = () => {
-        submitted(true);
+    const handleAddStep = () => {
+        addStep(true);
+    }
+
+    const handleGoBack = () => {
+        goBack(true);
     }
 
     React.useEffect(() => {
-        if (!submitButtonDisabled) {
-            setSubmitButtonColor("var(--lunikoBlue)");
+        if (!addStepButtonDisabled) {
+            setAddStepButtonColor("var(--lunikoBlue)");
         } else {
-            setSubmitButtonColor("#BFBFBF");
+            setAddStepButtonColor("#BFBFBF");
         }
-    }, [submitButtonDisabled]);
+    }, [addStepButtonColor]);
 
     return (
         <Card
@@ -67,7 +79,7 @@ export default function AddTestScriptStepsCard({
                 borderRadius: "10px",
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
                 transition: "0.5s",
-                backgroundColor: "var(--lunikoOrange)",
+                backgroundColor: "var(--lunikoDarkGrey)",
                 marginBottom: "20px"
             }}>
             <div className="card-content">
@@ -82,7 +94,7 @@ export default function AddTestScriptStepsCard({
                     //         {statusAbbreviation}
                     //     </Avatar>
                     // }
-                    title={<strong>Pre-Conversion Checklist</strong>}
+                    title={<strong>Test Script Steps</strong>}
                 />
                 {/* < CardActions
                 disableSpacing
@@ -99,39 +111,29 @@ export default function AddTestScriptStepsCard({
             </CardActions > */}
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
-                        {/* <Typography
-                        paragraph>
-                        <strong>Updatable Fields</strong>
-                    </Typography> */}
-                        <MaterialTextField
-                            label="Test Script Name"
-                            characterLimit={100}
-                            placeholder="Test Script Name"
-                            inputValue={handleOnChange} // TODO
-                            multiline={false}
-                            required={true}
-                            showCharCounter={true}
-                            requiresValidation={true}
-                            invalidInputs={invalidTestScriptNames}
-                            invalidInputMsg="Test script name already exists" >
-                        </MaterialTextField>
-                        {/* <button
-                            className="submit-checklist-button"
-                            onClick={handleSubmitChecklist}
-                            disabled={submitButtonDisabled}
-                            style={{ backgroundColor: submitButtonColor }}>
-                            {displayFadingBalls ?
-                                <div className="fading-balls-container">
-                                    <FadingBalls
-                                        className="spinner"
-                                        color="white"
-                                        width="7px"
-                                        height="7px"
-                                        duration="0.5s"
-                                    />
-                                </div> :
-                                <p>Submit</p>}
-                        </button> */}
+                        {existingSteps.length
+                            ? existingSteps.map((val, key) => {
+                                return <ModifiableStep
+                                    key={key}
+                                    stepNumber={val.stepNumber}
+                                    stepDescription={val.stepDescription}>
+                                </ModifiableStep>
+                            })
+                            : <div className="no-steps-placeholder">
+                                You haven't added any steps yet!
+                            </div>}
+                        <button
+                            className="add-step-button"
+                            onClick={handleAddStep}
+                            disabled={addStepButtonDisabled}
+                            style={{ backgroundColor: addStepButtonColor }}>
+                            Add Step
+                        </button>
+                        <button
+                            className="back-button"
+                            onClick={handleGoBack}>
+                            Back
+                        </button>
                     </CardContent>
                 </Collapse>
             </div>

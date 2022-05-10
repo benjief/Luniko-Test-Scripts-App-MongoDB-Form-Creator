@@ -40,7 +40,7 @@ function NavBar() {
             light
         >
             <NavbarBrand href="/">
-                <img className="test" src={require("../img/logo_exp.png")} alt="Luniko"></img>
+                <img src={require("../img/logo_exp.png")} alt="Luniko"></img>
             </NavbarBrand>
             {/* <NavbarToggler
                 onClick={() => { setIsOpen(!isOpen) }}
