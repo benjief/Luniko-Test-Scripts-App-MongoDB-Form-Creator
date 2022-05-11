@@ -8,9 +8,12 @@ export default function ModifiableStep({
     // existingStepDescription = "",
     modify = {},
     remove = {},
-    removeDisabled = false
+    removeDisabled = true
 }) {
-    const [removeButtonImg, setRemoveButtonImg] = React.useState("remove_icon_active.png");
+    const [removeButtonImg, setRemoveButtonImg] = React.useState("remove_icon_disabled.png");
+    const [opacity, setOpacity] = React.useState("0%");
+    const [height, setHeight] = React.useState(stepNumber === 1 ? "30px" : "0");
+    const [marginBottom, setMarginBottom] = React.useState("0");
 
     const handleOnChange = (returnedObject) => {
         const updatedDescription = returnedObject.value;
@@ -20,12 +23,23 @@ export default function ModifiableStep({
 
     const handleRemove = () => {
         if (!removeDisabled) {
-            remove({ stepNumber: stepNumber });
-
+            setOpacity("0%");
+            setTimeout(() => {
+                setMarginBottom("0");
+                setHeight("0");
+            }, 500);
+            setTimeout(() => {
+                remove({ stepNumber: stepNumber });
+            }, 1000);
         }
     }
 
     React.useEffect(() => {
+        setHeight("172.91px");
+        setMarginBottom("20px");
+        setTimeout(() => {
+            setOpacity("100%");
+        }, 300);
         if (!removeDisabled) {
             setRemoveButtonImg("remove_icon_active.png");
         } else {
@@ -34,7 +48,7 @@ export default function ModifiableStep({
     }, [removeDisabled, removeButtonImg]);
 
     return (
-        <div className="step-container">
+        <div className="step-container" style={{ opacity: opacity, height: height, marginBottom: marginBottom }}>
             <div className="step-number">
                 Step {stepNumber}
             </div>

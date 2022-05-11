@@ -43,7 +43,7 @@ export default function AddOrModifyStepsCard({
     addStepButtonDisabled = false,
     updateStepDescription = {},
     removeStep = {},
-    removeStepDisabled = false,
+    removeStepDisabled = true,
     goBack = false,
     displayFadingBalls = false
 }) {

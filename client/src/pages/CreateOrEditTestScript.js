@@ -28,7 +28,7 @@ function CreateOrEditTestScript() {
     const [testScriptSteps, setTestScriptSteps] = useState([]);
     const [addOrModifySteps, setAddOrModifySteps] = useState(false);
     const [addStepButtonDisabled, setAddStepButtonDisabled] = useState(false);
-    const [removeStepButtonDisabled, setRemoveStepButtonDisabled] = useState(false);
+    const [removeStepButtonDisabled, setRemoveStepButtonDisabled] = useState(true);
     const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
     const [displayFadingBalls, setDisplayFadingBalls] = useState(false);
 
