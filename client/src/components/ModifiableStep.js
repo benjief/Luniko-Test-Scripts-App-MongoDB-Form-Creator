@@ -1,3 +1,4 @@
+import { display } from '@mui/system';
 import * as React from 'react';
 import MaterialTextField from './MaterialTextField';
 
@@ -6,17 +7,31 @@ export default function ModifiableStep({
     stepDescription = "",
     // existingStepDescription = "",
     modify = {},
-    remove = {}
+    remove = {},
+    removeDisabled = false
 }) {
+    const [removeButtonImg, setRemoveButtonImg] = React.useState("remove_icon_active.png");
+
     const handleOnChange = (returnedObject) => {
-        const newStepDescription = returnedObject.value;
-        const objectToReturn = { stepNumber: stepNumber, stepDescription: newStepDescription }
+        const updatedDescription = returnedObject.value;
+        const objectToReturn = { stepNumber: stepNumber, stepDescription: updatedDescription }
         modify(objectToReturn);
     }
 
     const handleRemove = () => {
-        remove({ stepNumber: stepNumber });
+        if (!removeDisabled) {
+            remove({ stepNumber: stepNumber });
+
+        }
     }
+
+    React.useEffect(() => {
+        if (!removeDisabled) {
+            setRemoveButtonImg("remove_icon_active.png");
+        } else {
+            setRemoveButtonImg("remove_icon_disabled.png");
+        }
+    }, [removeDisabled, removeButtonImg]);
 
     return (
         <div className="step-container">
@@ -36,8 +51,11 @@ export default function ModifiableStep({
                 </MaterialTextField>
             </div>
             <div className="remove-step">
-                <img src={require("../img/remove_icon_active.png")} alt="Remove Step"></img>
+                <img src={require("../img/" + removeButtonImg)}
+                    alt="Remove Step"
+                    onClick={handleRemove}>
+                </img>
             </div>
-        </div>
+        </div >
     );
 }

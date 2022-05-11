@@ -5,6 +5,7 @@ import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
 import "../styles/LandingPage.css";
 import CreateOrEditTestScriptCard from "../components/CreateOrEditTestScriptCard";
 import AddOrModifyStepsCard from "../components/AddOrModifyStepsCard";
+import { v4 as uuidv4 } from "uuid";
 import "../styles/CreateOrEditTestScript.css";
 import "../styles/InputComponents.css";
 import "../styles/CardComponents.css";
@@ -27,6 +28,7 @@ function CreateOrEditTestScript() {
     const [testScriptSteps, setTestScriptSteps] = useState([]);
     const [addOrModifySteps, setAddOrModifySteps] = useState(false);
     const [addStepButtonDisabled, setAddStepButtonDisabled] = useState(false);
+    const [removeStepButtonDisabled, setRemoveStepButtonDisabled] = useState(false);
     const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
     const [displayFadingBalls, setDisplayFadingBalls] = useState(false);
 
@@ -59,7 +61,8 @@ function CreateOrEditTestScript() {
         if (addStep) {
             console.log("adding step");
             let stepCount = testScriptSteps.length;
-            let newStep = { stepNumber: stepCount + 1, stepDescription: "" };
+            let uniqueID = uuidv4();
+            let newStep = { stepNumber: stepCount + 1, stepDescription: "", stepID: uniqueID };
             let tempArray = testScriptSteps;
             tempArray.push(newStep);
             setTestScriptSteps([...tempArray]);
@@ -79,6 +82,27 @@ function CreateOrEditTestScript() {
         setTestScriptSteps([...copyOfSteps]);
     }
 
+    const handleRemoveStep = async (stepInfo) => {
+        const stepNumber = stepInfo["stepNumber"];
+        let copyOfSteps = testScriptSteps;
+        copyOfSteps = copyOfSteps.filter(obj => {
+            return obj["stepNumber"] !== stepNumber
+        });
+        if (testScriptSteps.length) {
+            copyOfSteps = await updateStepNumbers(copyOfSteps, stepNumber);
+        }
+        console.log(copyOfSteps);
+        setTestScriptSteps([...copyOfSteps]);
+    }
+
+    const updateStepNumbers = (listOfSteps, startingStepNumber) => {
+        console.log("updating steps");
+        for (let i = startingStepNumber - 1; i < listOfSteps.length; i++) {
+            listOfSteps[i]["stepNumber"]--;
+        }
+        return listOfSteps;
+    }
+
     const handleSubmit = (submitted) => {
         if (submitted) {
             setDisplayFadingBalls(true);
@@ -92,21 +116,19 @@ function CreateOrEditTestScript() {
         } else {
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
-            if (formProps["testScriptName"] !== "" && formProps["testScriptDescription"] !== "" && formProps["testScriptPrimaryWorkstream"] !== ""
-                && formProps["ownerFirstName"] !== "" && formProps["ownerLastName"] !== "" && formProps["ownerEmail"] !== "") {
-                setSubmitButtonDisabled(false);
-            } else {
-                setSubmitButtonDisabled(true);
-            }
-            if (testScriptSteps.length && !testScriptSteps.slice(-1)[0]["stepDescription"].trim().length) {
-                setAddStepButtonDisabled(true);
-            } else {
-                setAddStepButtonDisabled(false);
-            }
-            console.log(addStepButtonDisabled);
+            (formProps["testScriptName"] !== "" && formProps["testScriptDescription"] !== "" && formProps["testScriptPrimaryWorkstream"] !== ""
+                && formProps["ownerFirstName"] !== "" && formProps["ownerLastName"] !== "" && formProps["ownerEmail"] !== "")
+                ? setSubmitButtonDisabled(false)
+                : setSubmitButtonDisabled(true);
+            testScriptSteps.length && !testScriptSteps.slice(-1)[0]["stepDescription"].trim().length
+                ? setAddStepButtonDisabled(true)
+                : setAddStepButtonDisabled(false);
+            testScriptSteps.length === 1
+                ? setRemoveStepButtonDisabled(true)
+                : setRemoveStepButtonDisabled(false);
+            // TODO: look into abstracting functions in useEffect hook... can this be done?
         }
     }, [rendering, formProps, testScriptSteps, addStepButtonDisabled]);
-
     return (
         rendering
             ? <div className="loading-spinner">
@@ -139,6 +161,8 @@ function CreateOrEditTestScript() {
                                     addStep={handleAddStep}
                                     addStepButtonDisabled={addStepButtonDisabled}
                                     updateStepDescription={handleUpdateStepDescription}
+                                    removeStep={handleRemoveStep}
+                                    removeStepDisabled={removeStepButtonDisabled}
                                     goBack={handleChangeCard}>
                                 </AddOrModifyStepsCard>
                             </div>

@@ -42,6 +42,8 @@ export default function AddOrModifyStepsCard({
     addStep = false,
     addStepButtonDisabled = false,
     updateStepDescription = {},
+    removeStep = {},
+    removeStepDisabled = false,
     goBack = false,
     displayFadingBalls = false
 }) {
@@ -56,6 +58,10 @@ export default function AddOrModifyStepsCard({
         addStep(true);
     }
 
+    const handleRemoveStep = (returnedObject) => {
+        removeStep(returnedObject);
+    }
+
     const handleGoBack = () => {
         goBack(true);
     }
@@ -64,7 +70,6 @@ export default function AddOrModifyStepsCard({
         if (!addStepButtonDisabled) {
             setAddStepButtonColor("var(--lunikoBlue)");
         } else {
-            console.log("disabled");
             setAddStepButtonColor("#BFBFBF");
         }
     }, [addStepButtonDisabled, addStepButtonColor]);
@@ -112,12 +117,14 @@ export default function AddOrModifyStepsCard({
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
                         {existingSteps.length
-                            ? existingSteps.map((val, key) => {
+                            ? existingSteps.map((step) => {
                                 return <ModifiableStep
-                                    key={key}
-                                    stepNumber={val.stepNumber}
-                                    stepDescription={val.stepDescription}
-                                    modify={handleOnChange}>
+                                    key={step.stepID}
+                                    stepNumber={step.stepNumber}
+                                    stepDescription={step.stepDescription}
+                                    modify={handleOnChange}
+                                    remove={handleRemoveStep}
+                                    removeDisabled={removeStepDisabled}>
                                 </ModifiableStep>
                             })
                             : <div className="no-steps-placeholder">

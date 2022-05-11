@@ -7,9 +7,9 @@
 }
 
 .step-number {
-    min-width: 11.5%;
+    min-width: 11.7%;
     position: relative;
-    top: 17px;
+    top: 16.5px;
 }
 
 .step-description {
@@ -17,9 +17,9 @@
 }
 
 .remove-step {
-    min-width: 8.5%;
+    min-width: 8.3%;
     position: relative;
-    top: 17px;
+    top: 16.5px;
 }
 
 .step-description .MuiBox-root {
@@ -29,7 +29,8 @@
 }
 
 img {
-    width: 25px;
+    width: 22px;
+    height: 22px;
 }
 
 .no-steps-placeholder {
