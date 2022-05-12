@@ -44,11 +44,11 @@ export default function CreateOrEditTestScriptCard({
     submittedOwnerEmail = "",
     addOrModifySteps = false,
     submitted = false,
-    submitButtonDisabled = true,
+    isSubmitButtonDisabled = true,
     displayFadingBalls = false
 }) {
     const [expanded, setExpanded] = React.useState(true);
-    const [submitButtonColor, setSubmitButtonColor] = React.useState("#BFBFBF");
+    // const [submitButtonColor, setSubmitButtonColor] = React.useState("#BFBFBF");
 
     const handleOnChange = (returnedObject) => {
         const objectToReturn = { value: returnedObject.value, field: returnedObject.field };
@@ -64,13 +64,13 @@ export default function CreateOrEditTestScriptCard({
         submitted(true);
     }
 
-    React.useEffect(() => {
-        if (!submitButtonDisabled) {
-            setSubmitButtonColor("var(--lunikoBlue)");
-        } else {
-            setSubmitButtonColor("#BFBFBF");
-        }
-    }, [submitButtonDisabled]);
+    // React.useEffect(() => {
+    //     if (!submitButtonDisabled) {
+    //         setSubmitButtonColor("var(--lunikoBlue)");
+    //     } else {
+    //         setSubmitButtonColor("#BFBFBF");
+    //     }
+    // }, [submitButtonDisabled]);
 
     return (
         <Card
@@ -188,8 +188,8 @@ export default function CreateOrEditTestScriptCard({
                         <button
                             className="submit-test-script-button"
                             onClick={handleSubmit}
-                            disabled={submitButtonDisabled}
-                            style={{ backgroundColor: submitButtonColor }}>
+                            disabled={isSubmitButtonDisabled}
+                            /*style={{ backgroundColor: submitButtonColor }}*/>
                             {displayFadingBalls ?
                                 <div className="fading-balls-container">
                                     <FadingBalls

@@ -48,6 +48,15 @@
     box-shadow: 2px 2px 4px rgba(43, 43, 43, 0.6);
 }
 
+.submit-test-script-button:not(:disabled), .add-step-button:not(:disabled) {
+    background-color: var(--lunikoBlue);
+}
+
+
+.submit-test-script-button:disabled, .add-step-button:disabled {
+    background-color: #BFBFBF;
+}
+
 .submit-test-script-button:not(:disabled):hover {
     background-color: #009952 !important;
 }

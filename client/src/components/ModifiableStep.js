@@ -10,9 +10,8 @@ export default function ModifiableStep({
     remove = {},
     removeDisabled = true
 }) {
-    const [removeButtonImg, setRemoveButtonImg] = React.useState("remove_icon_disabled.png");
     const [opacity, setOpacity] = React.useState("0%");
-    const [height, setHeight] = React.useState(stepNumber === 1 ? "30px" : "0");
+    const [height, setHeight] = React.useState(stepNumber === 1 ? "49px" : "0");
     const [marginBottom, setMarginBottom] = React.useState("0");
 
     const handleOnChange = (returnedObject) => {
@@ -40,12 +39,7 @@ export default function ModifiableStep({
         setTimeout(() => {
             setOpacity("100%");
         }, 300);
-        if (!removeDisabled) {
-            setRemoveButtonImg("remove_icon_active.png");
-        } else {
-            setRemoveButtonImg("remove_icon_disabled.png");
-        }
-    }, [removeDisabled, removeButtonImg]);
+    });
 
     return (
         <div className="step-container" style={{ opacity: opacity, height: height, marginBottom: marginBottom }}>
@@ -65,10 +59,11 @@ export default function ModifiableStep({
                 </MaterialTextField>
             </div>
             <div className="remove-step">
-                <img src={require("../img/" + removeButtonImg)}
-                    alt="Remove Step"
+                <button className="remove-step-button"
+                    type="submit"
+                    disabled={removeDisabled}
                     onClick={handleRemove}>
-                </img>
+                </button>
             </div>
         </div >
     );
