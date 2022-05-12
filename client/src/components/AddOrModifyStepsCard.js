@@ -48,7 +48,7 @@ export default function AddOrModifyStepsCard({
     displayFadingBalls = false
 }) {
     const [expanded, setExpanded] = React.useState(true);
-    const [addStepButtonColor, setAddStepButtonColor] = React.useState("var(--lunikoBlue)");
+    // const [addStepButtonColor, setAddStepButtonColor] = React.useState("var(--lunikoBlue)");
 
     const handleOnChange = (returnedObject) => {
         updateStepDescription(returnedObject);
@@ -66,13 +66,13 @@ export default function AddOrModifyStepsCard({
         goBack(true);
     }
 
-    React.useEffect(() => {
-        if (!addStepButtonDisabled) {
-            setAddStepButtonColor("var(--lunikoBlue)");
-        } else {
-            setAddStepButtonColor("#BFBFBF");
-        }
-    }, [addStepButtonDisabled, addStepButtonColor]);
+    // React.useEffect(() => {
+    //     if (!addStepButtonDisabled) {
+    //         setAddStepButtonColor("var(--lunikoBlue)");
+    //     } else {
+    //         setAddStepButtonColor("#BFBFBF");
+    //     }
+    // }, [addStepButtonDisabled, addStepButtonColor]);
 
     return (
         <Card
@@ -134,7 +134,7 @@ export default function AddOrModifyStepsCard({
                             className="add-step-button"
                             onClick={handleAddStep}
                             disabled={addStepButtonDisabled}
-                            style={{ backgroundColor: addStepButtonColor }}>
+                            /*style={{ backgroundColor: addStepButtonColor }}*/>
                             Add Step
                         </button>
                         <button
