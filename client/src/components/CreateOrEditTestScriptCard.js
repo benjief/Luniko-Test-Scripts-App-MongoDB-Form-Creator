@@ -40,8 +40,8 @@ export default function CreateOrEditTestScriptCard({
     submittedOwnerFirstName = "",
     ownerLastName = "",
     submittedOwnerLastName = "",
-    ownerEmail = "",
-    submittedOwnerEmail = "",
+    // ownerEmail = "",
+    // submittedOwnerEmail = "",
     addOrModifySteps = false,
     submitted = false,
     isSubmitButtonDisabled = true,
@@ -122,6 +122,7 @@ export default function CreateOrEditTestScriptCard({
                             label="Test Script Name"
                             characterLimit={100}
                             placeholder="Test Script Name"
+                            defaultValue={submittedTestScriptName}
                             inputValue={handleOnChange} // TODO
                             multiline={false}
                             required={true}
@@ -136,6 +137,7 @@ export default function CreateOrEditTestScriptCard({
                             label="Test Script Description"
                             characterLimit={1000}
                             placeholder="Test Script Description"
+                            defaultValue={submittedTestScriptDescription}
                             inputValue={handleOnChange}
                             multiline={true}
                             required={true}
@@ -146,6 +148,7 @@ export default function CreateOrEditTestScriptCard({
                             label="Primary Workstream"
                             characterLimit={100}
                             placeholder="Primary Workstream"
+                            defaultValue={submittedTestScriptPrimaryWorkstream}
                             inputValue={handleOnChange}
                             multiline={false}
                             required={true}
@@ -155,6 +158,7 @@ export default function CreateOrEditTestScriptCard({
                         <MaterialTextField
                             label="Owner First Name"
                             placeholder="Owner First Name"
+                            defaultValue={submittedOwnerFirstName}
                             inputValue={handleOnChange}
                             multiline={false}
                             required={true}
@@ -164,13 +168,14 @@ export default function CreateOrEditTestScriptCard({
                         <MaterialTextField
                             label="Owner Last Name"
                             placeholder="Owner Last Name"
+                            defaultValue={submittedOwnerLastName}
                             inputValue={handleOnChange}
                             multiline={false}
                             required={true}
                             showCharCounter={false}
                             field="ownerLastName" >
                         </MaterialTextField>
-                        <MaterialTextField
+                        {/* <MaterialTextField
                             label="Email"
                             placeholder="Owner Email"
                             type="email"
@@ -179,7 +184,7 @@ export default function CreateOrEditTestScriptCard({
                             required={true}
                             showCharCounter={false}
                             field="ownerEmail" >
-                        </MaterialTextField>
+                        </MaterialTextField> */}
                         <button
                             className="add-or-modify-steps-button"
                             onClick={handleAddOrModifySteps}>

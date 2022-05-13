@@ -40,10 +40,10 @@ export default function AddOrModifyStepsCard({
     // submittedOwnerEmail = "",
     existingSteps = [],
     addStep = false,
-    addStepButtonDisabled = false,
+    isAddStepButtonDisabled = false,
     updateStepDescription = {},
     removeStep = {},
-    removeStepDisabled = true,
+    isRemoveStepButtonDisabled = true,
     goBack = false,
     displayFadingBalls = false
 }) {
@@ -124,7 +124,7 @@ export default function AddOrModifyStepsCard({
                                     stepDescription={step.stepDescription}
                                     modify={handleOnChange}
                                     remove={handleRemoveStep}
-                                    removeDisabled={removeStepDisabled}>
+                                    removeDisabled={isRemoveStepButtonDisabled}>
                                 </ModifiableStep>
                             })
                             : <div className="no-steps-placeholder">
@@ -133,7 +133,7 @@ export default function AddOrModifyStepsCard({
                         <button
                             className="add-step-button"
                             onClick={handleAddStep}
-                            disabled={addStepButtonDisabled}
+                            disabled={isAddStepButtonDisabled}
                             /*style={{ backgroundColor: addStepButtonColor }}*/>
                             Add Step
                         </button>

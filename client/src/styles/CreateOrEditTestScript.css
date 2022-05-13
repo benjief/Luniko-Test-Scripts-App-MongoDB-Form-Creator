@@ -68,3 +68,8 @@
 .back-button, .submit-test-script-button {
     margin-top: 25px !important;
 }
+
+.error-div {
+    height: "100vw";
+    width: "100%";
+}
