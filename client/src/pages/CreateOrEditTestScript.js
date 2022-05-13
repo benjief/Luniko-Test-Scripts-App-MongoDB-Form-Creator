@@ -124,6 +124,7 @@ function CreateOrEditTestScript() {
 
     const runWriteAsyncFunctions = () => {
         addTestScriptOwnerToDB();
+        setAlert(true);
     }
 
     const addTestScriptOwnerToDB = async () => {
