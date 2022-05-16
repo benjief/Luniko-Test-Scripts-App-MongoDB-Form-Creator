@@ -16,7 +16,7 @@ export default function ModifiableStep({
 
     const handleOnChange = (returnedObject) => {
         const updatedDescription = returnedObject.value;
-        const objectToReturn = { stepNumber: stepNumber, stepDescription: updatedDescription }
+        const objectToReturn = { number: stepNumber, description: updatedDescription }
         modify(objectToReturn);
     }
 

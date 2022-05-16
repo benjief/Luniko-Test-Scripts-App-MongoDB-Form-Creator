@@ -43,6 +43,7 @@ export default function CreateOrEditTestScriptCard({
     // ownerEmail = "",
     // submittedOwnerEmail = "",
     addOrModifySteps = false,
+    isAddOrModifyStepsButtonDisabled = false,
     submitted = false,
     isSubmitButtonDisabled = true,
     displayFadingBalls = false
@@ -128,6 +129,7 @@ export default function CreateOrEditTestScriptCard({
                             required={true}
                             showCharCounter={true}
                             requiresValidation={true}
+                            isValidationCaseSensitive={true}
                             invalidInputs={invalidTestScriptNames}
                             invalidInputMsg="Test script name already exists"
                             field="testScriptName" >
@@ -187,7 +189,8 @@ export default function CreateOrEditTestScriptCard({
                         </MaterialTextField> */}
                         <button
                             className="add-or-modify-steps-button"
-                            onClick={handleAddOrModifySteps}>
+                            onClick={handleAddOrModifySteps}
+                            disabled={isAddOrModifyStepsButtonDisabled}>
                             Add/Modify Steps
                         </button>
                         <button

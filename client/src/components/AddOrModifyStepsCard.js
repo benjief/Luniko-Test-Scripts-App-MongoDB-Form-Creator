@@ -25,19 +25,6 @@ import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 // }));
 
 export default function AddOrModifyStepsCard({
-    // testScriptName = "",
-    // submittedTestScriptName = "",
-    // invalidTestScriptNames = [], // TODO: be careful with this and the above prop
-    // testScriptDescription = "",
-    // submittedTestScriptDescription = "",
-    // testScriptPrimaryWorkstream = "",
-    // submittedTestScriptPrimaryWorkstream = "",
-    // ownerFirstName = "",
-    // submittedOwnerFirstName = "",
-    // ownerLastName = "",
-    // submittedOwnerLastName = "",
-    // ownerEmail = "",
-    // submittedOwnerEmail = "",
     existingSteps = [],
     addStep = false,
     isAddStepButtonDisabled = false,
@@ -119,9 +106,9 @@ export default function AddOrModifyStepsCard({
                         {existingSteps.length
                             ? existingSteps.map((step) => {
                                 return <ModifiableStep
-                                    key={step.stepID}
-                                    stepNumber={step.stepNumber}
-                                    stepDescription={step.stepDescription}
+                                    key={step.id}
+                                    stepNumber={step.number}
+                                    stepDescription={step.description}
                                     modify={handleOnChange}
                                     remove={handleRemoveStep}
                                     removeDisabled={isRemoveStepButtonDisabled}>

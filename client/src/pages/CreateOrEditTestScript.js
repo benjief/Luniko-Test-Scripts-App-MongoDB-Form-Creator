@@ -20,7 +20,6 @@ function CreateOrEditTestScript() {
     const [rendering, setRendering] = useState(true);
     const [transitionElementOpacity, setTransitionElementOpacity] = useState("100%");
     const [transtitionElementVisibility, setTransitionElementVisibility] = useState("visible");
-    const [invalidTestScriptNames, setInvalidTestScriptNames] = useState([]);
     const [formProps, setFormProps] = useState({
         testScriptName: "",
         testScriptDescription: "",
@@ -31,6 +30,7 @@ function CreateOrEditTestScript() {
     });
     const [testScriptSteps, setTestScriptSteps] = useState([]);
     const [addOrModifySteps, setAddOrModifySteps] = useState(false);
+    const [isAddOrModifyStepsButtonDisabled, setIsAddOrModifyStepsButtonDisabled] = useState(false);
     const [isAddStepButtonDisabled, setAddStepButtonDisabled] = useState(false);
     const [isRemoveStepButtonDisabled, setRemoveStepButtonDisabled] = useState(true);
     const [isSubmitButtonDisabled, setSubmitButtonDisabled] = useState(true);
@@ -41,10 +41,58 @@ function CreateOrEditTestScript() {
     const alertMessage = useRef("Test script successfully submitted!");
     const alertType = useRef("success-alert");
 
+    const testScriptNamesAlreadyInDB = useRef([]);
+    const isInitialDataFetched = useRef(false);
+    const isTestScriptSubmitted = useRef(false);
+
     const loadErrorMessage = "Apologies! We've encountered an error. Please attempt to re-load this page.";
     const writeErrorMessage = "Apologies! We've encountered an error. Please attempt to re-submit your test script.";
 
     const navigate = useNavigate();
+
+    const runReadAsyncFunctions = async () => {
+        isInitialDataFetched.current = true;
+        await fetchTestScriptNamesAlreadyInDB();
+        // await deleteTestScript("Test 1");
+        setRendering(false);
+    }
+
+    const fetchTestScriptNamesAlreadyInDB = async () => {
+        console.log("fetching existing test script names");
+        try {
+            async.current = true;
+            await Axios.get("http://localhost:5000/get-test-script-names", {
+            })
+                .then(res => {
+                    console.log(res["data"]);
+                    testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name.toLowerCase());
+                    console.log(testScriptNamesAlreadyInDB.current);
+                    async.current = false;
+                });
+        } catch (e) {
+            console.log(e);
+            handleError("r");
+        }
+    }
+
+    // const deleteTestScript = async (testScriptName) => {
+    //     if (!async.current) {
+    //         console.log("deleting test script");
+    //         try {
+    //             console.log(testScriptName);
+    //             async.current = true;
+    //             await Axios.delete(`http://localhost:5000/delete-test-script/${testScriptName}`, {
+    //             })
+    //                 .then(res => {
+    //                     console.log(res);
+    //                     async.current = false;
+    //                 });
+    //         } catch (e) {
+    //             console.log(e);
+    //             handleError("r");
+    //         }
+    //     }
+    // }
 
     const handleFormCallback = (returnedObject) => {
         const field = returnedObject.field;
@@ -74,7 +122,7 @@ function CreateOrEditTestScript() {
             console.log("adding step");
             let stepCount = testScriptSteps.length;
             let uniqueID = uuidv4();
-            let newStep = { stepNumber: stepCount + 1, stepDescription: "", stepID: uniqueID };
+            let newStep = { number: stepCount + 1, description: "", pass: false, id: uniqueID };
             let tempArray = testScriptSteps;
             tempArray.push(newStep);
             setTestScriptSteps([...tempArray]);
@@ -82,23 +130,23 @@ function CreateOrEditTestScript() {
     }
 
     const handleUpdateStepDescription = (updateInfo) => {
-        const stepNumber = updateInfo["stepNumber"];
-        const updatedDescription = updateInfo["stepDescription"];
+        const stepNumber = updateInfo["number"];
+        const updatedDescription = updateInfo["description"];
         let copyOfSteps = testScriptSteps;
         let stepToUpdate = copyOfSteps.filter(obj => {
-            return obj["stepNumber"] === stepNumber
+            return obj["number"] === stepNumber
         });
         stepToUpdate = stepToUpdate[0];
         let indexOfStepToUpdate = copyOfSteps.indexOf(stepToUpdate);
-        stepToUpdate["stepDescription"] = updatedDescription;
+        stepToUpdate["description"] = updatedDescription;
         setTestScriptSteps([...copyOfSteps]);
     }
 
     const handleRemoveStep = async (stepInfo) => {
-        const stepNumber = stepInfo["stepNumber"];
+        const stepNumber = stepInfo["number"];
         let copyOfSteps = testScriptSteps;
         copyOfSteps = copyOfSteps.filter(obj => {
-            return obj["stepNumber"] !== stepNumber
+            return obj["number"] !== stepNumber
         });
         if (testScriptSteps.length) {
             copyOfSteps = await updateStepNumbers(copyOfSteps, stepNumber);
@@ -110,37 +158,53 @@ function CreateOrEditTestScript() {
     const updateStepNumbers = (listOfSteps, startingStepNumber) => {
         console.log("updating steps");
         for (let i = startingStepNumber - 1; i < listOfSteps.length; i++) {
-            listOfSteps[i]["stepNumber"]--;
+            listOfSteps[i]["number"]--;
         }
         return listOfSteps;
     }
 
     const handleSubmit = (submitted) => {
         if (submitted) {
+            isTestScriptSubmitted.current = true;
+            setSubmitButtonDisabled(true);
+            setIsAddOrModifyStepsButtonDisabled(true);
             setDisplayFadingBalls(true);
             runWriteAsyncFunctions();
         }
     }
 
     const runWriteAsyncFunctions = () => {
-        addTestScriptOwnerToDB();
+        addTestScriptToDB();
         setAlert(true);
     }
 
-    const addTestScriptOwnerToDB = async () => {
-        console.log("adding test script owner to database");
+    const addTestScriptToDB = async () => {
+        console.log("adding test script to database");
         async.current = true;
         try {
-            await Axios.post("http://localhost:5000/add-personnel", {
-                firstName: formProps["ownerFirstName"],
-                lastName: formProps["ownerLastName"]
-            }).then(res => {
-                console.log(res);
-                async.current = false;
-            });
+            removeEmptySteps();
+            await Axios.post("http://localhost:5000/add-test-script", {
+                testScriptOwner: { firstName: formProps["ownerFirstName"], lastName: formProps["ownerLastName"] },
+                testScriptName: formProps["testScriptName"],
+                testScriptDescription: formProps["testScriptDescription"],
+                testScriptPrimaryWorkstream: formProps["testScriptPrimaryWorkstream"],
+                testScriptSteps: testScriptSteps
+            })
+                .then(res => {
+                    console.log(res);
+                    async.current = false;
+                })
         } catch (e) {
             console.log(e);
             handleError("w");
+        }
+    }
+
+    const removeEmptySteps = () => {
+        if (testScriptSteps.length) {
+            if (!testScriptSteps.slice(-1)[0]["description"].trim().length) {
+                testScriptSteps.pop();
+            }
         }
     }
 
@@ -172,23 +236,31 @@ function CreateOrEditTestScript() {
 
     useEffect(() => {
         if (rendering) {
-            setRendering(false);
+            if (!addOrModifySteps && !isInitialDataFetched.current) {
+                runReadAsyncFunctions();
+            } else if (addOrModifySteps) {
+                setRendering(false);
+            } else {
+                setRendering(false);
+            }
         } else {
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
-            (formProps["testScriptName"].trim() !== "" && formProps["testScriptDescription"].trim() !== "" && formProps["testScriptPrimaryWorkstream"].trim() !== ""
-                && formProps["ownerFirstName"].trim() !== "" && formProps["ownerLastName"].trim() !== "" /*&& formProps["ownerEmail"] !== ""*/)
-                ? setSubmitButtonDisabled(false)
-                : setSubmitButtonDisabled(true);
-            testScriptSteps.length && !testScriptSteps.slice(-1)[0]["stepDescription"].trim().length
-                ? setAddStepButtonDisabled(true)
-                : setAddStepButtonDisabled(false);
-            testScriptSteps.length === 1
-                ? setRemoveStepButtonDisabled(true)
-                : setRemoveStepButtonDisabled(false);
-            // TODO: look into abstracting functions in useEffect hook... can this be done?
+            if (!isTestScriptSubmitted.current) {
+                (formProps["testScriptName"].trim() !== "" && formProps["testScriptDescription"].trim() !== "" && formProps["testScriptPrimaryWorkstream"].trim() !== ""
+                    && formProps["ownerFirstName"].trim() !== "" && formProps["ownerLastName"].trim() !== "" /*&& formProps["ownerEmail"] !== ""*/)
+                    ? setSubmitButtonDisabled(false)
+                    : setSubmitButtonDisabled(true);
+                testScriptSteps.length && !testScriptSteps.slice(-1)[0]["description"].trim().length
+                    ? setAddStepButtonDisabled(true)
+                    : setAddStepButtonDisabled(false);
+                testScriptSteps.length === 1
+                    ? setRemoveStepButtonDisabled(true)
+                    : setRemoveStepButtonDisabled(false);
+                // TODO: look into abstracting functions in useEffect hook... can this be done?
+            }
         }
-    }, [rendering, formProps, testScriptSteps, isAddStepButtonDisabled, isSubmitButtonDisabled]);
+    }, [rendering, formProps, testScriptSteps, isAddStepButtonDisabled, isSubmitButtonDisabled, isTestScriptSubmitted]);
 
     return (
         rendering
@@ -260,7 +332,7 @@ function CreateOrEditTestScript() {
                                     <CreateOrEditTestScriptCard
                                         testScriptName={handleFormCallback}
                                         submittedTestScriptName={formProps["testScriptName"]}
-                                        invalidTestScriptNames={invalidTestScriptNames}
+                                        invalidTestScriptNames={testScriptNamesAlreadyInDB.current}
                                         testScriptDescription={handleFormCallback}
                                         submittedTestScriptDescription={formProps["testScriptDescription"]}
                                         testScriptPrimaryWorkstream={handleFormCallback}
@@ -272,6 +344,7 @@ function CreateOrEditTestScript() {
                                         // ownerEmail={handleFormCallback}
                                         // submittedOwnerEmail={formProps["ownerEmail"]}
                                         addOrModifySteps={handleChangeCard}
+                                        isAddOrModifyStepsButtonDisabled={isAddOrModifyStepsButtonDisabled}
                                         submitted={handleSubmit}
                                         isSubmitButtonDisabled={isSubmitButtonDisabled}
                                         displayFadingBalls={displayFadingBalls}>

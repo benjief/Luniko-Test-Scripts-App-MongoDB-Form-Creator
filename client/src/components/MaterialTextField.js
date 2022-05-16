@@ -17,6 +17,7 @@ export default function MaterialTextField({
   showCharCounter = false,
   // limitRangeOfInputs = false,
   requiresValidation = false,
+  isValidationCaseSensitive = false,
   invalidInputs = [],
   invalidInputMsg = "",
   maxValue = Number.MAX_SAFE_INTEGER,
@@ -65,6 +66,7 @@ export default function MaterialTextField({
   }
 
   const checkInputValidity = (input) => {
+    input = isValidationCaseSensitive ? input : input.toLowerCase();
     if (invalidInputs.includes(input)) {
       invalidInputMsg === ""
         ? setDisplayedHelperText("Invalid input")

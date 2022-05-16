@@ -25,6 +25,6 @@ const step = new mongoose.Schema({
     }
 });
 
-step.index({ testScriptID: 1, number: 1 }, { unique: true });
+step.index({ testScript: 1, number: 1 }, { unique: true });
 
 exports = mongoose.model("step", step);

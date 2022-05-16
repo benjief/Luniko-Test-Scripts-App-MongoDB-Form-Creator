@@ -1,14 +1,12 @@
 const mongoose = require("mongoose");
 
-const testScript = new mongoose.Schema({
-    name: {
+const step = new mongoose.Schema({
+    testScriptName: {
         type: String,
-        required: true,
-        unique: true,
+        required: true
     },
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "personnel", // TODO: add validation to this (i.e. make sure personnel is designated as a test script owner)
+    number: {
+        type: Number,
         required: true
     },
     description: {
@@ -16,25 +14,52 @@ const testScript = new mongoose.Schema({
         maxlength: 1000,
         required: true
     },
-    testedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "personnel"
+    pass: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    comments: {
+        type: String
+    },
+    id: {
+        type: String
+    }
+});
+
+const testScript = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    owner: {
+        firstName: String,
+        lastName: String
+    },
+    description: {
+        type: String,
+        maxlength: 1000,
+        required: true
     },
     primaryWorkstream: {
         type: String,
         required: true
     },
-    testedAt: {
-        type: Date
-    },
-    pass: {
-        type: String,
-        required: true,
-        default: "N"
-    },
-    steps:
-        [{ type: mongoose.Schema.Types.ObjectId }]
-
+    steps: [step]
 }, { timestamps: true });
 
-module.exports = mongoose.model("testScript", testScript);
+testScript.pre('deleteOne', function (next) {
+    console.log("deleting steps associated with:", this.getQuery().name);
+    Step.deleteMany({ testScriptName: this.getQuery().name }).exec();
+    next();
+});
+
+step.index(
+    { testScript: 1, number: 1 }
+);
+
+const Step = mongoose.model("step", step);
+const TestScript = mongoose.model("testScript", testScript);
+
+module.exports = { Step, TestScript };
