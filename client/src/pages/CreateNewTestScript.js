@@ -1,22 +1,21 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../components/Navbar";
 import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
 import "../styles/LandingPage.css";
-import CreateOrEditTestScriptCard from "../components/CreateOrEditTestScriptCard";
+import CreateOrModifyTestScriptCard from "../components/CreateOrModifyTestScriptCard";
 import AddOrModifyStepsCard from "../components/AddOrModifyStepsCard";
 import MaterialAlert from "../components/MaterialAlert";
 import { v4 as uuidv4 } from "uuid";
 import Axios from "axios";
-import "../styles/CreateOrEditTestScript.css";
+import "../styles/CreateNewTestScript.css";
 import "../styles/InputComponents.css";
 import "../styles/CardComponents.css";
 import "../styles/SelectorComponents.css";
 import "../styles/AlertComponents.css";
 import "../styles/Steps.css";
-import { Navbar } from "reactstrap";
 
-function CreateOrEditTestScript() {
+function CreateNewTestScript() {
     const [rendering, setRendering] = useState(true);
     const [transitionElementOpacity, setTransitionElementOpacity] = useState("100%");
     const [transtitionElementVisibility, setTransitionElementVisibility] = useState("visible");
@@ -38,7 +37,7 @@ function CreateOrEditTestScript() {
     const async = useRef(false);
     const activeError = useRef(false);
     const [alert, setAlert] = useState(false);
-    const alertMessage = useRef("Test script successfully submitted!");
+    const alertMessage = useRef("Test script successfully updated!");
     const alertType = useRef("success-alert");
 
     const testScriptNamesAlreadyInDB = useRef([]);
@@ -151,12 +150,10 @@ function CreateOrEditTestScript() {
         if (testScriptSteps.length) {
             copyOfSteps = await updateStepNumbers(copyOfSteps, stepNumber);
         }
-        console.log(copyOfSteps);
         setTestScriptSteps([...copyOfSteps]);
     }
 
     const updateStepNumbers = (listOfSteps, startingStepNumber) => {
-        console.log("updating steps");
         for (let i = startingStepNumber - 1; i < listOfSteps.length; i++) {
             listOfSteps[i]["number"]--;
         }
@@ -323,24 +320,24 @@ function CreateOrEditTestScript() {
                                 </div>
                             </div>
                         </div >
-                        : <div className="create-or-edit-test-script">
+                        : <div className="create-or-modify-test-script">
                             <div className="page-message">
                                 Please Fill Out/Modify the Fields Below:
                             </div>
-                            <div className="create-or-edit-test-script-container">
-                                <div className="create-or-edit-test-script-card">
-                                    <CreateOrEditTestScriptCard
+                            <div className="create-or-modify-test-script-container">
+                                <div className="create-or-modify-test-script-card">
+                                    <CreateOrModifyTestScriptCard
                                         testScriptName={handleFormCallback}
-                                        submittedTestScriptName={formProps["testScriptName"]}
+                                        existingTestScriptName={formProps["testScriptName"]}
                                         invalidTestScriptNames={testScriptNamesAlreadyInDB.current}
                                         testScriptDescription={handleFormCallback}
-                                        submittedTestScriptDescription={formProps["testScriptDescription"]}
+                                        existingTestScriptDescription={formProps["testScriptDescription"]}
                                         testScriptPrimaryWorkstream={handleFormCallback}
-                                        submittedTestScriptPrimaryWorkstream={formProps["testScriptPrimaryWorkstream"]}
+                                        existingTestScriptPrimaryWorkstream={formProps["testScriptPrimaryWorkstream"]}
                                         ownerFirstName={handleFormCallback}
-                                        submittedOwnerFirstName={formProps["ownerFirstName"]}
+                                        existingOwnerFirstName={formProps["ownerFirstName"]}
                                         ownerLastName={handleFormCallback}
-                                        submittedOwnerLastName={formProps["ownerLastName"]}
+                                        existingOwnerLastName={formProps["ownerLastName"]}
                                         // ownerEmail={handleFormCallback}
                                         // submittedOwnerEmail={formProps["ownerEmail"]}
                                         addOrModifySteps={handleChangeCard}
@@ -348,7 +345,7 @@ function CreateOrEditTestScript() {
                                         submitted={handleSubmit}
                                         isSubmitButtonDisabled={isSubmitButtonDisabled}
                                         displayFadingBalls={displayFadingBalls}>
-                                    </CreateOrEditTestScriptCard>
+                                    </CreateOrModifyTestScriptCard>
                                 </div>
                             </div>
                         </div>}
@@ -357,4 +354,4 @@ function CreateOrEditTestScript() {
     )
 };
 
-export default CreateOrEditTestScript;
+export default CreateNewTestScript;

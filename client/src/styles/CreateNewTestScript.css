@@ -1,4 +1,4 @@
-.create-or-edit-test-script, .add-or-modify-steps {
+.create-or-modify-test-script, .add-or-modify-steps {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,7 +9,7 @@
     scrollbar-width: none;
 }
 
-.create-or-edit-test-script::-webkit-scrollbar {
+.create-or-modify-test-script::-webkit-scrollbar {
     display: none;
 }
 
@@ -17,7 +17,7 @@
     display: none;
 }
 
-.create-or-edit-test-script-container, .add-or-modify-steps-container {
+.create-or-modify-test-script-container, .add-or-modify-steps-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,11 +27,11 @@
     padding-bottom: 20px;
 }
 
-.create-or-edit-test-script-card, .add-or-modify-steps-card {
+.create-or-modify-test-script-card, .add-or-modify-steps-card {
     width: 100%;
 }
 
-.add-or-modify-steps-button, .submit-test-script-button, .add-step-button, .back-button {
+.add-or-modify-steps-button, .submit-or-update-test-script-button, .add-step-button, .back-button {
     padding: 10px;
     /* margin-top: 5px; */
     margin-bottom: 10px;
@@ -48,16 +48,16 @@
     box-shadow: 2px 2px 4px rgba(43, 43, 43, 0.6);
 }
 
-.submit-test-script-button:not(:disabled), .add-step-button:not(:disabled) {
+.submit-or-update-test-script-button:not(:disabled), .add-step-button:not(:disabled) {
     background-color: var(--lunikoBlue);
 }
 
 
-.add-or-modify-steps-button:disabled, .submit-test-script-button:disabled, .add-step-button:disabled {
+.add-or-modify-steps-button:disabled, .submit-test-or-update-script-button:disabled, .add-step-button:disabled {
     background-color: #BFBFBF;
 }
 
-.submit-test-script-button:not(:disabled):hover {
+.submit-or-update-test-script-button:not(:disabled):hover {
     background-color: #009952 !important;
 }
 
@@ -65,7 +65,7 @@
     background-color: var(--lunikoOrange) !important;
 }
 
-.back-button, .submit-test-script-button {
+.back-button, .submit-or-update-test-script-button {
     margin-top: 25px !important;
 }
 

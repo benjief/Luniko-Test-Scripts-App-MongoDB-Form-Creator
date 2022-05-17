@@ -1,14 +1,8 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import MaterialSingleSelect from './MaterialSingleSelect';
 // import MaterialSingleSelectFreeSolo from './MaterialSingleSelectFreeSolo';
 import MaterialTextField from './MaterialTextField';
@@ -28,27 +22,29 @@ import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 //     }),
 // }));
 
-export default function CreateOrEditTestScriptCard({
+export default function CreateOrModifyTestScriptCard({
+    isModificationCard = false,
     testScriptName = "",
-    submittedTestScriptName = "",
+    existingTestScriptName = "",
     invalidTestScriptNames = [], // TODO: be careful with this and the above prop
     testScriptDescription = "",
-    submittedTestScriptDescription = "",
+    existingTestScriptDescription = "",
     testScriptPrimaryWorkstream = "",
-    submittedTestScriptPrimaryWorkstream = "",
+    existingTestScriptPrimaryWorkstream = "",
     ownerFirstName = "",
-    submittedOwnerFirstName = "",
+    existingOwnerFirstName = "",
     ownerLastName = "",
-    submittedOwnerLastName = "",
+    existingOwnerLastName = "",
     // ownerEmail = "",
     // submittedOwnerEmail = "",
     addOrModifySteps = false,
     isAddOrModifyStepsButtonDisabled = false,
     submitted = false,
-    isSubmitButtonDisabled = true,
-    displayFadingBalls = false
+    modified = false,
+    isSubmitOrModifyButtonDisabled = true,
+    displayFadingBalls = false,
 }) {
-    const [expanded, setExpanded] = React.useState(true);
+    // const [expanded, setExpanded] = React.useState(true);
     // const [submitButtonColor, setSubmitButtonColor] = React.useState("#BFBFBF");
 
     const handleOnChange = (returnedObject) => {
@@ -62,7 +58,7 @@ export default function CreateOrEditTestScriptCard({
     }
 
     const handleSubmit = () => {
-        submitted(true);
+        isModificationCard ? modified(true) : submitted(true);
     }
 
     // React.useEffect(() => {
@@ -113,7 +109,7 @@ export default function CreateOrEditTestScriptCard({
                     <ExpandMoreIcon />
                 </ExpandMore>
             </CardActions > */}
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Collapse in={true} timeout="auto" unmountOnExit>
                     <CardContent>
                         {/* <Typography
                         paragraph>
@@ -121,15 +117,16 @@ export default function CreateOrEditTestScriptCard({
                     </Typography> */}
                         <MaterialTextField
                             label="Test Script Name"
+                            disabled={isModificationCard}
                             characterLimit={100}
                             placeholder="Test Script Name"
-                            defaultValue={submittedTestScriptName}
-                            inputValue={handleOnChange} // TODO
+                            defaultValue={existingTestScriptName}
+                            inputValue={handleOnChange}
                             multiline={false}
                             required={true}
                             showCharCounter={true}
                             requiresValidation={true}
-                            isValidationCaseSensitive={true}
+                            isValidationCaseSensitive={false}
                             invalidInputs={invalidTestScriptNames}
                             invalidInputMsg="Test script name already exists"
                             field="testScriptName" >
@@ -139,7 +136,7 @@ export default function CreateOrEditTestScriptCard({
                             label="Test Script Description"
                             characterLimit={1000}
                             placeholder="Test Script Description"
-                            defaultValue={submittedTestScriptDescription}
+                            defaultValue={existingTestScriptDescription}
                             inputValue={handleOnChange}
                             multiline={true}
                             required={true}
@@ -150,7 +147,7 @@ export default function CreateOrEditTestScriptCard({
                             label="Primary Workstream"
                             characterLimit={100}
                             placeholder="Primary Workstream"
-                            defaultValue={submittedTestScriptPrimaryWorkstream}
+                            defaultValue={existingTestScriptPrimaryWorkstream}
                             inputValue={handleOnChange}
                             multiline={false}
                             required={true}
@@ -160,7 +157,7 @@ export default function CreateOrEditTestScriptCard({
                         <MaterialTextField
                             label="Owner First Name"
                             placeholder="Owner First Name"
-                            defaultValue={submittedOwnerFirstName}
+                            defaultValue={existingOwnerFirstName}
                             inputValue={handleOnChange}
                             multiline={false}
                             required={true}
@@ -170,7 +167,7 @@ export default function CreateOrEditTestScriptCard({
                         <MaterialTextField
                             label="Owner Last Name"
                             placeholder="Owner Last Name"
-                            defaultValue={submittedOwnerLastName}
+                            defaultValue={existingOwnerLastName}
                             inputValue={handleOnChange}
                             multiline={false}
                             required={true}
@@ -194,9 +191,9 @@ export default function CreateOrEditTestScriptCard({
                             Add/Modify Steps
                         </button>
                         <button
-                            className="submit-test-script-button"
+                            className="submit-or-update-test-script-button"
                             onClick={handleSubmit}
-                            disabled={isSubmitButtonDisabled}
+                            disabled={isSubmitOrModifyButtonDisabled}
                             /*style={{ backgroundColor: submitButtonColor }}*/>
                             {displayFadingBalls ?
                                 <div className="fading-balls-container">
@@ -208,7 +205,7 @@ export default function CreateOrEditTestScriptCard({
                                         duration="0.5s"
                                     />
                                 </div> :
-                                <p>Submit</p>}
+                                <p>{isModificationCard ? "Update" : "Submit"}</p>}
                         </button>
                     </CardContent>
                 </Collapse>

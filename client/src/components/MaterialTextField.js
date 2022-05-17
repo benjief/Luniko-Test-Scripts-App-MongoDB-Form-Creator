@@ -17,7 +17,7 @@ export default function MaterialTextField({
   showCharCounter = false,
   // limitRangeOfInputs = false,
   requiresValidation = false,
-  isValidationCaseSensitive = false,
+  isValidationCaseSensitive = true,
   invalidInputs = [],
   invalidInputMsg = "",
   maxValue = Number.MAX_SAFE_INTEGER,
@@ -35,7 +35,7 @@ export default function MaterialTextField({
   // const [errorMsg, setErrorMsg] = React.useState("");
   const [displayedHelperText, setDisplayedHelperText] = React.useState(helperText);
   const [inputLength, setInputLength] = React.useState(type !== "number" ? defaultValue.length : 0);
-  const [firstRender, setFirstRender] = React.useState(true);
+  // const [firstRender, setFirstRender] = React.useState(true);
 
   const handleOnChange = (value) => {
     if (value.trim() !== "") {
@@ -139,23 +139,18 @@ export default function MaterialTextField({
   }
 
   React.useEffect(() => {
-    // if (defaultValue !== "" && firstRender) {
-    //   console.log(defaultValue);
-    //   setValue(defaultValue);
-    //   setFirstRender(false);
-    // }
     if (authenticationField) {
       if (textAuthenticationError !== "") {
         setErrorEnabled(true);
         setDisplayedHelperText(textAuthenticationError);
       } else {
-        if (value.trim() !== "") {
+        if (value.trim() !== "" || authenticationField) {
           setErrorEnabled(false);
           setDisplayedHelperText("");
         }
       }
     }
-  }, [authenticationField, textAuthenticationError, errorEnabled, firstRender, value]) // TODO: check need for firstRender
+  }, [authenticationField, textAuthenticationError, errorEnabled, value]) // TODO: check need for firstRender
 
   return (
     <Box

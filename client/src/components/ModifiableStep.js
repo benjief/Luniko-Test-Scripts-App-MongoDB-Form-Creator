@@ -13,6 +13,7 @@ export default function ModifiableStep({
     const [opacity, setOpacity] = React.useState("0%");
     const [height, setHeight] = React.useState(stepNumber === 1 ? "49px" : "0");
     const [marginBottom, setMarginBottom] = React.useState("0");
+    const [removed, setRemoved] = React.useState(false);
 
     const handleOnChange = (returnedObject) => {
         const updatedDescription = returnedObject.value;
@@ -21,25 +22,28 @@ export default function ModifiableStep({
     }
 
     const handleRemove = () => {
+        setRemoved(true);
         if (!removeDisabled) {
             setOpacity("0%");
             setTimeout(() => {
                 setMarginBottom("0");
                 setHeight("0");
-            }, 500);
+            }, 300);
             setTimeout(() => {
-                remove({ stepNumber: stepNumber });
+                remove({ number: stepNumber });
             }, 1000);
         }
     }
 
     React.useEffect(() => {
-        setHeight("172.91px");
-        setMarginBottom("20px");
-        setTimeout(() => {
-            setOpacity("100%");
-        }, 300);
-    });
+        if (!removed) {
+            setHeight("172.91px");
+            setMarginBottom("20px");
+            setTimeout(() => {
+                setOpacity("100%");
+            }, 300);
+        }
+    }, [removed]);
 
     return (
         <div className="step-container" style={{ opacity: opacity, height: height, marginBottom: marginBottom }}>
