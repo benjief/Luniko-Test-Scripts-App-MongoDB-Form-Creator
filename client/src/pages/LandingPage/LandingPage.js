@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../components/Navbar";
-import LandingPageOptionsCard from "../components/LandingPageOptionsCard";
+import NavBar from "../../components/Navbar";
+import LandingPageOptionsCard from "../../components/LandingPageOptionsCard";
 import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
-import "../styles/InputComponents.css"
-import "../styles/LandingPage.css";
+import "../../styles/InputComponents.css"
+import "../../styles/LandingPage.css";
 
 function LandingPage() {
     const [rendering, setRendering] = useState(true);

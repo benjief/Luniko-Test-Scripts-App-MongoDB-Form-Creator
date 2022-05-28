@@ -53,11 +53,11 @@
 }
 
 
-.add-or-modify-steps-button:disabled, .submit-test-or-update-script-button:disabled, .add-step-button:disabled {
+.add-or-modify-steps-button:disabled, .submit-or-update-test-script-button:disabled, .add-step-button:disabled {
     background-color: #BFBFBF;
 }
 
-.submit-or-update-test-script-button:not(:disabled):hover {
+.submit-test-script-button:not(:disabled):hover {
     background-color: #009952 !important;
 }
 
@@ -65,7 +65,7 @@
     background-color: var(--lunikoOrange) !important;
 }
 
-.back-button, .submit-or-update-test-script-button {
+.back-button, .submit-test-script-button {
     margin-top: 25px !important;
 }
 

@@ -44,15 +44,15 @@
     box-shadow: 2px 2px 4px rgba(43, 43, 43, 0.6);
 }
 
-.submit-test-script-name-button:not(:disabled), .submit-or-modify-script-name-button:not(:disabled), .submit-or-modify-script-button:not(:disabled), .add-step-button:not(:disabled) {
+.submit-test-script-name-button:not(:disabled), .submit-or-update-script-name-button:not(:disabled), .submit-or-update-script-button:not(:disabled), .add-step-button:not(:disabled) {
     background-color: var(--lunikoBlue);
 }
 
-.submit-test-script-name-button:disabled, .submit-or-modify-script-name-button:disabled, .add-or-modify-steps-button:disabled, .submit-or-modify-script-button:disabled, .add-step-button:disabled {
+.submit-test-script-name-button:disabled, .submit-or-update-script-name-button:disabled, .add-or-modify-steps-button:disabled, .submit-or-update-script-button:disabled, .add-step-button:disabled {
     background-color: #BFBFBF;
 }
 
-.submit-or-modify-script-button:not(:disabled):hover {
+.submit-or-update-test-script-button:not(:disabled):hover {
     background-color: #009952 !important;
 }
 
@@ -60,7 +60,7 @@
     background-color: var(--lunikoOrange) !important;
 }
 
-.back-button, .submit-or-modify-script-button {
+.back-button, .submit-or-update-script-button {
     margin-top: 25px !important;
 }
 

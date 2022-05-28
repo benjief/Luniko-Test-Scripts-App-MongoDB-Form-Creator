@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -24,33 +25,25 @@ import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 //     }),
 // }));
 
-export default function AddOrModifyStepsCard({
-    existingSteps = [],
-    addStep = false,
-    isAddStepButtonDisabled = false,
-    updateStepDescription = {},
-    removeStep = {},
-    isRemoveStepButtonDisabled = true,
-    goBack = false,
-    displayFadingBalls = false
+function AddOrModifyStepsCard({
+    existingSteps,
+    addStep,
+    isAddStepButtonDisabled,
+    modifyStepDescription,
+    removeStep,
+    isRemoveStepButtonDisabled,
+    goBack,
+    displayFadingBalls,
 }) {
     const [expanded, setExpanded] = React.useState(true);
     // const [addStepButtonColor, setAddStepButtonColor] = React.useState("var(--lunikoBlue)");
 
-    const handleOnChange = (returnedObject) => {
-        updateStepDescription(returnedObject);
-    }
-
-    const handleAddStep = () => {
-        addStep(true);
+    const handleModifyStepDescription = (returnedObject) => {
+        modifyStepDescription(returnedObject);
     }
 
     const handleRemoveStep = (returnedObject) => {
         removeStep(returnedObject);
-    }
-
-    const handleGoBack = () => {
-        goBack(true);
     }
 
     // React.useEffect(() => {
@@ -109,8 +102,8 @@ export default function AddOrModifyStepsCard({
                                     key={step.id}
                                     stepNumber={step.number}
                                     stepDescription={step.description}
-                                    modify={handleOnChange}
-                                    remove={handleRemoveStep}
+                                    modifyStepDescription={modifyStepDescription}
+                                    removeStep={removeStep}
                                     removeDisabled={isRemoveStepButtonDisabled}>
                                 </ModifiableStep>
                             })
@@ -119,14 +112,14 @@ export default function AddOrModifyStepsCard({
                             </div>}
                         <button
                             className="add-step-button"
-                            onClick={handleAddStep}
+                            onClick={addStep}
                             disabled={isAddStepButtonDisabled}
                             /*style={{ backgroundColor: addStepButtonColor }}*/>
                             Add Step
                         </button>
                         <button
                             className="back-button"
-                            onClick={handleGoBack}>
+                            onClick={goBack}>
                             Back
                         </button>
                     </CardContent>
@@ -135,3 +128,25 @@ export default function AddOrModifyStepsCard({
         </Card >
     );
 }
+
+AddOrModifyStepsCard.propTypes = {
+    existingSteps: PropTypes.array,
+    addStep: PropTypes.func,
+    isAddStepButtonDisabled: PropTypes.bool,
+    modifyStepDescription: PropTypes.func,
+    removeStep: PropTypes.func,
+    goBack: PropTypes.func,
+    displayFadingBalls: PropTypes.bool,
+}
+
+AddOrModifyStepsCard.defaultProps = {
+    existingSteps: [],
+    addStep: () => { },
+    isAddStepButtonDisabled: false,
+    modifyStepDescription: () => { },
+    removeStep: () => { },
+    goBack: () => { },
+    displayFadingBalls: false,
+}
+
+export default AddOrModifyStepsCard;

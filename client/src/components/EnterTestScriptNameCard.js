@@ -1,4 +1,6 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
+import { useValidationErrorUpdate } from '../pages/ModifyExistingTestScript/Context/ValidationErrorContext';
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -24,23 +26,19 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export default function EnterTestScriptNameCard({
-    submitted = false,
-    isSubmitButtonDisabled = true,
-    textAuthenticationError = "",
-    testScriptName = ""
+function EnterTestScriptNameCard({
+    setFormProps,
+    requestTestScript,
+    isSubmitButtonDisabled,
 }) {
     const [expanded, setExpanded] = React.useState(true);
-    // const [submitButtonColor, setSubmitButtonColor] = React.useState("#BFBFBF");
+    const invalidTestScriptNameError = useValidationErrorUpdate();
 
     const handleOnChange = (returnedObject) => {
-        const objectToReturn = { value: returnedObject.value, field: returnedObject.field };
-        const stringFunction = returnedObject.field + "(objectToReturn)";
-        eval(stringFunction);
-    }
-
-    const handleSubmit = () => {
-        submitted(true);
+        invalidTestScriptNameError("");
+        setFormProps(
+            prev => ({ ...prev, [returnedObject.field]: returnedObject.value })
+        );
     }
 
     // React.useEffect(() => {
@@ -99,20 +97,16 @@ export default function EnterTestScriptNameCard({
                     </Typography> */}
                         <MaterialTextField
                             label="Test Script Name"
-                            // characterLimit={10}
-                            // placeholder="Approximate number of unique records pre-cleanup"
-                            // inputValue={handleOnChangeLoadSheetName}
                             inputValue={handleOnChange}
                             multiline={false}
                             required={false}
                             type="text"
                             authenticationField={true}
-                            textAuthenticationError={textAuthenticationError}
                             field={"testScriptName"}>
                         </MaterialTextField>
                         <button
                             className="submit-test-script-name-button"
-                            onClick={handleSubmit}
+                            onClick={requestTestScript}
                             disabled={isSubmitButtonDisabled}>
                             Submit
                         </button>
@@ -122,3 +116,17 @@ export default function EnterTestScriptNameCard({
         </Card >
     );
 }
+
+EnterTestScriptNameCard.propTypes = {
+    setFormProps: PropTypes.func,
+    requestTestScript: PropTypes.func,
+    isSubmitButtonDisabled: PropTypes.bool,
+}
+
+EnterTestScriptNameCard.defaultProps = {
+    setFormProps: () => { },
+    requestTestScript: () => { },
+    isSubmitButtonDisabled: true,
+}
+
+export default EnterTestScriptNameCard;

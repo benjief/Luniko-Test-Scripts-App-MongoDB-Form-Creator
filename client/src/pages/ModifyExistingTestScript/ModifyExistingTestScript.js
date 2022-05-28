@@ -1,30 +1,28 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
+import { useValidationErrorUpdate } from "./Context/ValidationErrorContext";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../components/Navbar";
+import NavBar from "../../components/Navbar";
 import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
-import "../styles/LandingPage.css";
-import CreateOrModifyTestScriptCard from "../components/CreateOrModifyTestScriptCard";
-import AddOrModifyStepsCard from "../components/AddOrModifyStepsCard";
-import EnterTestScriptNameCard from "../components/EnterTestScriptNameCard";
-import MaterialAlert from "../components/MaterialAlert";
+import CreateOrModifyTestScriptCard from "../../components/CreateOrModifyTestScriptCard";
+import AddOrModifyStepsCard from "../../components/AddOrModifyStepsCard";
+import EnterTestScriptNameCard from "../../components/EnterTestScriptNameCard";
+import MaterialAlert from "../../components/MaterialAlert";
 import { v4 as uuidv4, validate } from "uuid";
 import Axios from "axios";
-import "../styles/ModifyExistingTestScript.css";
-import "../styles/InputComponents.css";
-import "../styles/CardComponents.css";
-import "../styles/SelectorComponents.css";
-import "../styles/AlertComponents.css";
-import "../styles/Steps.css";
-import { Navbar } from "reactstrap";
+import "../../styles/ModifyExistingTestScript.css";
+import "../../styles/InputComponents.css";
+import "../../styles/CardComponents.css";
+import "../../styles/SelectorComponents.css";
+import "../../styles/AlertComponents.css";
+import "../../styles/Steps.css";
 
 function ModifyExistingTestScript() {
-    const test = false;
-
     const [rendering, setRendering] = useState(true);
     const [transitionElementOpacity, setTransitionElementOpacity] = useState("100%");
     const [transtitionElementVisibility, setTransitionElementVisibility] = useState("visible");
-    const isValidTestScriptNameEntered = useRef(false);
-    const [invalidTestScriptNameError, setInvalidTestScriptNameError] = useState("");
+    const [isValidTestScriptNameEntered, setIsValidTestScriptNameEntered] = useState(false);
+    // const [invalidTestScriptNameError, setInvalidTestScriptNameError] = useState("");
+    const invalidTestScriptNameError = useValidationErrorUpdate();
     const [isSubmitButtonDisabled, setSubmitButtonDisabled] = useState(true);
     const [formProps, setFormProps] = useState({
         testScriptName: "",
@@ -109,21 +107,21 @@ function ModifyExistingTestScript() {
         async.current = false;
     }
 
-    const handleFormCallback = (returnedObject) => {
-        const field = returnedObject.field;
-        const value = returnedObject.value;
-        if (field === "testScriptName") {
-            setInvalidTestScriptNameError("");
-        }
-        setFormPropsForFieldAndValue(field, value);
-    }
+    // const handleFormCallback = (returnedObject) => {
+    //     const field = returnedObject.field;
+    //     const value = returnedObject.value;
+    //     if (field === "testScriptName") {
+    //         setInvalidTestScriptNameError("");
+    //     }
+    //     setFormPropsForFieldAndValue(field, value);
+    // }
 
-    const setFormPropsForFieldAndValue = (field, value) => {
-        setFormProps((prevState) => ({
-            ...prevState,
-            [field]: value,
-        }));
-    }
+    // const setFormPropsForFieldAndValue = (field, value) => {
+    //     setFormProps((prevState) => ({
+    //         ...prevState,
+    //         [field]: value,
+    //     }));
+    // }
 
     const handleChangeCard = (changeCard) => {
         if (changeCard) {
@@ -134,16 +132,14 @@ function ModifyExistingTestScript() {
         }
     }
 
-    const handleAddStep = (addStep) => {
-        if (addStep) {
-            console.log("adding step");
-            let stepCount = testScriptSteps.length;
-            let uniqueID = uuidv4();
-            let newStep = { number: stepCount + 1, description: "", pass: false, id: uniqueID };
-            let tempArray = testScriptSteps;
-            tempArray.push(newStep);
-            setTestScriptSteps([...tempArray]);
-        }
+    const handleAddStep = () => {
+        console.log("adding step");
+        let stepCount = testScriptSteps.length;
+        let uniqueID = uuidv4();
+        let newStep = { number: stepCount + 1, description: "", pass: false, id: uniqueID };
+        let tempArray = testScriptSteps;
+        tempArray.push(newStep);
+        setTestScriptSteps([...tempArray]);
     }
 
     const handleUpdateStepDescription = (updateInfo) => {
@@ -180,15 +176,15 @@ function ModifyExistingTestScript() {
         return listOfSteps;
     }
 
-    const handleSubmit = (submitted) => {
-        if (submitted && !isValidTestScriptNameEntered.current) {
+    const handleRequestTestscript = () => {
+        if (!isValidTestScriptNameEntered) {
             if (validateTestScriptNameEntered()) {
-                isValidTestScriptNameEntered.current = true;
+                setIsValidTestScriptNameEntered(true);
                 isDataFetched.current = false;
                 setRendering(true);
                 setSubmitButtonDisabled(true);
             } else {
-                setInvalidTestScriptNameError("Invalid test script name");
+                invalidTestScriptNameError("Invalid test script name");
             }
         }
     }
@@ -197,21 +193,19 @@ function ModifyExistingTestScript() {
     const validateTestScriptNameEntered = () => {
         for (let i = 0; i < testScriptNamesAlreadyInDB.current.length; i++) {
             let escapeRegExpMatch = formProps["testScriptName"].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-            if (new RegExp(`(?:^|\s|$)${escapeRegExpMatch}(?:^|\s|$)`).test(testScriptNamesAlreadyInDB.current[i])) {
+            if (new RegExp(`(?:^|s|$)${escapeRegExpMatch}(?:^|s|$)`).test(testScriptNamesAlreadyInDB.current[i])) {
                 return true;
             }
         }
         return false;
     }
 
-    const handleUpdate = (updated) => {
-        if (updated) {
-            isTestScriptSubmitted.current = true;
-            setSubmitButtonDisabled(true);
-            setIsAddOrModifyStepsButtonDisabled(true);
-            setDisplayFadingBalls(true);
-            runWriteAsyncFunctions();
-        }
+    const handleUpdate = () => {
+        isTestScriptSubmitted.current = true;
+        setSubmitButtonDisabled(true);
+        setIsAddOrModifyStepsButtonDisabled(true);
+        setDisplayFadingBalls(true);
+        runWriteAsyncFunctions();
     }
 
     const runWriteAsyncFunctions = () => {
@@ -277,9 +271,9 @@ function ModifyExistingTestScript() {
 
     useEffect(() => {
         if (rendering) {
-            if (!isValidTestScriptNameEntered.current && !isDataFetched.current) {
+            if (!isValidTestScriptNameEntered && !isDataFetched.current) {
                 runPrimaryReadAsyncFunctions();
-            } else if (isValidTestScriptNameEntered.current) {
+            } else if (isValidTestScriptNameEntered) {
                 if (!addOrModifySteps && !isDataFetched.current) {
                     runSecondaryReadAsyncFunctions(formProps["testScriptName"]);
                 } else if (addOrModifySteps) {
@@ -291,7 +285,7 @@ function ModifyExistingTestScript() {
         } else {
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
-            if (!isValidTestScriptNameEntered.current) {
+            if (!isValidTestScriptNameEntered) {
                 formProps["testScriptName"].trim().length ? setSubmitButtonDisabled(false) : setSubmitButtonDisabled(true);
             } else {
                 if (!isTestScriptSubmitted.current) {
@@ -353,7 +347,7 @@ function ModifyExistingTestScript() {
                         : <div></div>
                 }
                 <Fragment>
-                    {isValidTestScriptNameEntered.current
+                    {isValidTestScriptNameEntered
                         ? <Fragment>
                             {addOrModifySteps
                                 ? <div className="add-or-modify-steps">
@@ -381,23 +375,17 @@ function ModifyExistingTestScript() {
                                     <div className="modify-test-script-container">
                                         <div className="modify-test-script-card">
                                             <CreateOrModifyTestScriptCard
+                                                setFormProps={setFormProps}
                                                 isModificationCard={true}
-                                                testScriptName={handleFormCallback}
                                                 existingTestScriptName={formProps["testScriptName"]}
                                                 invalidTestScriptNames={testScriptNamesAlreadyInDB.current}
-                                                testScriptDescription={handleFormCallback}
                                                 existingTestScriptDescription={formProps["testScriptDescription"]}
-                                                testScriptPrimaryWorkstream={handleFormCallback}
                                                 existingTestScriptPrimaryWorkstream={formProps["testScriptPrimaryWorkstream"]}
-                                                ownerFirstName={handleFormCallback}
                                                 existingOwnerFirstName={formProps["ownerFirstName"]}
-                                                ownerLastName={handleFormCallback}
                                                 existingOwnerLastName={formProps["ownerLastName"]}
-                                                // ownerEmail={handleFormCallback}
-                                                // submittedOwnerEmail={formProps["ownerEmail"]}
-                                                addOrModifySteps={handleChangeCard}
+                                                handleTransitionToStepsPage={handleChangeCard}
                                                 isAddOrModifyStepsButtonDisabled={isAddOrModifyStepsButtonDisabled}
-                                                modified={handleUpdate}
+                                                modifyTestScript={handleUpdate}
                                                 isSubmitOrModifyButtonDisabled={isModifyButtonDisabled}
                                                 displayFadingBalls={displayFadingBalls}>
                                             </CreateOrModifyTestScriptCard>
@@ -414,10 +402,9 @@ function ModifyExistingTestScript() {
                                     </div>
                                     <div className="enter-valid-test-script-name-card">
                                         <EnterTestScriptNameCard
-                                            testScriptName={handleFormCallback}
-                                            submitted={handleSubmit}
-                                            isSubmitButtonDisabled={isSubmitButtonDisabled}
-                                            textAuthenticationError={invalidTestScriptNameError}>
+                                            setFormProps={setFormProps}
+                                            requestTestScript={handleRequestTestscript}
+                                            isSubmitButtonDisabled={isSubmitButtonDisabled}>
                                         </EnterTestScriptNameCard>
                                     </div>
                                 </div>

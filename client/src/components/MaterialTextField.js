@@ -1,49 +1,47 @@
 import * as React from 'react';
+import { useValidationError } from '../pages/ModifyExistingTestScript/Context/ValidationErrorContext';
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function MaterialTextField({
-  field = "",
-  className = "",
-  label = "",
-  helperText = "",
-  characterLimit = 500,
-  placeholder = "",
-  defaultValue = "",
-  inputValue = "",
-  multiline = false,
-  type = "text",
-  required = false,
-  showCharCounter = false,
-  // limitRangeOfInputs = false,
-  requiresValidation = false,
-  isValidationCaseSensitive = true,
-  invalidInputs = [],
-  invalidInputMsg = "",
-  maxValue = Number.MAX_SAFE_INTEGER,
-  minValue = Number.MIN_SAFE_INTEGER,
-  negativeNumbersAllowed = true,
-  zerosAllowed = true,
-  fractionsAllowed = true,
-  authenticationField = false,
-  textAuthenticationError = "",
+function MaterialTextField({
+  field,
+  className,
+  label,
+  helperText,
+  characterLimit,
+  placeholder,
+  defaultValue,
+  inputValue,
+  multiline,
+  type,
+  required,
+  showCharCounter,
+  requiresTextValidation,
+  isTextValidationCaseSensitive,
+  invalidInputs,
+  invalidInputMsg,
+  authenticationField,
+  minValue,
+  maxValue,
+  negativeNumbersAllowed,
+  zerosAllowed,
+  fractionsAllowed,
   disabled = false,
-  forceErrorOff = false
 }) {
   const [value, setValue] = React.useState(defaultValue);
   const [errorEnabled, setErrorEnabled] = React.useState(false);
-  // const [errorMsg, setErrorMsg] = React.useState("");
   const [displayedHelperText, setDisplayedHelperText] = React.useState(helperText);
   const [inputLength, setInputLength] = React.useState(type !== "number" ? defaultValue.length : 0);
-  // const [firstRender, setFirstRender] = React.useState(true);
+  const authenticationError = useValidationError();
 
   const handleOnChange = (value) => {
     if (value.trim() !== "") {
-      if (type === "text" && requiresValidation) {
+      if (type === "text" && requiresTextValidation) {
         checkInputValidity(value);
       } else if (type === "email") {
         checkEmailValidity(value);
-      } else if (type === "password" && requiresValidation) {
+      } else if (type === "password" && requiresTextValidation) {
         checkPasswordValidity(value);
       } else if (type === "number") {
         checkNumberValidity(parseInt(value));
@@ -66,7 +64,7 @@ export default function MaterialTextField({
   }
 
   const checkInputValidity = (input) => {
-    input = isValidationCaseSensitive ? input : input.toLowerCase();
+    input = isTextValidationCaseSensitive ? input : input.toLowerCase();
     if (invalidInputs.includes(input)) {
       invalidInputMsg === ""
         ? setDisplayedHelperText("Invalid input")
@@ -140,17 +138,17 @@ export default function MaterialTextField({
 
   React.useEffect(() => {
     if (authenticationField) {
-      if (textAuthenticationError !== "") {
+      if (authenticationError.length) {
         setErrorEnabled(true);
-        setDisplayedHelperText(textAuthenticationError);
+        setDisplayedHelperText(authenticationError);
       } else {
-        if (value.trim() !== "" || authenticationField) {
-          setErrorEnabled(false);
-          setDisplayedHelperText("");
-        }
+        // if (value.trim().length || authenticationField) {
+        setErrorEnabled(false);
+        setDisplayedHelperText("");
+        // }
       }
     }
-  }, [authenticationField, textAuthenticationError, errorEnabled, value]) // TODO: check need for firstRender
+  }, [authenticationField, authenticationError, errorEnabled, value]) // TODO: check need for firstRender
 
   return (
     <Box
@@ -204,3 +202,57 @@ export default function MaterialTextField({
     </Box>
   );
 }
+
+MaterialTextField.propTypes = {
+  field: PropTypes.string,
+  className: PropTypes.string,
+  label: PropTypes.string,
+  helperText: PropTypes.string,
+  characterLimit: PropTypes.number,
+  placeholder: PropTypes.string,
+  defaultValue: PropTypes.string,
+  inputValue: PropTypes.func,
+  multiline: PropTypes.bool,
+  type: PropTypes.string,
+  required: PropTypes.bool,
+  showCharCounter: PropTypes.bool,
+  requiresValidation: PropTypes.bool,
+  isValidationCaseSensitive: PropTypes.bool,
+  invalidInputs: PropTypes.array,
+  invalidInputMsg: PropTypes.string,
+  authenticationField: PropTypes.bool,
+  minValue: PropTypes.number,
+  maxValue: PropTypes.number,
+  negativeNumbersAllowed: PropTypes.bool,
+  zerosAllowed: PropTypes.bool,
+  fractionsAllowed: PropTypes.bool,
+  disabled: PropTypes.bool,
+}
+
+MaterialTextField.defaultProps = {
+  field: "",
+  className: "",
+  label: "",
+  helperText: "",
+  characterLimit: 500,
+  placeholder: "",
+  defaultValue: "",
+  inputValue: () => { },
+  multiline: false,
+  type: "text",
+  required: false,
+  showCharCounter: false,
+  requiresTextValidation: false,
+  isTextValidationCaseSensitive: true,
+  invalidInputs: [],
+  invalidInputMsg: "",
+  authenticationField: false,
+  minValue: Number.MIN_SAFE_INTEGER,
+  maxValue: Number.MAX_SAFE_INTEGER,
+  negativeNumbersAllowed: true,
+  zerosAllowed: true,
+  fractionsAllowed: true,
+  disabled: false,
+}
+
+export default MaterialTextField;

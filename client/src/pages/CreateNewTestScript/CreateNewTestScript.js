@@ -1,19 +1,21 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../components/Navbar";
+import NavBar from "../../components/Navbar";
 import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
-import "../styles/LandingPage.css";
-import CreateOrModifyTestScriptCard from "../components/CreateOrModifyTestScriptCard";
-import AddOrModifyStepsCard from "../components/AddOrModifyStepsCard";
-import MaterialAlert from "../components/MaterialAlert";
+import CreateOrModifyTestScriptCard from "../../components/CreateOrModifyTestScriptCard";
+import AddOrModifyStepsCard from "../../components/AddOrModifyStepsCard";
+import MaterialAlert from "../../components/MaterialAlert";
 import { v4 as uuidv4 } from "uuid";
 import Axios from "axios";
-import "../styles/CreateNewTestScript.css";
-import "../styles/InputComponents.css";
-import "../styles/CardComponents.css";
-import "../styles/SelectorComponents.css";
-import "../styles/AlertComponents.css";
-import "../styles/Steps.css";
+import "../../styles/CreateNewTestScript.css";
+import "../../styles/InputComponents.css";
+import "../../styles/CardComponents.css";
+import "../../styles/SelectorComponents.css";
+import "../../styles/AlertComponents.css";
+import "../../styles/Steps.css";
+
+import PageWrapper from "./PageWrapper";
+import useName from "./Context/useName";
 
 function CreateNewTestScript() {
     const [rendering, setRendering] = useState(true);
@@ -28,7 +30,7 @@ function CreateNewTestScript() {
         // ownerEmail: "",
     });
     const [testScriptSteps, setTestScriptSteps] = useState([]);
-    const [addOrModifySteps, setAddOrModifySteps] = useState(false);
+    const [isUserModifyingSteps, setIsUserModifyingSteps] = useState(false);
     const [isAddOrModifyStepsButtonDisabled, setIsAddOrModifyStepsButtonDisabled] = useState(false);
     const [isAddStepButtonDisabled, setAddStepButtonDisabled] = useState(false);
     const [isRemoveStepButtonDisabled, setRemoveStepButtonDisabled] = useState(true);
@@ -93,39 +95,35 @@ function CreateNewTestScript() {
     //     }
     // }
 
-    const handleFormCallback = (returnedObject) => {
-        const field = returnedObject.field;
-        const value = returnedObject.value;
+    // const handleFormCallback = (returnedObject) => {
+    //     const field = returnedObject.field;
+    //     const value = returnedObject.value;
 
-        setFormPropsForFieldAndValue(field, value);
+    //     setFormPropsForFieldAndValue(field, value);
+    // }
+
+    // const setFormPropsForFieldAndValue = (field, value) => {
+    //     setFormProps((prevState) => ({
+    //         ...prevState,
+    //         [field]: value,
+    //     }));
+    // }
+
+    const handleChangeCard = () => {
+        setRendering(true);
+        isUserModifyingSteps
+            ? setIsUserModifyingSteps(false)
+            : setIsUserModifyingSteps(true);
     }
 
-    const setFormPropsForFieldAndValue = (field, value) => {
-        setFormProps((prevState) => ({
-            ...prevState,
-            [field]: value,
-        }));
-    }
-
-    const handleChangeCard = (changeCard) => {
-        if (changeCard) {
-            setRendering(true);
-            addOrModifySteps
-                ? setAddOrModifySteps(false)
-                : setAddOrModifySteps(true);
-        }
-    }
-
-    const handleAddStep = (addStep) => {
-        if (addStep) {
-            console.log("adding step");
-            let stepCount = testScriptSteps.length;
-            let uniqueID = uuidv4();
-            let newStep = { number: stepCount + 1, description: "", pass: false, id: uniqueID };
-            let tempArray = testScriptSteps;
-            tempArray.push(newStep);
-            setTestScriptSteps([...tempArray]);
-        }
+    const handleAddStep = () => {
+        console.log("adding step");
+        let stepCount = testScriptSteps.length;
+        let uniqueID = uuidv4();
+        let newStep = { number: stepCount + 1, description: "", pass: false, id: uniqueID };
+        let tempArray = testScriptSteps;
+        tempArray.push(newStep);
+        setTestScriptSteps([...tempArray]);
     }
 
     const handleUpdateStepDescription = (updateInfo) => {
@@ -160,14 +158,12 @@ function CreateNewTestScript() {
         return listOfSteps;
     }
 
-    const handleSubmit = (submitted) => {
-        if (submitted) {
-            isTestScriptSubmitted.current = true;
-            setSubmitButtonDisabled(true);
-            setIsAddOrModifyStepsButtonDisabled(true);
-            setDisplayFadingBalls(true);
-            runWriteAsyncFunctions();
-        }
+    const handleSubmit = () => {
+        isTestScriptSubmitted.current = true;
+        setSubmitButtonDisabled(true);
+        setIsAddOrModifyStepsButtonDisabled(true);
+        setDisplayFadingBalls(true);
+        runWriteAsyncFunctions();
     }
 
     const runWriteAsyncFunctions = () => {
@@ -233,9 +229,9 @@ function CreateNewTestScript() {
 
     useEffect(() => {
         if (rendering) {
-            if (!addOrModifySteps && !isInitialDataFetched.current) {
+            if (!isUserModifyingSteps && !isInitialDataFetched.current) {
                 runReadAsyncFunctions();
-            } else if (addOrModifySteps) {
+            } else if (isUserModifyingSteps) {
                 setRendering(false);
             } else {
                 setRendering(false);
@@ -273,7 +269,7 @@ function CreateNewTestScript() {
                 <div
                     className="transition-element"
                     style={{
-                        opacity: transitionElementOpacity,
+                        opacity: transitionElementOpacity, // TODO: change this to use a boolean
                         visibility: transtitionElementVisibility
                     }}>
                 </div>
@@ -300,56 +296,41 @@ function CreateNewTestScript() {
                         </div>
                         : <div></div>
                 }
-                <Fragment>
-                    {addOrModifySteps
-                        ? <div className="add-or-modify-steps">
-                            <div className="page-message">
-                                Add/Modify Test Script Steps Below:
+                <PageWrapper isAddingSteps={isUserModifyingSteps}>
+                    {isUserModifyingSteps
+                        ?
+                        <div className="add-or-modify-steps-container">
+                            <div className="add-or-modify-steps-card">
+                                <AddOrModifyStepsCard
+                                    existingSteps={testScriptSteps}
+                                    addStep={handleAddStep}
+                                    isAddStepButtonDisabled={isAddStepButtonDisabled}
+                                    modifyStepDescription={handleUpdateStepDescription}
+                                    removeStep={handleRemoveStep}
+                                    isRemoveStepButtonDisabled={isRemoveStepButtonDisabled}
+                                    goBack={handleChangeCard}>
+                                </AddOrModifyStepsCard>
                             </div>
-                            <div className="add-or-modify-steps-container">
-                                <div className="add-or-modify-steps-card">
-                                    <AddOrModifyStepsCard
-                                        existingSteps={testScriptSteps}
-                                        addStep={handleAddStep}
-                                        isAddStepButtonDisabled={isAddStepButtonDisabled}
-                                        updateStepDescription={handleUpdateStepDescription}
-                                        removeStep={handleRemoveStep}
-                                        isRemoveStepButtonDisabled={isRemoveStepButtonDisabled}
-                                        goBack={handleChangeCard}>
-                                    </AddOrModifyStepsCard>
-                                </div>
-                            </div>
-                        </div >
-                        : <div className="create-or-modify-test-script">
-                            <div className="page-message">
-                                Please Fill Out/Modify the Fields Below:
-                            </div>
-                            <div className="create-or-modify-test-script-container">
-                                <div className="create-or-modify-test-script-card">
-                                    <CreateOrModifyTestScriptCard
-                                        testScriptName={handleFormCallback}
-                                        existingTestScriptName={formProps["testScriptName"]}
-                                        invalidTestScriptNames={testScriptNamesAlreadyInDB.current}
-                                        testScriptDescription={handleFormCallback}
-                                        existingTestScriptDescription={formProps["testScriptDescription"]}
-                                        testScriptPrimaryWorkstream={handleFormCallback}
-                                        existingTestScriptPrimaryWorkstream={formProps["testScriptPrimaryWorkstream"]}
-                                        ownerFirstName={handleFormCallback}
-                                        existingOwnerFirstName={formProps["ownerFirstName"]}
-                                        ownerLastName={handleFormCallback}
-                                        existingOwnerLastName={formProps["ownerLastName"]}
-                                        // ownerEmail={handleFormCallback}
-                                        // submittedOwnerEmail={formProps["ownerEmail"]}
-                                        addOrModifySteps={handleChangeCard}
-                                        isAddOrModifyStepsButtonDisabled={isAddOrModifyStepsButtonDisabled}
-                                        submitted={handleSubmit}
-                                        isSubmitButtonDisabled={isSubmitButtonDisabled}
-                                        displayFadingBalls={displayFadingBalls}>
-                                    </CreateOrModifyTestScriptCard>
-                                </div>
+                        </div> :
+                        <div className="create-or-modify-test-script-container">
+                            <div className="create-or-modify-test-script-card">
+                                <CreateOrModifyTestScriptCard
+                                    setFormProps={setFormProps}
+                                    existingTestScriptName={formProps["testScriptName"]}
+                                    invalidTestScriptNames={testScriptNamesAlreadyInDB.current}
+                                    existingTestScriptDescription={formProps["testScriptDescription"]}
+                                    existingTestScriptPrimaryWorkstream={formProps["testScriptPrimaryWorkstream"]}
+                                    existingOwnerFirstName={formProps["ownerFirstName"]}
+                                    existingOwnerLastName={formProps["ownerLastName"]}
+                                    handleTransitionToStepsPage={handleChangeCard}
+                                    isAddOrModifyStepsButtonDisabled={isAddOrModifyStepsButtonDisabled}
+                                    submitTestScript={handleSubmit}
+                                    isSubmitOrModifyButtonDisabled={isSubmitButtonDisabled}
+                                    displayFadingBalls={displayFadingBalls}>
+                                </CreateOrModifyTestScriptCard>
                             </div>
                         </div>}
-                </Fragment>
+                </PageWrapper>
             </Fragment>
     )
 };

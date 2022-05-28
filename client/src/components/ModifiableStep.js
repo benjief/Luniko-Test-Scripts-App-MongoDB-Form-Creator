@@ -1,27 +1,28 @@
 import { display } from '@mui/system';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import MaterialTextField from './MaterialTextField';
 
-export default function ModifiableStep({
-    stepNumber = -1,
-    stepDescription = "",
+function ModifiableStep({
+    stepNumber,
+    stepDescription,
     // existingStepDescription = "",
-    modify = {},
-    remove = {},
-    removeDisabled = true
+    modifyStepDescription,
+    removeStep,
+    removeDisabled,
 }) {
     const [opacity, setOpacity] = React.useState("0%");
     const [height, setHeight] = React.useState(stepNumber === 1 ? "49px" : "0");
     const [marginBottom, setMarginBottom] = React.useState("0");
     const [removed, setRemoved] = React.useState(false);
 
-    const handleOnChange = (returnedObject) => {
-        const updatedDescription = returnedObject.value;
-        const objectToReturn = { number: stepNumber, description: updatedDescription }
-        modify(objectToReturn);
+    const handleModifyStepDescription = (returnedObject) => {
+        const updatedStepDescription = returnedObject.value;
+        const updatedStep = { number: stepNumber, description: updatedStepDescription }
+        modifyStepDescription(updatedStep);
     }
 
-    const handleRemove = () => {
+    const handleRemoveStep = () => {
         setRemoved(true);
         if (!removeDisabled) {
             setOpacity("0%");
@@ -30,7 +31,7 @@ export default function ModifiableStep({
                 setHeight("0");
             }, 300);
             setTimeout(() => {
-                remove({ number: stepNumber });
+                removeStep({ number: stepNumber });
             }, 1000);
         }
     }
@@ -56,7 +57,7 @@ export default function ModifiableStep({
                     characterLimit={1000}
                     defaultValue={stepDescription}
                     placeholder="Description"
-                    inputValue={handleOnChange}
+                    inputValue={handleModifyStepDescription}
                     multiline={true}
                     required={true}
                     showCharCounter={true}>
@@ -66,9 +67,27 @@ export default function ModifiableStep({
                 <button className="remove-step-button"
                     type="submit"
                     disabled={removeDisabled}
-                    onClick={handleRemove}>
+                    onClick={handleRemoveStep}>
                 </button>
             </div>
         </div >
     );
 }
+
+ModifiableStep.propTypes = {
+    stepNumber: PropTypes.number,
+    stepDescription: PropTypes.string,
+    modifyStepDescription: PropTypes.func,
+    removeStep: PropTypes.func,
+    removeDisabled: PropTypes.bool,
+}
+
+ModifiableStep.defaultProps = {
+    stepNumber: -1,
+    stepDescription: "",
+    modifyStepDescription: () => { },
+    removeStep: () => { },
+    removeDisabled: true,
+}
+
+export default ModifiableStep;

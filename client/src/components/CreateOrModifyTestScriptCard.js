@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -22,43 +23,31 @@ import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 //     }),
 // }));
 
-export default function CreateOrModifyTestScriptCard({
-    isModificationCard = false,
-    testScriptName = "",
-    existingTestScriptName = "",
-    invalidTestScriptNames = [], // TODO: be careful with this and the above prop
-    testScriptDescription = "",
-    existingTestScriptDescription = "",
-    testScriptPrimaryWorkstream = "",
-    existingTestScriptPrimaryWorkstream = "",
-    ownerFirstName = "",
-    existingOwnerFirstName = "",
-    ownerLastName = "",
-    existingOwnerLastName = "",
+function CreateOrModifyTestScriptCard({
+    setFormProps,
+    isModificationCard,
+    existingTestScriptName,
+    invalidTestScriptNames, // TODO: be careful with this and the above prop
+    existingTestScriptDescription,
+    existingTestScriptPrimaryWorkstream,
+    existingOwnerFirstName,
+    existingOwnerLastName,
     // ownerEmail = "",
     // submittedOwnerEmail = "",
-    addOrModifySteps = false,
-    isAddOrModifyStepsButtonDisabled = false,
-    submitted = false,
-    modified = false,
-    isSubmitOrModifyButtonDisabled = true,
-    displayFadingBalls = false,
+    handleTransitionToStepsPage,
+    isAddOrModifyStepsButtonDisabled,
+    modifyTestScript,
+    submitTestScript,
+    isSubmitOrModifyButtonDisabled,
+    displayFadingBalls,
 }) {
     // const [expanded, setExpanded] = React.useState(true);
     // const [submitButtonColor, setSubmitButtonColor] = React.useState("#BFBFBF");
 
     const handleOnChange = (returnedObject) => {
-        const objectToReturn = { value: returnedObject.value, field: returnedObject.field };
-        const stringFunction = returnedObject.field + "(objectToReturn)";
-        eval(stringFunction);
-    }
-
-    const handleAddOrModifySteps = () => {
-        addOrModifySteps(true);
-    }
-
-    const handleSubmit = () => {
-        isModificationCard ? modified(true) : submitted(true);
+        setFormProps(
+            prev => ({ ...prev, [returnedObject.field]: returnedObject.value })
+        );
     }
 
     // React.useEffect(() => {
@@ -124,7 +113,7 @@ export default function CreateOrModifyTestScriptCard({
                             inputValue={handleOnChange}
                             multiline={false}
                             required={true}
-                            showCharCounter={true}
+                            showCharCounter={isModificationCard ? false : true}
                             requiresValidation={true}
                             isValidationCaseSensitive={false}
                             invalidInputs={invalidTestScriptNames}
@@ -186,13 +175,13 @@ export default function CreateOrModifyTestScriptCard({
                         </MaterialTextField> */}
                         <button
                             className="add-or-modify-steps-button"
-                            onClick={handleAddOrModifySteps}
+                            onClick={handleTransitionToStepsPage}
                             disabled={isAddOrModifyStepsButtonDisabled}>
                             Add/Modify Steps
                         </button>
                         <button
                             className="submit-or-update-test-script-button"
-                            onClick={handleSubmit}
+                            onClick={isModificationCard ? modifyTestScript : submitTestScript}
                             disabled={isSubmitOrModifyButtonDisabled}
                             /*style={{ backgroundColor: submitButtonColor }}*/>
                             {displayFadingBalls ?
@@ -213,3 +202,39 @@ export default function CreateOrModifyTestScriptCard({
         </Card >
     );
 }
+
+CreateOrModifyTestScriptCard.propTypes = {
+    setFormProps: PropTypes.func,
+    isModificationCard: PropTypes.bool,
+    existingTestScriptName: PropTypes.string,
+    invalidTestScriptNames: PropTypes.array,
+    existingTestScriptDescription: PropTypes.string,
+    existingTestScriptPrimaryWorkstream: PropTypes.string,
+    existingOwnerFirstName: PropTypes.string,
+    existingOwnerLastName: PropTypes.string,
+    handleTransitionToStepsPage: PropTypes.func,
+    isAddOrModifyStepsButtonDisabled: PropTypes.bool,
+    modifyTestScript: PropTypes.func,
+    submitTestScript: PropTypes.func,
+    isSubmitOrModifyButtonDisabled: PropTypes.bool,
+    displayFadingBalls: PropTypes.bool,
+}
+
+CreateOrModifyTestScriptCard.defaultProps = {
+    setFormProps: () => { },
+    isModificationCard: false,
+    existingTestScriptName: "",
+    invalidTestScriptNames: [],
+    existingTestScriptDescription: "",
+    existingTestScriptPrimaryWorkstream: "",
+    existingOwnerFirstName: "",
+    existingOwnerLastName: "",
+    handleTransitionToStepsPage: () => { },
+    isAddOrModifyStepsButtonDisabled: false,
+    modifyTestScript: () => { },
+    submitTestScript: () => { },
+    isSubmitOrModifyButtonDisabled: true,
+    displayFadingBalls: false,
+}
+
+export default CreateOrModifyTestScriptCard;

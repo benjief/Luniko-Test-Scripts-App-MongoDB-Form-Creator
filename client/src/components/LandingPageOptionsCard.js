@@ -23,7 +23,7 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export default function LandingPageOptionsCard({
+function LandingPageOptionsCard({
 }) {
     const [expanded, setExpanded] = React.useState(true);
 
@@ -91,3 +91,5 @@ export default function LandingPageOptionsCard({
         </Card >
     );
 }
+
+export default LandingPageOptionsCard;
