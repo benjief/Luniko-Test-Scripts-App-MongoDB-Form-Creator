@@ -130,7 +130,7 @@ function AddOrModifyStepsCard({
 }
 
 AddOrModifyStepsCard.propTypes = {
-    existingSteps: PropTypes.array,
+    existingSteps: PropTypes.array, // TODO: make this more specific (see CardWrapper.jsx)
     addStep: PropTypes.func,
     isAddStepButtonDisabled: PropTypes.bool,
     modifyStepDescription: PropTypes.func,

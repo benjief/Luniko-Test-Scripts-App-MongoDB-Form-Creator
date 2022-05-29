@@ -1,26 +1,26 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../../components/Navbar";
-import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
-import CreateOrModifyTestScriptCard from "../../components/CreateOrModifyTestScriptCard";
-import AddOrModifyStepsCard from "../../components/AddOrModifyStepsCard";
-import MaterialAlert from "../../components/MaterialAlert";
+import LoadingWrapper from "../wrappers/LoadingWrapper/LoadingWrapper";
+import ErrorWrapper from "../wrappers/ErrorWrapper/ErrorWrapper";
+import CardWrapper from "../wrappers/CardWrapper/CardWrapper";
+// import NavBar from "../../components/Navbar";
+// import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
+import CreateOrModifyTestScriptCard from "../../../components/CreateOrModifyTestScriptCard";
+import AddOrModifyStepsCard from "../../../components/AddOrModifyStepsCard";
+// import MaterialAlert from "../../components/MaterialAlert";
 import { v4 as uuidv4 } from "uuid";
 import Axios from "axios";
-import "../../styles/CreateNewTestScript.css";
-import "../../styles/InputComponents.css";
-import "../../styles/CardComponents.css";
-import "../../styles/SelectorComponents.css";
-import "../../styles/AlertComponents.css";
-import "../../styles/Steps.css";
-
-import PageWrapper from "./PageWrapper";
-import useName from "./Context/useName";
+import "../../../styles/CreateNewTestScript.css";
+import "../../../styles/InputComponents.css";
+import "../../../styles/CardComponents.css";
+import "../../../styles/SelectorComponents.css";
+import "../../../styles/AlertComponents.css";
+import "../../../styles/Steps.css";
 
 function CreateNewTestScript() {
     const [rendering, setRendering] = useState(true);
     const [transitionElementOpacity, setTransitionElementOpacity] = useState("100%");
-    const [transtitionElementVisibility, setTransitionElementVisibility] = useState("visible");
+    const [transitionElementVisibility, setTransitionElementVisibility] = useState("visible");
     const [formProps, setFormProps] = useState({
         testScriptName: "",
         testScriptDescription: "",
@@ -37,7 +37,7 @@ function CreateNewTestScript() {
     const [isSubmitButtonDisabled, setSubmitButtonDisabled] = useState(true);
     const [displayFadingBalls, setDisplayFadingBalls] = useState(false);
     const async = useRef(false);
-    const activeError = useRef(false);
+    const [isErrorThrown, setIsErrorThrown] = useState(false);
     const [alert, setAlert] = useState(false);
     const alertMessage = useRef("Test script successfully updated!");
     const alertType = useRef("success-alert");
@@ -65,9 +65,7 @@ function CreateNewTestScript() {
             await Axios.get("http://localhost:5000/get-test-script-names", {
             })
                 .then(res => {
-                    console.log(res["data"]);
                     testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name.toLowerCase());
-                    console.log(testScriptNamesAlreadyInDB.current);
                     async.current = false;
                 });
         } catch (e) {
@@ -202,7 +200,7 @@ function CreateNewTestScript() {
     }
 
     const handleError = (errorType) => {
-        activeError.current = true;
+        setIsErrorThrown(true);
         alertType.current = "error-alert";
         errorType === "r"
             ? alertMessage.current = loadErrorMessage
@@ -256,82 +254,47 @@ function CreateNewTestScript() {
     }, [rendering, formProps, testScriptSteps, isAddStepButtonDisabled, isSubmitButtonDisabled, isTestScriptSubmitted]);
 
     return (
-        rendering
-            ? <div className="loading-spinner">
-                <Hypnosis
-                    className="spinner"
-                    color="var(--lunikoOrange)"
-                    width="100px"
-                    height="100px"
-                    duration="1.5s" />
-            </div>
-            : <Fragment>
-                <div
-                    className="transition-element"
-                    style={{
-                        opacity: transitionElementOpacity, // TODO: change this to use a boolean
-                        visibility: transtitionElementVisibility
-                    }}>
-                </div>
-                <NavBar>
-                </NavBar>
-                {activeError.current
-                    ? alert
-                        ? <div className="alert-container">
-                            <MaterialAlert
-                                message={alertMessage.current}
-                                closed={handleAlertClosed}
-                                className={alertType.current}>
-                            </MaterialAlert>
-                            <div className="error-div"></div>
-                        </div>
-                        : <div></div>
-                    : alert
-                        ? <div className="alert-container">
-                            <MaterialAlert
-                                message={alertMessage.current}
-                                closed={handleAlertClosed}
-                                className={alertType.current}>
-                            </MaterialAlert>
-                        </div>
-                        : <div></div>
-                }
-                <PageWrapper isAddingSteps={isUserModifyingSteps}>
-                    {isUserModifyingSteps
-                        ?
-                        <div className="add-or-modify-steps-container">
-                            <div className="add-or-modify-steps-card">
-                                <AddOrModifyStepsCard
-                                    existingSteps={testScriptSteps}
-                                    addStep={handleAddStep}
-                                    isAddStepButtonDisabled={isAddStepButtonDisabled}
-                                    modifyStepDescription={handleUpdateStepDescription}
-                                    removeStep={handleRemoveStep}
-                                    isRemoveStepButtonDisabled={isRemoveStepButtonDisabled}
-                                    goBack={handleChangeCard}>
-                                </AddOrModifyStepsCard>
-                            </div>
-                        </div> :
-                        <div className="create-or-modify-test-script-container">
-                            <div className="create-or-modify-test-script-card">
-                                <CreateOrModifyTestScriptCard
-                                    setFormProps={setFormProps}
-                                    existingTestScriptName={formProps["testScriptName"]}
-                                    invalidTestScriptNames={testScriptNamesAlreadyInDB.current}
-                                    existingTestScriptDescription={formProps["testScriptDescription"]}
-                                    existingTestScriptPrimaryWorkstream={formProps["testScriptPrimaryWorkstream"]}
-                                    existingOwnerFirstName={formProps["ownerFirstName"]}
-                                    existingOwnerLastName={formProps["ownerLastName"]}
-                                    handleTransitionToStepsPage={handleChangeCard}
-                                    isAddOrModifyStepsButtonDisabled={isAddOrModifyStepsButtonDisabled}
-                                    submitTestScript={handleSubmit}
-                                    isSubmitOrModifyButtonDisabled={isSubmitButtonDisabled}
-                                    displayFadingBalls={displayFadingBalls}>
-                                </CreateOrModifyTestScriptCard>
-                            </div>
-                        </div>}
-                </PageWrapper>
-            </Fragment>
+        <Fragment>
+            <LoadingWrapper
+                rendering={rendering}
+                transitionElementOpacity={transitionElementOpacity}
+                transitionElementVisibility={transitionElementVisibility}>
+            </LoadingWrapper>
+            < ErrorWrapper
+                alert={alert}
+                alertMessage={alertMessage.current}
+                handleAlertClosed={handleAlertClosed}
+                alertType={alertType.current}>
+            </ErrorWrapper>
+            <CardWrapper
+                isErrorThrown={isErrorThrown}
+                isUserModifyingSteps={isUserModifyingSteps}>
+                {isUserModifyingSteps
+                    ? <AddOrModifyStepsCard
+                        existingSteps={testScriptSteps}
+                        addStep={handleAddStep}
+                        isAddStepButtonDisabled={isAddStepButtonDisabled}
+                        modifyStepDescription={handleUpdateStepDescription}
+                        removeStep={handleRemoveStep}
+                        isRemoveStepButtonDisabled={isRemoveStepButtonDisabled}
+                        goBack={handleChangeCard}>
+                    </AddOrModifyStepsCard>
+                    : <CreateOrModifyTestScriptCard
+                        setFormProps={setFormProps}
+                        existingTestScriptName={formProps["testScriptName"]}
+                        invalidTestScriptNames={testScriptNamesAlreadyInDB.current}
+                        existingTestScriptDescription={formProps["testScriptDescription"]}
+                        existingTestScriptPrimaryWorkstream={formProps["testScriptPrimaryWorkstream"]}
+                        existingOwnerFirstName={formProps["ownerFirstName"]}
+                        existingOwnerLastName={formProps["ownerLastName"]}
+                        handleTransitionToStepsPage={handleChangeCard}
+                        isAddOrModifyStepsButtonDisabled={isAddOrModifyStepsButtonDisabled}
+                        submitTestScript={handleSubmit}
+                        isSubmitOrModifyButtonDisabled={isSubmitButtonDisabled}
+                        displayFadingBalls={displayFadingBalls}>
+                    </CreateOrModifyTestScriptCard>}
+            </CardWrapper>
+        </Fragment >
     )
 };
 

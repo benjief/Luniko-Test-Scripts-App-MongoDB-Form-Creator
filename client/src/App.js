@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes as Switch } from "react-router-dom"
 import LandingPage from "./pages/LandingPage";
-import CreateNewTestScript from "./pages/CreateNewTestScript";
-import ModifyExistingTestScript from "./pages/ModifyExistingTestScript";
-import { ValidationErrorProvider } from "./pages/ModifyExistingTestScript/Context/ValidationErrorContext";
+import CreateNewTestScript from "./pages/test_script_pages/CreateNewTestScript/CreateNewTestScript";
+import ModifyExistingTestScript from "./pages/test_script_pages/ModifyExistingTestScript/ModifyExistingTestScript";
+import { ValidationErrorProvider } from "./pages/test_script_pages/Context/ValidationErrorContext";
 import './App.css';
 
 function App() {

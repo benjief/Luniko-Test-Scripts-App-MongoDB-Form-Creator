@@ -1,0 +1,48 @@
+import PropTypes from 'prop-types';
+import React from 'react'
+// import "../../../styles/CreateNewTestScript.css";
+
+// const CREATE_VIEW = 'CREATE_VIEW'
+
+function CardWrapper({
+    children,
+    isErrorThrown,
+    isUserModifyingSteps,
+}) {
+
+    return (
+        isErrorThrown
+            ? <div></div> // TODO: test this!
+            : <div className={isUserModifyingSteps ? "create-or-modify-test-script" : "add-or-modify-steps"}>
+                <div className="page-message">
+                    {isUserModifyingSteps
+                        ? "Add or Modify Test Script Steps Below:"
+                        : "Please Fill Out the Fields Below:"}
+                </div>
+                <div className={isUserModifyingSteps ? "add-or-modify-steps-container" : "create-or-modify-test-script-container"}>
+                    <div className={isUserModifyingSteps ? "add-or-modify-steps-card" : "create-or-modify-test-script-card"}>
+                        {children}
+                    </div>
+                </div>
+            </div >
+    )
+};
+
+// TODO: example prop types (document these elsewhere)
+CardWrapper.propTypes = {
+    children: PropTypes.node.isRequired,
+    isUserModifyingSteps: PropTypes.bool,
+    // setter: PropTypes.func,
+    // myObject: PropTypes.shape({
+    //     age: PropTypes.number
+    // }),
+    // arr: PropTypes.arrayOf(PropTypes.string),
+    // somethingElse: PropTypes.oneOf([CREATE_VIEW, 'Modify'])
+}
+
+CardWrapper.defaultProps = {
+    isUserModifyingSteps: false,
+    // setter: null
+}
+
+export default CardWrapper;
