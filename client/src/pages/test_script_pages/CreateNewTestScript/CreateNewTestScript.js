@@ -207,7 +207,8 @@ function CreateNewTestScript() {
             : alertMessage.current = writeErrorMessage;
 
         // Delay is set up just in case an error is generated before the is fully-displayed
-        let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
+        // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
+        let delay = 0; // TODO: test this and amend if necessary
 
         if (rendering) {
             setRendering(false);
@@ -231,9 +232,9 @@ function CreateNewTestScript() {
                 runReadAsyncFunctions();
             } else if (isUserModifyingSteps) {
                 setRendering(false);
-            } else {
+            } /*else {
                 setRendering(false);
-            }
+            }*/
         } else {
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");

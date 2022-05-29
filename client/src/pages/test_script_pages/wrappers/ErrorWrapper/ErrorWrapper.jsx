@@ -13,11 +13,11 @@ function ErrorWrapper({
         alert
             ? <div className="alert-container">
                 <MaterialAlert
-                    message={alertMessage.current}
+                    message={alertMessage}
                     closed={handleAlertClosed}
-                    className={alertType.current}>
+                    className={alertType}>
                 </MaterialAlert>
-                <div className="error-div"></div>
+                {/* <div className="error-div"></div> */}
             </div>
             : <div></div>
     )
