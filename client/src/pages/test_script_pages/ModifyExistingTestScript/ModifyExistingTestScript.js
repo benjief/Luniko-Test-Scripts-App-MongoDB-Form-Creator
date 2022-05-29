@@ -71,6 +71,7 @@ function ModifyExistingTestScript() {
             })
                 .then(res => {
                     testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name);
+                    console.log(res.data);
                     async.current = false;
                 });
         } catch (e) {
@@ -82,6 +83,7 @@ function ModifyExistingTestScript() {
     const runSecondaryReadAsyncFunctions = async (testScriptName) => {
         isDataFetched.current = true;
         await fetchTestScriptInformation(testScriptName);
+        setRendering(false);
     }
 
     const fetchTestScriptInformation = async (testScriptName) => {
@@ -247,6 +249,7 @@ function ModifyExistingTestScript() {
     }
 
     const handleError = (errorType) => {
+        console.log("handling error");
         setIsErrorThrown(true);
         alertType.current = "error-alert";
         errorType === "r"
@@ -254,7 +257,8 @@ function ModifyExistingTestScript() {
             : alertMessage.current = writeErrorMessage;
 
         // Delay is set up just in case an error is generated before the is fully-displayed
-        let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
+        // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
+        let delay = 0; // TODO: test this and amend if necessary
 
         if (rendering) {
             setRendering(false);
@@ -273,7 +277,7 @@ function ModifyExistingTestScript() {
     }
 
     useEffect(() => {
-        if (rendering) {
+        if (rendering) { // TODO: go over logic here
             if (!isValidTestScriptNameEntered && !isDataFetched.current) {
                 runPrimaryReadAsyncFunctions();
             } else if (isValidTestScriptNameEntered) {
@@ -281,9 +285,9 @@ function ModifyExistingTestScript() {
                     runSecondaryReadAsyncFunctions(formProps["testScriptName"]);
                 } else if (isUserModifyingSteps) {
                     setRendering(false);
-                } else {
+                } /*else {
                     setRendering(false);
-                }
+                }*/
             }
         } else {
             setTransitionElementOpacity("0%");
@@ -351,20 +355,24 @@ function ModifyExistingTestScript() {
                             displayFadingBalls={displayFadingBalls}>
                         </CreateOrModifyTestScriptCard>}
                 </CardWrapper>
-                : <div className="enter-valid-test-script-name">
-                    <div className="enter-valid-test-script-name-container">
-                        <div className="page-message">
-                            Retrieve Your Test Script Below:
-                        </div>
-                        <div className="enter-valid-test-script-name-card">
-                            <EnterTestScriptNameCard
-                                setFormProps={setFormProps}
-                                requestTestScript={handleRequestTestscript}
-                                isSubmitButtonDisabled={isSubmitButtonDisabled}>
-                            </EnterTestScriptNameCard>
-                        </div>
-                    </div>
-                </div>}
+                : <Fragment>
+                    {isErrorThrown
+                        ? <div></div>
+                        : <div className="enter-valid-test-script-name">
+                            <div className="enter-valid-test-script-name-container">
+                                <div className="page-message">
+                                    Retrieve Your Test Script Below:
+                                </div>
+                                <div className="enter-valid-test-script-name-card">
+                                    <EnterTestScriptNameCard
+                                        setFormProps={setFormProps}
+                                        requestTestScript={handleRequestTestscript}
+                                        isSubmitButtonDisabled={isSubmitButtonDisabled}>
+                                    </EnterTestScriptNameCard>
+                                </div>
+                            </div>
+                        </div>}
+                </Fragment>}
         </Fragment >
     )
 };
