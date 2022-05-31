@@ -4,12 +4,9 @@ import { useNavigate } from "react-router-dom";
 import LoadingWrapper from "../wrappers/LoadingWrapper/LoadingWrapper";
 import ErrorWrapper from "../wrappers/ErrorWrapper/ErrorWrapper";
 import CardWrapper from "../wrappers/CardWrapper/CardWrapper";
-// import NavBar from "../../components/Navbar";
-// import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
 import CreateOrModifyTestScriptCard from "../../../components/CreateOrModifyTestScriptCard";
 import AddOrModifyStepsCard from "../../../components/AddOrModifyStepsCard";
 import EnterTestScriptNameCard from "../../../components/EnterTestScriptNameCard";
-// import MaterialAlert from "../../components/MaterialAlert";
 import { v4 as uuidv4, validate } from "uuid";
 import Axios from "axios";
 import "../../../styles/ModifyExistingTestScript.css";
@@ -24,18 +21,18 @@ function ModifyExistingTestScript() {
     const [transitionElementOpacity, setTransitionElementOpacity] = useState("100%");
     const [transitionElementVisibility, setTransitionElementVisibility] = useState("visible");
     const [isValidTestScriptNameEntered, setIsValidTestScriptNameEntered] = useState(false);
-    // const [invalidTestScriptNameError, setInvalidTestScriptNameError] = useState("");
     const invalidTestScriptNameError = useValidationErrorUpdate();
     const [isSubmitButtonDisabled, setSubmitButtonDisabled] = useState(true);
+    const testScriptID = useRef("");
     const [formProps, setFormProps] = useState({
         testScriptName: "",
         testScriptDescription: "",
         testScriptPrimaryWorkstream: "",
         ownerFirstName: "",
         ownerLastName: "",
-        // ownerEmail: "",
     });
     const [testScriptSteps, setTestScriptSteps] = useState([]);
+    const cardChanged = useRef(false);
     const [isUserModifyingSteps, setIsUserModifyingSteps] = useState(false);
     const [isAddOrModifyStepsButtonDisabled, setIsAddOrModifyStepsButtonDisabled] = useState(false);
     const [isAddStepButtonDisabled, setAddStepButtonDisabled] = useState(false);
@@ -49,7 +46,7 @@ function ModifyExistingTestScript() {
     const alertType = useRef("success-alert");
 
     const testScriptNamesAlreadyInDB = useRef([]);
-    const isDataFetched = useRef(false);
+    const isDataBeingFetched = useRef(false);
     const isTestScriptSubmitted = useRef(false);
 
     const loadErrorMessage = "Apologies! We've encountered an error. Please attempt to re-load this page.";
@@ -58,7 +55,7 @@ function ModifyExistingTestScript() {
     const navigate = useNavigate();
 
     const runPrimaryReadAsyncFunctions = async () => {
-        isDataFetched.current = true;
+        isDataBeingFetched.current = true;
         await fetchTestScriptNamesAlreadyInDB();
         setRendering(false);
     }
@@ -81,8 +78,10 @@ function ModifyExistingTestScript() {
     }
 
     const runSecondaryReadAsyncFunctions = async (testScriptName) => {
-        isDataFetched.current = true;
+        isDataBeingFetched.current = true;
         await fetchTestScriptInformation(testScriptName);
+        console.log(testScriptID.current);
+        await getTestScriptSteps(testScriptID.current);
         setRendering(false);
     }
 
@@ -92,6 +91,7 @@ function ModifyExistingTestScript() {
             await Axios.get(`http://localhost:5000/get-test-script/${testScriptName}`, {
             })
                 .then(res => {
+                    console.log(res.data);
                     populateTestScriptInformation(res.data);
                 })
         } catch (e) {
@@ -108,40 +108,39 @@ function ModifyExistingTestScript() {
             ownerFirstName: testScriptInformation.owner["firstName"],
             ownerLastName: testScriptInformation.owner["lastName"],
         });
-        setTestScriptSteps(testScriptInformation.steps);
+        testScriptID.current = testScriptInformation._id;
         async.current = false;
     }
 
-    // const handleFormCallback = (returnedObject) => {
-    //     const field = returnedObject.field;
-    //     const value = returnedObject.value;
-    //     if (field === "testScriptName") {
-    //         setInvalidTestScriptNameError("");
-    //     }
-    //     setFormPropsForFieldAndValue(field, value);
-    // }
-
-    // const setFormPropsForFieldAndValue = (field, value) => {
-    //     setFormProps((prevState) => ({
-    //         ...prevState,
-    //         [field]: value,
-    //     }));
-    // }
-
-    const handleChangeCard = (changeCard) => {
-        if (changeCard) {
-            setRendering(true);
-            isUserModifyingSteps
-                ? setIsUserModifyingSteps(false)
-                : setIsUserModifyingSteps(true);
+    const getTestScriptSteps = async (testScriptID) => {
+        if (!async.current) {
+            try {
+                async.current = true;
+                await Axios.get(`http://localhost:5000/get-test-script-steps/${testScriptID}`, {
+                })
+                    .then(res => {
+                        setTestScriptSteps(res.data);
+                    })
+            } catch (e) {
+                console.log(e);
+                handleError("r");
+            }
         }
+    }
+
+    const handleChangeCard = () => {
+        setRendering(true);
+        cardChanged.current = true;
+        isUserModifyingSteps
+            ? setIsUserModifyingSteps(false)
+            : setIsUserModifyingSteps(true);
     }
 
     const handleAddStep = () => {
         console.log("adding step");
         let stepCount = testScriptSteps.length;
         let uniqueID = uuidv4();
-        let newStep = { number: stepCount + 1, description: "", pass: false, id: uniqueID };
+        let newStep = { number: stepCount + 1, description: "", pass: false, uniqueID: uniqueID };
         let tempArray = testScriptSteps;
         tempArray.push(newStep);
         setTestScriptSteps([...tempArray]);
@@ -185,7 +184,7 @@ function ModifyExistingTestScript() {
         if (!isValidTestScriptNameEntered) {
             if (validateTestScriptNameEntered()) {
                 setIsValidTestScriptNameEntered(true);
-                isDataFetched.current = false;
+                isDataBeingFetched.current = false;
                 setRendering(true);
                 setSubmitButtonDisabled(true);
             } else {
@@ -278,16 +277,15 @@ function ModifyExistingTestScript() {
 
     useEffect(() => {
         if (rendering) { // TODO: go over logic here
-            if (!isValidTestScriptNameEntered && !isDataFetched.current) {
+            if (!isValidTestScriptNameEntered && !isDataBeingFetched.current) {
                 runPrimaryReadAsyncFunctions();
             } else if (isValidTestScriptNameEntered) {
-                if (!isUserModifyingSteps && !isDataFetched.current) {
+                if (!isUserModifyingSteps && !isDataBeingFetched.current) {
                     runSecondaryReadAsyncFunctions(formProps["testScriptName"]);
-                } else if (isUserModifyingSteps) {
+                } else if (cardChanged.current) {
+                    cardChanged.current = false
                     setRendering(false);
-                } /*else {
-                    setRendering(false);
-                }*/
+                }
             }
         } else {
             setTransitionElementOpacity("0%");
@@ -310,7 +308,7 @@ function ModifyExistingTestScript() {
                 }
             }
         }
-    }, [rendering, isDataFetched, isValidTestScriptNameEntered, formProps, testScriptSteps, isAddStepButtonDisabled, isModifyButtonDisabled, isTestScriptSubmitted]);
+    }, [rendering, isDataBeingFetched, cardChanged, isUserModifyingSteps, isValidTestScriptNameEntered, formProps, testScriptSteps, isAddStepButtonDisabled, isModifyButtonDisabled, isTestScriptSubmitted, runPrimaryReadAsyncFunctions, runSecondaryReadAsyncFunctions]);
 
     return (
         <Fragment>
@@ -327,6 +325,7 @@ function ModifyExistingTestScript() {
             </ErrorWrapper>
             {isValidTestScriptNameEntered
                 ? <CardWrapper
+                    rendering={rendering}
                     isErrorThrown={isErrorThrown}
                     isUserModifyingSteps={isUserModifyingSteps}>
                     {isUserModifyingSteps

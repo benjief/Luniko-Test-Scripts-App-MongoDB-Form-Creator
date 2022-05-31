@@ -30,6 +30,7 @@ function CreateNewTestScript() {
         // ownerEmail: "",
     });
     const [testScriptSteps, setTestScriptSteps] = useState([]);
+    const cardChanged = useRef(false);
     const [isUserModifyingSteps, setIsUserModifyingSteps] = useState(false);
     const [isAddOrModifyStepsButtonDisabled, setIsAddOrModifyStepsButtonDisabled] = useState(false);
     const [isAddStepButtonDisabled, setAddStepButtonDisabled] = useState(false);
@@ -39,11 +40,11 @@ function CreateNewTestScript() {
     const async = useRef(false);
     const [isErrorThrown, setIsErrorThrown] = useState(false);
     const [alert, setAlert] = useState(false);
-    const alertMessage = useRef("Test script successfully updated!");
+    const alertMessage = useRef("Test script successfully submitted!");
     const alertType = useRef("success-alert");
 
     const testScriptNamesAlreadyInDB = useRef([]);
-    const isInitialDataFetched = useRef(false);
+    const isDataBeingFetched = useRef(false);
     const isTestScriptSubmitted = useRef(false);
 
     const loadErrorMessage = "Apologies! We've encountered an error. Please attempt to re-load this page.";
@@ -52,9 +53,9 @@ function CreateNewTestScript() {
     const navigate = useNavigate();
 
     const runReadAsyncFunctions = async () => {
-        isInitialDataFetched.current = true;
+        isDataBeingFetched.current = true;
         await fetchTestScriptNamesAlreadyInDB();
-        // await deleteTestScript("Test 1");
+        await deleteTestScript("629669df8f74d1f0b25fe514");
         setRendering(false);
     }
 
@@ -74,24 +75,24 @@ function CreateNewTestScript() {
         }
     }
 
-    // const deleteTestScript = async (testScriptName) => {
-    //     if (!async.current) {
-    //         console.log("deleting test script");
-    //         try {
-    //             console.log(testScriptName);
-    //             async.current = true;
-    //             await Axios.delete(`http://localhost:5000/delete-test-script/${testScriptName}`, {
-    //             })
-    //                 .then(res => {
-    //                     console.log(res);
-    //                     async.current = false;
-    //                 });
-    //         } catch (e) {
-    //             console.log(e);
-    //             handleError("r");
-    //         }
-    //     }
-    // }
+    const deleteTestScript = async (testScriptID) => {
+        if (!async.current) {
+            console.log("deleting test script");
+            try {
+                console.log(testScriptID);
+                async.current = true;
+                await Axios.delete(`http://localhost:5000/delete-test-script/${testScriptID}`, {
+                })
+                    .then(res => {
+                        console.log(res);
+                        async.current = false;
+                    });
+            } catch (e) {
+                console.log(e);
+                handleError("r");
+            }
+        }
+    }
 
     // const handleFormCallback = (returnedObject) => {
     //     const field = returnedObject.field;
@@ -109,6 +110,7 @@ function CreateNewTestScript() {
 
     const handleChangeCard = () => {
         setRendering(true);
+        cardChanged.current = true;
         isUserModifyingSteps
             ? setIsUserModifyingSteps(false)
             : setIsUserModifyingSteps(true);
@@ -228,13 +230,14 @@ function CreateNewTestScript() {
 
     useEffect(() => {
         if (rendering) {
-            if (!isUserModifyingSteps && !isInitialDataFetched.current) {
+            if (!isUserModifyingSteps && !isDataBeingFetched.current) {
                 runReadAsyncFunctions();
-            } else if (isUserModifyingSteps) {
+            } else if (isUserModifyingSteps || !isUserModifyingSteps) {
                 setRendering(false);
-            } /*else {
+            } else if (cardChanged.current) {
+                cardChanged.current = false;
                 setRendering(false);
-            }*/
+            }
         } else {
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
@@ -252,7 +255,7 @@ function CreateNewTestScript() {
                 // TODO: look into abstracting functions in useEffect hook... can this be done?
             }
         }
-    }, [rendering, formProps, testScriptSteps, isAddStepButtonDisabled, isSubmitButtonDisabled, isTestScriptSubmitted]);
+    }, [rendering, formProps, isUserModifyingSteps, testScriptSteps, isAddStepButtonDisabled, isSubmitButtonDisabled, isTestScriptSubmitted, runReadAsyncFunctions]);
 
     return (
         <Fragment>
@@ -268,6 +271,7 @@ function CreateNewTestScript() {
                 alertType={alertType.current}>
             </ErrorWrapper>
             <CardWrapper
+                rendering={rendering}
                 isErrorThrown={isErrorThrown}
                 isUserModifyingSteps={isUserModifyingSteps}>
                 {isUserModifyingSteps

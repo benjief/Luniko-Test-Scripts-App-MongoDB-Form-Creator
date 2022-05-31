@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const step = new mongoose.Schema({
-    testScriptName: {
+    testScriptID: {
         type: String,
         required: true
     },
@@ -14,17 +14,17 @@ const step = new mongoose.Schema({
         maxlength: 1000,
         required: true
     },
-    pass: {
-        type: Boolean,
-        default: false,
-        required: true
-    },
-    comments: {
-        type: String
-    },
-    id: {
-        type: String
-    }
+    // pass: {
+    //     type: Boolean,
+    //     default: false,
+    //     required: true
+    // },
+    // comments: {
+    //     type: String
+    // },
+    // id: {
+    //     type: String
+    // }
 });
 
 const testScript = new mongoose.Schema({
@@ -46,12 +46,12 @@ const testScript = new mongoose.Schema({
         type: String,
         required: true
     },
-    steps: [step]
+    /*steps: [step]*/
 }, { timestamps: true });
 
 testScript.pre('deleteOne', function (next) {
-    console.log("deleting steps associated with:", this.getQuery().name);
-    Step.deleteMany({ testScriptName: this.getQuery().name }).exec();
+    console.log("deleting steps associated with:", this.getQuery()._id);
+    Step.deleteMany({ testScriptID: this.getQuery()._id }).exec();
     next();
 });
 

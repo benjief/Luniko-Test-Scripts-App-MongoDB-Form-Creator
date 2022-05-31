@@ -40,4 +40,10 @@ LoadingWrapper.propTypes = {
     transitionElementVisibility: PropTypes.string,
 };
 
+LoadingWrapper.defaultProps = {
+    rendering: false,
+    transitionElementOpacity: "0%",
+    transitionElementVisibility: "hidden",
+};
+
 export default LoadingWrapper;

@@ -38,7 +38,7 @@ function MaterialTextField({
   const handleOnChange = (value) => {
     if (value.trim() !== "") {
       if (type === "text" && requiresTextValidation) {
-        checkInputValidity(value);
+        checkTextInputValidity(value);
       } else if (type === "email") {
         checkEmailValidity(value);
       } else if (type === "password" && requiresTextValidation) {
@@ -63,7 +63,7 @@ function MaterialTextField({
     }
   }
 
-  const checkInputValidity = (input) => {
+  const checkTextInputValidity = (input) => {
     input = isTextValidationCaseSensitive ? input : input.toLowerCase();
     if (invalidInputs.includes(input)) {
       invalidInputMsg === ""
@@ -216,7 +216,7 @@ MaterialTextField.propTypes = {
   type: PropTypes.string,
   required: PropTypes.bool,
   showCharCounter: PropTypes.bool,
-  requiresValidation: PropTypes.bool,
+  requiresTextValidation: PropTypes.bool,
   isValidationCaseSensitive: PropTypes.bool,
   invalidInputs: PropTypes.array,
   invalidInputMsg: PropTypes.string,

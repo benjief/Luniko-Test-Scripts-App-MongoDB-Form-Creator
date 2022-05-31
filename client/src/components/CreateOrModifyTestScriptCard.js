@@ -50,13 +50,9 @@ function CreateOrModifyTestScriptCard({
         );
     }
 
-    // React.useEffect(() => {
-    //     if (!submitButtonDisabled) {
-    //         setSubmitButtonColor("var(--lunikoBlue)");
-    //     } else {
-    //         setSubmitButtonColor("#BFBFBF");
-    //     }
-    // }, [submitButtonDisabled]);
+    React.useEffect(() => {
+        console.log(invalidTestScriptNames);
+    }, [invalidTestScriptNames]);
 
     return (
         <Card
@@ -114,7 +110,7 @@ function CreateOrModifyTestScriptCard({
                             multiline={false}
                             required={true}
                             showCharCounter={isModificationCard ? false : true}
-                            requiresValidation={true}
+                            requiresTextValidation={true}
                             isValidationCaseSensitive={false}
                             invalidInputs={invalidTestScriptNames}
                             invalidInputMsg="Test script name already exists"
