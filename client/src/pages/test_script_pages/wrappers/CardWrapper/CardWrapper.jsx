@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react'
-// import "../../../styles/CreateNewTestScript.css";
 
 // const CREATE_VIEW = 'CREATE_VIEW'
 

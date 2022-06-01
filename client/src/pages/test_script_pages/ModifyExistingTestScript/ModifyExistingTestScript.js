@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, { Fragment, useEffect, useState, useRef, useCallback } from "react";
 import { useValidationErrorUpdate } from "../Context/ValidationErrorContext";
 import { useNavigate } from "react-router-dom";
 import LoadingWrapper from "../wrappers/LoadingWrapper/LoadingWrapper";
@@ -7,7 +7,7 @@ import CardWrapper from "../wrappers/CardWrapper/CardWrapper";
 import CreateOrModifyTestScriptCard from "../../../components/CreateOrModifyTestScriptCard";
 import AddOrModifyStepsCard from "../../../components/AddOrModifyStepsCard";
 import EnterTestScriptNameCard from "../../../components/EnterTestScriptNameCard";
-import { v4 as uuidv4, validate } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import Axios from "axios";
 import "../../../styles/ModifyExistingTestScript.css";
 import "../../../styles/InputComponents.css";
@@ -54,79 +54,142 @@ function ModifyExistingTestScript() {
 
     const navigate = useNavigate();
 
-    const runPrimaryReadAsyncFunctions = async () => {
-        isDataBeingFetched.current = true;
-        await fetchTestScriptNamesAlreadyInDB();
-        setRendering(false);
-    }
+    const handleError = useCallback((errorType) => {
+        console.log("handling error");
+        setIsErrorThrown(true);
+        alertType.current = "error-alert";
+        errorType === "r"
+            ? alertMessage.current = loadErrorMessage
+            : alertMessage.current = writeErrorMessage;
 
-    const fetchTestScriptNamesAlreadyInDB = async () => {
-        console.log("fetching existing test script names");
-        try {
-            async.current = true;
-            await Axios.get("http://localhost:5000/get-test-script-names", {
-            })
-                .then(res => {
-                    testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name);
-                    console.log(res.data);
-                    async.current = false;
-                });
-        } catch (e) {
-            console.log(e);
-            handleError("r");
+        // Delay is set up just in case an error is generated before the is fully-displayed
+        // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
+        let delay = 0; // TODO: test this and amend if necessary
+
+        if (rendering) {
+            setRendering(false);
+        }
+
+        setTimeout(() => {
+            setAlert(true);
+        }, delay);
+    }, [alertType, rendering]);
+
+    const handleAlertClosed = (alertClosed) => {
+        if (alertClosed) {
+            setAlert(false);
+            navigate("/");
         }
     }
 
-    const runSecondaryReadAsyncFunctions = async (testScriptName) => {
-        isDataBeingFetched.current = true;
-        await fetchTestScriptInformation(testScriptName);
-        console.log(testScriptID.current);
-        await getTestScriptSteps(testScriptID.current);
-        setRendering(false);
-    }
-
-    const fetchTestScriptInformation = async (testScriptName) => {
-        try {
-            async.current = true;
-            await Axios.get(`http://localhost:5000/get-test-script/${testScriptName}`, {
-            })
-                .then(res => {
-                    console.log(res.data);
-                    populateTestScriptInformation(res.data);
-                })
-        } catch (e) {
-            console.log(e);
-            handleError("r");
+    useEffect(() => {
+        const runPrimaryReadAsyncFunctions = async () => {
+            isDataBeingFetched.current = true;
+            await fetchTestScriptNamesAlreadyInDB();
+            setRendering(false);
         }
-    }
 
-    const populateTestScriptInformation = (testScriptInformation) => {
-        setFormProps({
-            testScriptName: testScriptInformation.name,
-            testScriptDescription: testScriptInformation.description,
-            testScriptPrimaryWorkstream: testScriptInformation.primaryWorkstream,
-            ownerFirstName: testScriptInformation.owner["firstName"],
-            ownerLastName: testScriptInformation.owner["lastName"],
-        });
-        testScriptID.current = testScriptInformation._id;
-        async.current = false;
-    }
-
-    const getTestScriptSteps = async (testScriptID) => {
-        if (!async.current) {
+        const fetchTestScriptNamesAlreadyInDB = async () => {
+            console.log("fetching existing test script names");
             try {
                 async.current = true;
-                await Axios.get(`http://localhost:5000/get-test-script-steps/${testScriptID}`, {
+                await Axios.get("http://localhost:5000/get-test-script-names", {
                 })
                     .then(res => {
-                        setTestScriptSteps(res.data);
+                        testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name);
+                        console.log(res.data);
+                        async.current = false;
+                    });
+            } catch (e) {
+                console.log(e);
+                handleError("r");
+            }
+        }
+
+        const runSecondaryReadAsyncFunctions = async (testScriptName) => {
+            isDataBeingFetched.current = true;
+            await fetchTestScriptInformation(testScriptName);
+            console.log(testScriptID.current);
+            await getTestScriptSteps(testScriptID.current);
+            setRendering(false);
+        }
+
+        const fetchTestScriptInformation = async (testScriptName) => {
+            try {
+                async.current = true;
+                await Axios.get(`http://localhost:5000/get-test-script/${testScriptName}`, {
+                })
+                    .then(res => {
+                        console.log(res.data);
+                        populateTestScriptInformation(res.data);
                     })
             } catch (e) {
                 console.log(e);
                 handleError("r");
             }
         }
-    }
+
+        const populateTestScriptInformation = (testScriptInformation) => {
+            setFormProps({
+                testScriptName: testScriptInformation.name,
+                testScriptDescription: testScriptInformation.description,
+                testScriptPrimaryWorkstream: testScriptInformation.primaryWorkstream,
+                ownerFirstName: testScriptInformation.owner["firstName"],
+                ownerLastName: testScriptInformation.owner["lastName"],
+            });
+            testScriptID.current = testScriptInformation._id;
+            async.current = false;
+        }
+
+        const getTestScriptSteps = async (testScriptID) => {
+            if (!async.current) {
+                try {
+                    async.current = true;
+                    await Axios.get(`http://localhost:5000/get-test-script-steps/${testScriptID}`, {
+                    })
+                        .then(res => {
+                            setTestScriptSteps(res.data);
+                        })
+                } catch (e) {
+                    console.log(e);
+                    handleError("r");
+                }
+            }
+        }
+
+        if (rendering) { // TODO: go over logic here
+            if (!isValidTestScriptNameEntered && !isDataBeingFetched.current) {
+                runPrimaryReadAsyncFunctions();
+            } else if (isValidTestScriptNameEntered) {
+                if (!isUserModifyingSteps && !isDataBeingFetched.current) {
+                    runSecondaryReadAsyncFunctions(formProps["testScriptName"]);
+                } else if (cardChanged.current) {
+                    cardChanged.current = false
+                    setRendering(false);
+                }
+            }
+        } else {
+            setTransitionElementOpacity("0%");
+            setTransitionElementVisibility("hidden");
+            if (!isValidTestScriptNameEntered) {
+                formProps["testScriptName"].trim().length ? setSubmitButtonDisabled(false) : setSubmitButtonDisabled(true);
+            } else {
+                if (!isTestScriptSubmitted.current) {
+                    (formProps["testScriptName"].trim() !== "" && formProps["testScriptDescription"].trim() !== "" && formProps["testScriptPrimaryWorkstream"].trim() !== ""
+                        && formProps["ownerFirstName"].trim() !== "" && formProps["ownerLastName"].trim() !== "" /*&& formProps["ownerEmail"] !== ""*/)
+                        ? setIsModifyButtonDisabled(false)
+                        : setIsModifyButtonDisabled(true);
+                    testScriptSteps.length && !testScriptSteps.slice(-1)[0]["description"].trim().length
+                        ? setAddStepButtonDisabled(true)
+                        : setAddStepButtonDisabled(false);
+                    testScriptSteps.length === 1
+                        ? setRemoveStepButtonDisabled(true)
+                        : setRemoveStepButtonDisabled(false);
+                    // TODO: look into abstracting functions in useEffect hook... can this be done?
+                }
+            }
+        }
+    }, [rendering, isDataBeingFetched, cardChanged, isUserModifyingSteps, isValidTestScriptNameEntered, formProps, testScriptSteps, isAddStepButtonDisabled, isModifyButtonDisabled, isTestScriptSubmitted, handleError]);
 
     const handleChangeCard = () => {
         setRendering(true);
@@ -196,7 +259,7 @@ function ModifyExistingTestScript() {
     // adapted from https://stackoverflow.com/questions/60440139/check-if-a-string-contains-exact-match
     const validateTestScriptNameEntered = () => {
         for (let i = 0; i < testScriptNamesAlreadyInDB.current.length; i++) {
-            let escapeRegExpMatch = formProps["testScriptName"].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            let escapeRegExpMatch = formProps["testScriptName"].replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
             if (new RegExp(`(?:^|s|$)${escapeRegExpMatch}(?:^|s|$)`).test(testScriptNamesAlreadyInDB.current[i])) {
                 return true;
             }
@@ -246,69 +309,6 @@ function ModifyExistingTestScript() {
             }
         }
     }
-
-    const handleError = (errorType) => {
-        console.log("handling error");
-        setIsErrorThrown(true);
-        alertType.current = "error-alert";
-        errorType === "r"
-            ? alertMessage.current = loadErrorMessage
-            : alertMessage.current = writeErrorMessage;
-
-        // Delay is set up just in case an error is generated before the is fully-displayed
-        // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
-        let delay = 0; // TODO: test this and amend if necessary
-
-        if (rendering) {
-            setRendering(false);
-        }
-
-        setTimeout(() => {
-            setAlert(true);
-        }, delay);
-    }
-
-    const handleAlertClosed = (alertClosed) => {
-        if (alertClosed) {
-            setAlert(false);
-            navigate("/");
-        }
-    }
-
-    useEffect(() => {
-        if (rendering) { // TODO: go over logic here
-            if (!isValidTestScriptNameEntered && !isDataBeingFetched.current) {
-                runPrimaryReadAsyncFunctions();
-            } else if (isValidTestScriptNameEntered) {
-                if (!isUserModifyingSteps && !isDataBeingFetched.current) {
-                    runSecondaryReadAsyncFunctions(formProps["testScriptName"]);
-                } else if (cardChanged.current) {
-                    cardChanged.current = false
-                    setRendering(false);
-                }
-            }
-        } else {
-            setTransitionElementOpacity("0%");
-            setTransitionElementVisibility("hidden");
-            if (!isValidTestScriptNameEntered) {
-                formProps["testScriptName"].trim().length ? setSubmitButtonDisabled(false) : setSubmitButtonDisabled(true);
-            } else {
-                if (!isTestScriptSubmitted.current) {
-                    (formProps["testScriptName"].trim() !== "" && formProps["testScriptDescription"].trim() !== "" && formProps["testScriptPrimaryWorkstream"].trim() !== ""
-                        && formProps["ownerFirstName"].trim() !== "" && formProps["ownerLastName"].trim() !== "" /*&& formProps["ownerEmail"] !== ""*/)
-                        ? setIsModifyButtonDisabled(false)
-                        : setIsModifyButtonDisabled(true);
-                    testScriptSteps.length && !testScriptSteps.slice(-1)[0]["description"].trim().length
-                        ? setAddStepButtonDisabled(true)
-                        : setAddStepButtonDisabled(false);
-                    testScriptSteps.length === 1
-                        ? setRemoveStepButtonDisabled(true)
-                        : setRemoveStepButtonDisabled(false);
-                    // TODO: look into abstracting functions in useEffect hook... can this be done?
-                }
-            }
-        }
-    }, [rendering, isDataBeingFetched, cardChanged, isUserModifyingSteps, isValidTestScriptNameEntered, formProps, testScriptSteps, isAddStepButtonDisabled, isModifyButtonDisabled, isTestScriptSubmitted, runPrimaryReadAsyncFunctions, runSecondaryReadAsyncFunctions]);
 
     return (
         <Fragment>

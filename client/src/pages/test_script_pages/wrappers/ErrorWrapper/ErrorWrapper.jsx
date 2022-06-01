@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
+import React from 'react';
 import MaterialAlert from '../../../../components/MaterialAlert';
-// import "../../../styles/CreateNewTestScript.css";
 
 function ErrorWrapper({
     alert,
@@ -28,6 +27,13 @@ ErrorWrapper.propTypes = {
     alertMessage: PropTypes.string,
     handleAlertClosed: PropTypes.func,
     alertType: PropTypes.string,
+};
+
+ErrorWrapper.defaultProps = {
+    alert: false,
+    alertMessage: "",
+    handleAlertClosed: () => { },
+    alertType: "",
 };
 
 export default ErrorWrapper;

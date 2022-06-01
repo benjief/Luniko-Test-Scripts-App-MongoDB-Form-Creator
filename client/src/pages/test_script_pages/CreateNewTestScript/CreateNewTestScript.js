@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, { Fragment, useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingWrapper from "../wrappers/LoadingWrapper/LoadingWrapper";
 import ErrorWrapper from "../wrappers/ErrorWrapper/ErrorWrapper";
@@ -52,39 +52,49 @@ function CreateNewTestScript() {
 
     const navigate = useNavigate();
 
-    const runReadAsyncFunctions = async () => {
-        isDataBeingFetched.current = true;
-        await fetchTestScriptNamesAlreadyInDB();
-        await deleteTestScript("629669df8f74d1f0b25fe514");
-        setRendering(false);
-    }
+    const handleError = useCallback((errorType) => {
+        setIsErrorThrown(true);
+        alertType.current = "error-alert";
+        errorType === "r"
+            ? alertMessage.current = loadErrorMessage
+            : alertMessage.current = writeErrorMessage;
 
-    const fetchTestScriptNamesAlreadyInDB = async () => {
-        console.log("fetching existing test script names");
-        try {
-            async.current = true;
-            await Axios.get("http://localhost:5000/get-test-script-names", {
-            })
-                .then(res => {
-                    testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name.toLowerCase());
-                    async.current = false;
-                });
-        } catch (e) {
-            console.log(e);
-            handleError("r");
+        // Delay is set up just in case an error is generated before the is fully-displayed
+        // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
+        let delay = 0; // TODO: test this and amend if necessary
+
+        if (rendering) {
+            setRendering(false);
+        }
+
+        setTimeout(() => {
+            setAlert(true);
+        }, delay);
+    }, [alertType, rendering]);
+
+    const handleAlertClosed = (alertClosed) => {
+        if (alertClosed) {
+            setAlert(false);
+            navigate("/");
         }
     }
 
-    const deleteTestScript = async (testScriptID) => {
-        if (!async.current) {
-            console.log("deleting test script");
+    useEffect(() => {
+        const runReadAsyncFunctions = async () => {
+            isDataBeingFetched.current = true;
+            await fetchTestScriptNamesAlreadyInDB();
+            // await deleteTestScript("629669df8f74d1f0b25fe514");
+            setRendering(false);
+        }
+
+        const fetchTestScriptNamesAlreadyInDB = async () => {
+            console.log("fetching existing test script names");
             try {
-                console.log(testScriptID);
                 async.current = true;
-                await Axios.delete(`http://localhost:5000/delete-test-script/${testScriptID}`, {
+                await Axios.get("http://localhost:5000/get-test-script-names", {
                 })
                     .then(res => {
-                        console.log(res);
+                        testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name.toLowerCase());
                         async.current = false;
                     });
             } catch (e) {
@@ -92,7 +102,53 @@ function CreateNewTestScript() {
                 handleError("r");
             }
         }
-    }
+
+        if (rendering) {
+            if (!isUserModifyingSteps && !isDataBeingFetched.current) {
+                runReadAsyncFunctions();
+            } else if (isUserModifyingSteps || !isUserModifyingSteps) {
+                setRendering(false);
+            } else if (cardChanged.current) {
+                cardChanged.current = false;
+                setRendering(false);
+            }
+        } else {
+            setTransitionElementOpacity("0%");
+            setTransitionElementVisibility("hidden");
+            if (!isTestScriptSubmitted.current) {
+                (formProps["testScriptName"].trim() !== "" && formProps["testScriptDescription"].trim() !== "" && formProps["testScriptPrimaryWorkstream"].trim() !== ""
+                    && formProps["ownerFirstName"].trim() !== "" && formProps["ownerLastName"].trim() !== "" /*&& formProps["ownerEmail"] !== ""*/)
+                    ? setSubmitButtonDisabled(false)
+                    : setSubmitButtonDisabled(true);
+                testScriptSteps.length && !testScriptSteps.slice(-1)[0]["description"].trim().length
+                    ? setAddStepButtonDisabled(true)
+                    : setAddStepButtonDisabled(false);
+                testScriptSteps.length === 1
+                    ? setRemoveStepButtonDisabled(true)
+                    : setRemoveStepButtonDisabled(false);
+                // TODO: look into abstracting functions in useEffect hook... can this be done?
+            }
+        }
+    }, [rendering, formProps, isUserModifyingSteps, testScriptSteps, isAddStepButtonDisabled, isSubmitButtonDisabled, isTestScriptSubmitted, handleError]);
+
+    // const deleteTestScript = async (testScriptID) => {
+    //     if (!async.current) {
+    //         console.log("deleting test script");
+    //         try {
+    //             console.log(testScriptID);
+    //             async.current = true;
+    //             await Axios.delete(`http://localhost:5000/delete-test-script/${testScriptID}`, {
+    //             })
+    //                 .then(res => {
+    //                     console.log(res);
+    //                     async.current = false;
+    //                 });
+    //         } catch (e) {
+    //             console.log(e);
+    //             handleError("r");
+    //         }
+    //     }
+    // }
 
     // const handleFormCallback = (returnedObject) => {
     //     const field = returnedObject.field;
@@ -200,62 +256,6 @@ function CreateNewTestScript() {
             }
         }
     }
-
-    const handleError = (errorType) => {
-        setIsErrorThrown(true);
-        alertType.current = "error-alert";
-        errorType === "r"
-            ? alertMessage.current = loadErrorMessage
-            : alertMessage.current = writeErrorMessage;
-
-        // Delay is set up just in case an error is generated before the is fully-displayed
-        // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
-        let delay = 0; // TODO: test this and amend if necessary
-
-        if (rendering) {
-            setRendering(false);
-        }
-
-        setTimeout(() => {
-            setAlert(true);
-        }, delay);
-    }
-
-    const handleAlertClosed = (alertClosed) => {
-        if (alertClosed) {
-            setAlert(false);
-            navigate("/");
-        }
-    }
-
-    useEffect(() => {
-        if (rendering) {
-            if (!isUserModifyingSteps && !isDataBeingFetched.current) {
-                runReadAsyncFunctions();
-            } else if (isUserModifyingSteps || !isUserModifyingSteps) {
-                setRendering(false);
-            } else if (cardChanged.current) {
-                cardChanged.current = false;
-                setRendering(false);
-            }
-        } else {
-            setTransitionElementOpacity("0%");
-            setTransitionElementVisibility("hidden");
-            if (!isTestScriptSubmitted.current) {
-                (formProps["testScriptName"].trim() !== "" && formProps["testScriptDescription"].trim() !== "" && formProps["testScriptPrimaryWorkstream"].trim() !== ""
-                    && formProps["ownerFirstName"].trim() !== "" && formProps["ownerLastName"].trim() !== "" /*&& formProps["ownerEmail"] !== ""*/)
-                    ? setSubmitButtonDisabled(false)
-                    : setSubmitButtonDisabled(true);
-                testScriptSteps.length && !testScriptSteps.slice(-1)[0]["description"].trim().length
-                    ? setAddStepButtonDisabled(true)
-                    : setAddStepButtonDisabled(false);
-                testScriptSteps.length === 1
-                    ? setRemoveStepButtonDisabled(true)
-                    : setRemoveStepButtonDisabled(false);
-                // TODO: look into abstracting functions in useEffect hook... can this be done?
-            }
-        }
-    }, [rendering, formProps, isUserModifyingSteps, testScriptSteps, isAddStepButtonDisabled, isSubmitButtonDisabled, isTestScriptSubmitted, runReadAsyncFunctions]);
 
     return (
         <Fragment>
