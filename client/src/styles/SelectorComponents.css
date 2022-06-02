@@ -6,8 +6,9 @@
     display: flex !important;
     font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
     font-weight: 700 !important;
-    font-size: 10.5pt !important;
+    font-size: 12pt !important;
     color: rgba(0, 0, 0, 0.7) !important;
+    top: -0.2px !important;
 }
 
 .MuiInputLabel-shrink {
@@ -108,7 +109,7 @@
 
 .MuiTypography-root {
     font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
-    font-size: 11pt !important;
+    font-size: 12pt !important;
     text-align: left;
 }
 

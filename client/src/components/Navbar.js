@@ -4,11 +4,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {
     Navbar,
     NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    NavbarToggler,
-    Collapse
+    // Nav,
+    // NavItem,
+    // NavLink,
+    // NavbarToggler,
+    // Collapse
 } from "reactstrap";
 import "../styles/Navbar.css";
 

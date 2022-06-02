@@ -5,6 +5,10 @@
     /* margin-top: 5px; */
 }
 
+.test-script-name {
+    min-height: 78.91px !important;
+}
+
 .material-text-field {
     width: 100% !important;
 }
@@ -18,7 +22,7 @@
 .MuiOutlinedInput-root {
     min-height: 50px !important;
     font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
-    font-size: 11pt !important;
+    font-size: 12pt !important;
 }
 
 .test-script-description .MuiOutlinedInput-root {

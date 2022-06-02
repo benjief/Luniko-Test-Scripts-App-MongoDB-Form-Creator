@@ -31,7 +31,7 @@
     padding-bottom: 20px !important;
 }
 
-.MuiCardHeader-title {
+.MuiCardHeader-title strong {
     margin-bottom: 0px !important;
     font-size: 13.2pt !important;
 }
@@ -66,11 +66,4 @@
 .MuiCardContent-root {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
-
-}
-
-.MuiTypography-paragraph {
-    color: rgba(0, 0, 0, 0.7);
-    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
-    font-size: 10.5pt !important;
 }

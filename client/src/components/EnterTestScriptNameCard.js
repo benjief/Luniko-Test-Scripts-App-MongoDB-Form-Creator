@@ -96,6 +96,7 @@ function EnterTestScriptNameCard({
                         <strong>Updatable Fields</strong>
                     </Typography> */}
                         <MaterialTextField
+                            className="test-script-name"
                             label="Test Script Name"
                             inputValue={handleOnChange}
                             multiline={false}

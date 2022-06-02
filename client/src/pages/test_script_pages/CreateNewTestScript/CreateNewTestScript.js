@@ -176,7 +176,7 @@ function CreateNewTestScript() {
         console.log("adding step");
         let stepCount = testScriptSteps.length;
         let uniqueID = uuidv4();
-        let newStep = { number: stepCount + 1, description: "", pass: false, id: uniqueID };
+        let newStep = { number: stepCount + 1, description: "", pass: false, uniqueID: uniqueID };
         let tempArray = testScriptSteps;
         tempArray.push(newStep);
         setTestScriptSteps([...tempArray]);
