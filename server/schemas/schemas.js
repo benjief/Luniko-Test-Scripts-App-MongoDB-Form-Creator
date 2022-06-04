@@ -35,6 +35,10 @@ const testingSession = new mongoose.Schema({
         },
         required: true
     },
+    pass: {
+        type: String,
+        required: true
+    }
 
 }, { timestamps: true });
 
