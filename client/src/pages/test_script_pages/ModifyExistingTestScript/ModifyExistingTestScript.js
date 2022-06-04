@@ -110,7 +110,7 @@ function ModifyExistingTestScript() {
             isDataBeingFetched.current = true;
             await fetchTestScriptInformation(testScriptName);
             console.log(testScriptID.current);
-            await getTestScriptSteps(testScriptID.current);
+            await fetchTestScriptSteps(testScriptID.current);
             setRendering(false);
         }
 
@@ -130,18 +130,28 @@ function ModifyExistingTestScript() {
         }
 
         const populateTestScriptInformation = (testScriptInformation) => {
-            setFormProps({
-                testScriptName: testScriptInformation.name,
-                testScriptDescription: testScriptInformation.description,
-                testScriptPrimaryWorkstream: testScriptInformation.primaryWorkstream,
-                ownerFirstName: testScriptInformation.owner["firstName"],
-                ownerLastName: testScriptInformation.owner["lastName"],
-            });
+            setFormProps(
+                prev => ({
+                    ...prev,
+                    "testScriptName": testScriptInformation.name,
+                    "testScriptDescription": testScriptInformation.description,
+                    "testScriptPrimaryWorkstream": testScriptInformation.primaryWorkstream,
+                    "ownerFirstName": testScriptInformation.owner["firstName"],
+                    "ownerLastName": testScriptInformation.owner["lastName"],
+                })
+            );
+            // setFormProps({
+            //     testScriptName: testScriptInformation.name,
+            //     testScriptDescription: testScriptInformation.description,
+            //     testScriptPrimaryWorkstream: testScriptInformation.primaryWorkstream,
+            //     ownerFirstName: testScriptInformation.owner["firstName"],
+            //     ownerLastName: testScriptInformation.owner["lastName"],
+            // });
             testScriptID.current = testScriptInformation._id;
             async.current = false;
         }
 
-        const getTestScriptSteps = async (testScriptID) => {
+        const fetchTestScriptSteps = async (testScriptID) => {
             if (!async.current) {
                 try {
                     async.current = true;
@@ -149,6 +159,7 @@ function ModifyExistingTestScript() {
                     })
                         .then(res => {
                             setTestScriptSteps(res.data);
+                            async.current = false;
                         })
                 } catch (e) {
                     console.log(e);

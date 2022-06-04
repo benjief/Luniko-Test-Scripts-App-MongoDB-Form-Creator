@@ -27,23 +27,27 @@ const step = new mongoose.Schema({
     // }
 });
 
-const stepResponse = new mongoose.Schema({
-    sessionID: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    stepID: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "step"
-    },
+const testingSession = new mongoose.Schema({
     tester: {
         type: {
             firstName: String,
             lastName: String
         },
         required: true
+    },
+
+}, { timestamps: true });
+
+const stepResponse = new mongoose.Schema({
+    sessionID: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "testingSession"
+    },
+    stepID: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "step"
     },
     comments: {
         type: String,
@@ -54,7 +58,7 @@ const stepResponse = new mongoose.Schema({
         default: false,
         required: true
     }
-}, { timestamps: true });
+});
 
 const testScript = new mongoose.Schema({
     name: {
@@ -92,6 +96,7 @@ step.index(
 );
 
 const Step = mongoose.model("step", step);
+const TestingSession = mongoose.model("testingSession", testingSession);
 const StepResponse = mongoose.model("stepResponse", stepResponse);
 const TestScript = mongoose.model("testScript", testScript);
 
