@@ -94,6 +94,7 @@ function ModifyExistingTestScript() {
             try {
                 async.current = true;
                 await Axios.get("http://localhost:5000/get-test-script-names", {
+                    timeout: 5000
                 })
                     .then(res => {
                         testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name);
@@ -118,6 +119,7 @@ function ModifyExistingTestScript() {
             try {
                 async.current = true;
                 await Axios.get(`http://localhost:5000/get-test-script/${testScriptName}`, {
+                    timeout: 5000
                 })
                     .then(res => {
                         console.log(res.data);
@@ -156,6 +158,7 @@ function ModifyExistingTestScript() {
                 try {
                     async.current = true;
                     await Axios.get(`http://localhost:5000/get-test-script-steps/${testScriptID}`, {
+                        timeout: 5000
                     })
                         .then(res => {
                             setTestScriptSteps(res.data);
@@ -286,8 +289,8 @@ function ModifyExistingTestScript() {
         runWriteAsyncFunctions();
     }
 
-    const runWriteAsyncFunctions = () => {
-        updateTestScriptInDB();
+    const runWriteAsyncFunctions = async () => {
+        await updateTestScriptInDB();
         setAlert(true);
     }
 
@@ -302,7 +305,7 @@ function ModifyExistingTestScript() {
                 testScriptDescription: formProps["testScriptDescription"],
                 testScriptPrimaryWorkstream: formProps["testScriptPrimaryWorkstream"],
                 testScriptSteps: testScriptSteps
-            })
+            }, {timeout: 5000})
                 .then(res => {
                     console.log(res);
                     async.current = false;

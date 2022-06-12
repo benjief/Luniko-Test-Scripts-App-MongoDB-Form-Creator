@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 
 const step = new mongoose.Schema({
     testScriptID: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "testScript"
     },
     number: {
         type: Number,
@@ -36,7 +37,7 @@ const testingSession = new mongoose.Schema({
         required: true
     },
     pass: {
-        type: String,
+        type: Boolean,
         required: true
     }
 
@@ -59,7 +60,7 @@ const stepResponse = new mongoose.Schema({
     },
     pass: {
         type: Boolean,
-        default: false,
+        // default: false,
         required: true
     }
 });

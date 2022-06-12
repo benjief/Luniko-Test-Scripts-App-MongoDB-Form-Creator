@@ -1,25 +1,26 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
+import PropTypes from 'prop-types';
+// import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert } from 'reactstrap';
-import { green } from '@mui/material/colors';
+// import { Alert } from 'reactstrap';
+// import { green } from '@mui/material/colors';
 
-export default function MaterialAlert({
-    vertical = "top",
-    horizontal = "center",
-    message = "",
-    closed = false,
-    className = "success-alert"
+function MaterialAlert({
+    vertical,
+    horizontal,
+    message,
+    handleAlertClosed,
+    className,
 }) {
 
     // const [open, setOpen] = React.useState(true);
 
-    const handleClose = () => {
-        closed(true);
-        // setOpen(false);
-    };
+    // const handleClose = () => {
+    //     handleAlertClosed();
+    //     // setOpen(false);
+    // };
 
     const action = (
         <React.Fragment>
@@ -27,7 +28,7 @@ export default function MaterialAlert({
                 size="small"
                 aria-label="close"
                 color="inherit"
-                onClick={handleClose}
+                onClick={handleAlertClosed}
             >
                 <CloseIcon fontSize="small" />
             </IconButton>
@@ -40,7 +41,7 @@ export default function MaterialAlert({
                 className={className}
                 open
                 anchorOrigin={{ vertical, horizontal }}
-                onClose={handleClose}
+                onClose={handleAlertClosed}
                 message={message}
                 action={action}
                 key={vertical + horizontal}
@@ -50,3 +51,21 @@ export default function MaterialAlert({
         </div>
     );
 }
+
+MaterialAlert.propTypes = {
+    vertical: PropTypes.string,
+    horizontal: PropTypes.string,
+    message: PropTypes.string,
+    handleAlertClosed: PropTypes.func,
+    className: PropTypes.string,
+}
+
+MaterialAlert.defaultProps = {
+    vertical: "top",
+    horizontal: "center",
+    message: "",
+    handleAlertClosed: () => {},
+    className: "success-alert",
+}
+
+export default MaterialAlert;

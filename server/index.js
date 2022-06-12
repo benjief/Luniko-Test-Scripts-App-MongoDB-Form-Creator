@@ -125,7 +125,7 @@ app.delete("/delete-test-script/:testScriptID", async (req, res) => {
 // Helper functions
 const addSteps = async (testScriptID, stepsToAdd) => {
     addTestScriptIDToSteps(testScriptID, stepsToAdd);
-    const steps = await Step.create(stepsToAdd);
+    await Step.create(stepsToAdd);
     // const updatedTestScript = await TestScript.updateOne(
     //     { name: testScriptName },
     //     { $set: { steps: steps } },

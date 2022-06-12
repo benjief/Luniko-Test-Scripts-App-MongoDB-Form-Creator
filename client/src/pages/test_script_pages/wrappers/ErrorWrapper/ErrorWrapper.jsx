@@ -13,7 +13,7 @@ function ErrorWrapper({
             ? <div className="alert-container">
                 <MaterialAlert
                     message={alertMessage}
-                    closed={handleAlertClosed}
+                    handleAlertClosed={handleAlertClosed}
                     className={alertType}>
                 </MaterialAlert>
                 {/* <div className="error-div"></div> */}

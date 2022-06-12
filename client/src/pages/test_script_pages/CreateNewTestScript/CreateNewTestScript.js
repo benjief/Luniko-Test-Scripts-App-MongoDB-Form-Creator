@@ -72,11 +72,9 @@ function CreateNewTestScript() {
         }, delay);
     }, [alertType, rendering]);
 
-    const handleAlertClosed = (alertClosed) => {
-        if (alertClosed) {
-            setAlert(false);
-            navigate("/");
-        }
+    const handleAlertClosed = () => {
+        setAlert(false);
+        navigate("/");
     }
 
     useEffect(() => {
@@ -92,6 +90,7 @@ function CreateNewTestScript() {
             try {
                 async.current = true;
                 await Axios.get("http://localhost:5000/get-test-script-names", {
+                    timeout: 5000
                 })
                     .then(res => {
                         testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name.toLowerCase());
@@ -222,8 +221,8 @@ function CreateNewTestScript() {
         runWriteAsyncFunctions();
     }
 
-    const runWriteAsyncFunctions = () => {
-        addTestScriptToDB();
+    const runWriteAsyncFunctions = async () => {
+        await addTestScriptToDB();
         setAlert(true);
     }
 
@@ -238,7 +237,7 @@ function CreateNewTestScript() {
                 testScriptDescription: formProps["testScriptDescription"],
                 testScriptPrimaryWorkstream: formProps["testScriptPrimaryWorkstream"],
                 testScriptSteps: testScriptSteps
-            })
+            }, { timeout: 5000 })
                 .then(res => {
                     console.log(res);
                     async.current = false;
