@@ -31,7 +31,9 @@
     width: 100%;
 } */
 
-.create-new-test-script-button, .modify-existing-test-script-button {
+.create-new-test-script-button,
+.modify-existing-test-script-button,
+.view-test-script-results-button {
     padding: 10px;
     /* margin-top: 5px !important; */
     /* margin-bottom: 10px; */
@@ -48,7 +50,7 @@
     box-shadow: 2px 2px 4px rgba(43, 43, 43, 0.6);
 }
 
-.modify-existing-test-script-button {
+.modify-existing-test-script-button, .view-test-script-results-button {
     margin-top: 10px !important;
 }
 

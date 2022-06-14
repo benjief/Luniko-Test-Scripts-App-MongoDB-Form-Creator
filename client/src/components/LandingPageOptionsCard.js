@@ -4,35 +4,35 @@ import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
+// import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
+// import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import Typography from '@mui/material/Typography';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import BootstrapPopover from "../components/BootstrapPopover";
 
-const ExpandMore = styled((props) => {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-    }),
-}));
+// const ExpandMore = styled((props) => {
+//     const { expand, ...other } = props;
+//     return <IconButton {...other} />;
+// })(({ theme, expand }) => ({
+//     transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+//     marginLeft: 'auto',
+//     transition: theme.transitions.create('transform', {
+//         duration: theme.transitions.duration.shortest,
+//     }),
+// }));
 
 function LandingPageOptionsCard({
 }) {
-    const [expanded, setExpanded] = React.useState(true);
+    const expanded = true;
 
     return (
         <Card
             sx={{
                 // minWidth: 1,
                 // maxWidth: 1,
-                minHeight: "189.56px",
+                minHeight: "249.56px",
                 overflowY: "scroll",
                 borderRadius: "10px",
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
@@ -83,6 +83,12 @@ function LandingPageOptionsCard({
                             <button
                                 className="modify-existing-test-script-button">
                                 Modify Existing Test Script
+                            </button>
+                        </Link>
+                        <Link to={"/view-test-script-results"}>
+                            <button
+                                className="view-test-script-results-button">
+                                View Test Script Results
                             </button>
                         </Link>
                     </CardContent>
