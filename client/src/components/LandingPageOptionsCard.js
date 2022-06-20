@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
+// import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 // import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 // import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 // import Typography from '@mui/material/Typography';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import BootstrapPopover from "../components/BootstrapPopover";
@@ -23,8 +23,7 @@ import IconButton from '@mui/material/IconButton';
 //     }),
 // }));
 
-function LandingPageOptionsCard({
-}) {
+function LandingPageOptionsCard() {
     const expanded = true;
 
     return (
@@ -85,10 +84,10 @@ function LandingPageOptionsCard({
                                 Modify Existing Test Script
                             </button>
                         </Link>
-                        <Link to={"/view-test-script-results"}>
+                        <Link to={`/retrieve-test-script-testing-sessions/${"null"}`}>
                             <button
-                                className="view-test-script-results-button">
-                                View Test Script Results
+                                className="retrieve-test-script-testing-sessions-button">
+                                Retrieve Test Script Testing Sessions
                             </button>
                         </Link>
                     </CardContent>

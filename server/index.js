@@ -6,7 +6,7 @@ const cors = require("cors");
 const app = express();
 
 const connect = require("./connect");
-const { Step, TestScript } = require("./schemas/schemas");
+const { Step, TestingSession, StepResponse, TestScript } = require("./schemas/schemas");
 // const e = require("express");
 
 // Middleware
@@ -83,13 +83,40 @@ app.get("/get-test-script-steps/:testScriptID", async (req, res) => {
     }
 });
 
+app.get("/get-test-script-testing-sessions/:testScriptID", async (req, res) => {
+    const testScriptID = req.params.testScriptID;
+    try {
+        console.log(testScriptID);
+        const testingSessions = await TestingSession.find(
+            { testScriptID: testScriptID }
+        ).sort({ updatedAt: 'desc' }).lean().exec();
+        res.status(200).json(testingSessions);
+    } catch (e) {
+        res.status(500).send;
+    }
+});
+
+app.get("/get-testing-session-responses/:testingSessionID", async (req, res) => {
+    const testingSessionID = req.params.testingSessionID;
+    try {
+        console.log("getting responses for:", testingSessionID);
+        const responses = await StepResponse.find(
+            { sessionID: testingSessionID }
+        ).lean().exec();
+        await addStepNumberAndDescription(responses);
+        res.status(200).json(responses);
+    } catch (e) {
+        res.status(500).send;
+    }
+});
+
 app.put("/update-test-script", async (req, res) => {
     console.log("updating");
     const testScriptOwner = req.body.testScriptOwner;
     const testScriptName = req.body.testScriptName;
     const testScriptDescription = req.body.testScriptDescription;
     const testScriptPrimaryWorkstream = req.body.testScriptPrimaryWorkstream;
-    const testScriptSteps = req.body.testScriptSteps;
+    // const testScriptSteps = req.body.testScriptSteps;
     // console.log(req.body);
     try {
         const testScript = await TestScript.findOneAndUpdate(
@@ -136,6 +163,20 @@ const addSteps = async (testScriptID, stepsToAdd) => {
 const addTestScriptIDToSteps = (testScriptID, stepsToAdd) => {
     for (let i = 0; i < stepsToAdd.length; i++) {
         stepsToAdd[i]["testScriptID"] = testScriptID;
+    }
+}
+
+const addStepNumberAndDescription = async (responses) => {
+    for (let i = 0; i < responses.length; i++) {
+        const step = await Step.findOne(
+            { _id: responses[i].stepID },
+            {
+                "number": 1,
+                "description": 1,
+            }
+        ).lean().exec();
+        responses[i]["stepNumber"] = step["number"];
+        responses[i]["stepDescription"] = step["description"];
     }
 }
 

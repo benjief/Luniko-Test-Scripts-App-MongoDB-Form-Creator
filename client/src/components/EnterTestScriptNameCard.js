@@ -1,53 +1,49 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { useValidationErrorUpdate } from '../pages/test_script_pages/Context/ValidationErrorContext';
-import { Link } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
+// import { Link } from 'react-router-dom';
+// import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
+// import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import Avatar from '@mui/material/Avatar';
+// import IconButton from '@mui/material/IconButton';
+// import Typography from '@mui/material/Typography';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import BootstrapPopover from "../components/BootstrapPopover";
 import MaterialTextField from './MaterialTextField';
 
-const ExpandMore = styled((props) => {
-    const { expand, ...other } = props;
-    return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-    }),
-}));
+// const ExpandMore = styled((props) => {
+//     const { expand, ...other } = props;
+//     return <IconButton {...other} />;
+// })(({ theme, expand }) => ({
+//     transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+//     marginLeft: 'auto',
+//     transition: theme.transitions.create('transform', {
+//         duration: theme.transitions.duration.shortest,
+//     }),
+// }));
 
 function EnterTestScriptNameCard({
     setFormProps,
     requestTestScript,
     isSubmitButtonDisabled,
 }) {
-    const [expanded, setExpanded] = React.useState(true);
+    const expanded = true;
     const invalidTestScriptNameError = useValidationErrorUpdate();
 
     const handleOnChange = (returnedObject) => {
         invalidTestScriptNameError("");
         setFormProps(
-            prev => ({ ...prev, [returnedObject.field]: returnedObject.value })
+            prev => ({ ...prev, [returnedObject.field]: returnedObject.value.trim() })
         );
     }
 
     // React.useEffect(() => {
-    //     if (!submitButtonDisabled) {
-    //         setSubmitButtonColor("var(--lunikoBlue)");
-    //     } else {
-    //         setSubmitButtonColor("#BFBFBF");
-    //     }
-    // }, [submitButtonDisabled]);
+    //     console.log(setFormProps)
+    // }, [setFormProps]);
 
     return (
         <Card

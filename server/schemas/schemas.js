@@ -105,4 +105,4 @@ const TestingSession = mongoose.model("testingSession", testingSession);
 const StepResponse = mongoose.model("stepResponse", stepResponse);
 const TestScript = mongoose.model("testScript", testScript);
 
-module.exports = { Step, TestScript };
+module.exports = { Step, TestingSession, StepResponse, TestScript };
