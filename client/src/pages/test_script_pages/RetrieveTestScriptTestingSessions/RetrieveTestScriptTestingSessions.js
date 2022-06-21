@@ -151,7 +151,7 @@ function RetrieveTestScriptTestingSessions() {
                     timeout: 5000
                 })
                     .then(res => {
-                        // console.log(res.data);
+                        console.log(res.data);
                         setTestingSessions(res.data);
 
                     })
@@ -224,6 +224,7 @@ function RetrieveTestScriptTestingSessions() {
                 }
             }
         } else {
+            console.log(testScriptID.current);
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
             if (!isValidTestScriptNameEntered) {

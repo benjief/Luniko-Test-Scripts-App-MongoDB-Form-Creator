@@ -86,15 +86,27 @@ app.get("/get-test-script-steps/:testScriptID", async (req, res) => {
 app.get("/get-test-script-testing-sessions/:testScriptID", async (req, res) => {
     const testScriptID = req.params.testScriptID;
     try {
-        console.log(testScriptID);
-        const testingSessions = await TestingSession.find(
+        const steps = await TestingSession.find(
             { testScriptID: testScriptID }
-        ).sort({ updatedAt: 'desc' }).lean().exec();
-        res.status(200).json(testingSessions);
+        ).lean().exec();
+        res.status(200).json(steps);
     } catch (e) {
         res.status(500).send;
     }
 });
+
+// app.get("/get-test-script-testing-sessions/:testScriptID", async (req, res) => {
+//     const testScriptID = req.params.testScriptID;
+//     try {
+//         console.log(testScriptID);
+//         const testingSessions = await TestingSession.find(
+//             { testScriptID: testScriptID }
+//         ).sort({ updatedAt: 'desc' }).lean().exec();
+//         res.status(200).json(testingSessions);
+//     } catch (e) {
+//         res.status(500).send;
+//     }
+// });
 
 app.get("/get-testing-session-responses/:testingSessionID", async (req, res) => {
     const testingSessionID = req.params.testingSessionID;

@@ -29,6 +29,11 @@ const step = new mongoose.Schema({
 });
 
 const testingSession = new mongoose.Schema({
+    testScriptID: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "testScript"
+    },
     tester: {
         type: {
             firstName: String,
@@ -98,6 +103,10 @@ testScript.pre('deleteOne', function (next) {
 
 step.index(
     { testScript: 1, number: 1 }
+);
+
+testingSession.index(
+    {testscript: 1, _id: 1}
 );
 
 const Step = mongoose.model("step", step);
