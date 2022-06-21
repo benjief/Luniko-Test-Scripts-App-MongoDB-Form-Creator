@@ -16,6 +16,7 @@ function LoadingWrapper({
 }) {
     return (
         <Fragment>
+            <NavBar></NavBar>
             <div
                 className={rendering ? "loading-spinner" : "transition-element"}
                 style={{ opacity: rendering ? "100%" : transitionElementOpacity, visibility: rendering ? "visible" : transitionElementVisibility }}>
@@ -28,7 +29,6 @@ function LoadingWrapper({
                         duration="1.5s" />
                     : <div></div>}
             </div >
-            <NavBar></NavBar>
         </Fragment>
     )
 };

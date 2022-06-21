@@ -189,7 +189,7 @@ function ViewTestScriptTestingSessionDetails() {
 
         if (rendering) {
             if (!isDataBeingFetched.current) { // TODO: go over logic here
-                console.log("running primary reads");
+                // console.log("running primary reads");
                 runPrimaryReadAsyncFunctions();
             } else if (stepChanged.current) {
                 setRendering(false);
@@ -343,7 +343,7 @@ function ViewTestScriptTestingSessionDetails() {
     //     // }
 
     const handleChangeStep = (newStepNumber) => {
-        console.log("changing step");
+        // console.log("changing step");
         setCurrentStepNumber(newStepNumber);
         // console.log("finished changing step");
         // resetStepResponseProps.current = true;

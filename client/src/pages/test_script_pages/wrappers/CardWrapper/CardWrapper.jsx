@@ -33,7 +33,7 @@ function CardWrapper({
                                     ? "View Submitted Testing Sessions Below:"
                                     : "No Submissions Yet!"
                                 : isUserViewingTestingSessionDetails
-                                    ? "Review Testing Session Details Below"
+                                    ? "Review Testing Session Details Below:"
                                     : "Please Fill in the Fields Below:"}
                     </div>
                     <div className={isUserModifyingSteps

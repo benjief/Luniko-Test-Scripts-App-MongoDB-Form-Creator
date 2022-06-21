@@ -57,7 +57,7 @@
 }
 
 .step-result {
-    margin-bottom: 40px;
+    margin-bottom: 30px !important;
 }
 
 #step-result-contents {
