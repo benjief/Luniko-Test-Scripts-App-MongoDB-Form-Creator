@@ -440,7 +440,7 @@ function ViewTestScriptTestingSessionDetails() {
                         stepComments={testingSessionResponses[currentStepNumber - 1].comments}
                         stepResult={testingSessionResponses[currentStepNumber - 1].pass}
                         stepNumber={testingSessionResponses[currentStepNumber - 1].stepNumber}
-                        isLastStep={currentStepNumber === testingSessionResponses.length}>
+                        totalNumberOfSteps={testingSessionResponses.length}>
                     </TestingSessionDetailsCard>}
             </CardWrapper >
             {/* <Fragment>

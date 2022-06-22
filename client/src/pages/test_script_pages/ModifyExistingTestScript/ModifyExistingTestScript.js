@@ -187,7 +187,7 @@ function ModifyExistingTestScript() {
                 }
             }
         } else {
-            console.log(testScriptSteps);
+            // console.log(testScriptSteps);
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
             if (!isValidTestScriptNameEntered) {

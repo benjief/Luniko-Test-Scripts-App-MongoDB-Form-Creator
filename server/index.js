@@ -76,7 +76,7 @@ app.get("/get-test-script-steps/:testScriptID", async (req, res) => {
     try {
         const steps = await Step.find(
             { testScriptID: testScriptID }
-        ).lean().exec();
+        ).sort({number: "asc"}).lean().exec();
         res.status(200).json(steps);
     } catch (e) {
         res.status(500).send;

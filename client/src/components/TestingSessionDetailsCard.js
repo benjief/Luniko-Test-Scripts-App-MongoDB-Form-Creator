@@ -33,7 +33,7 @@ function TestingSessionDetailsCard({
     stepComments,
     stepNumber,
     stepResult,
-    isLastStep,
+    totalNumberOfSteps,
 }) {    
     // const expanded = true;
     const [areButtonsDisabled, setAreButtonsDisabled] = React.useState(false);
@@ -112,7 +112,7 @@ function TestingSessionDetailsCard({
                     //         {statusAbbreviation}
                     //     </Avatar>
                     // }
-                    title={<strong>Step {stepNumber}</strong>}
+                    title={<strong>Step {stepNumber} of {totalNumberOfSteps}</strong>}
                 />
                 {/* < CardActions
                 disableSpacing
@@ -157,7 +157,7 @@ function TestingSessionDetailsCard({
                         <button
                             className="next-step-button"
                             onClick={() => handleChangeStep("increment")}
-                            disabled={isLastStep || areButtonsDisabled}>
+                            disabled={stepNumber === totalNumberOfSteps || areButtonsDisabled}>
                             Next Step
                         </button>
                         <button
@@ -180,7 +180,7 @@ TestingSessionDetailsCard.propTypes = {
     stepComments: PropTypes.string,
     stepResult: PropTypes.bool,
     stepNumber: PropTypes.number,
-    isLastStep: PropTypes.bool,
+    totalNumberOfSteps: PropTypes.number,
 }
 
 TestingSessionDetailsCard.defaultProps = {
@@ -190,7 +190,7 @@ TestingSessionDetailsCard.defaultProps = {
     stepComments: "",
     stepResult: false,
     stepNumber: 0,
-    isLastStep: false,
+    totalNumberOfSteps: 0,
 }
 
 export default TestingSessionDetailsCard;
