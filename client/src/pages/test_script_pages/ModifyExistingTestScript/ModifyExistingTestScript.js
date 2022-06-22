@@ -42,7 +42,7 @@ function ModifyExistingTestScript() {
     const async = useRef(false);
     const [isErrorThrown, setIsErrorThrown] = useState(false);
     const [alert, setAlert] = useState(false);
-    const alertMessage = useRef("Test script successfully submitted!");
+    const alertMessage = useRef("Test script successfully updated!");
     const alertType = useRef("success-alert");
 
     const testScriptNamesAlreadyInDB = useRef([]);
@@ -50,7 +50,7 @@ function ModifyExistingTestScript() {
     const isTestScriptSubmitted = useRef(false);
 
     const loadErrorMessage = "Apologies! We've encountered an error. Please attempt to re-load this page.";
-    const writeErrorMessage = "Apologies! We've encountered an error. Please attempt to re-submit your test script.";
+    const writeErrorMessage = "Apologies! We've encountered an error. Please attempt to re-update your test script.";
 
     const navigate = useNavigate();
 
@@ -81,6 +81,10 @@ function ModifyExistingTestScript() {
             navigate("/");
         }
     }
+
+    const setIsNewlyAddedToFalseForExistingSteps = useCallback((steps) => {
+        return steps.map(obj => ({ ...obj, isNewlyAdded: false }));
+    }, [])
 
     useEffect(() => {
         const runPrimaryReadAsyncFunctions = async () => {
@@ -122,7 +126,6 @@ function ModifyExistingTestScript() {
                     timeout: 5000
                 })
                     .then(res => {
-                        console.log(res.data);
                         populateTestScriptInformation(res.data);
                     })
             } catch (e) {
@@ -161,6 +164,7 @@ function ModifyExistingTestScript() {
                         timeout: 5000
                     })
                         .then(res => {
+                            res.data = setIsNewlyAddedToFalseForExistingSteps(res.data);
                             setTestScriptSteps(res.data);
                             async.current = false;
                         })
@@ -183,6 +187,7 @@ function ModifyExistingTestScript() {
                 }
             }
         } else {
+            console.log(testScriptSteps);
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
             if (!isValidTestScriptNameEntered) {
@@ -203,21 +208,24 @@ function ModifyExistingTestScript() {
                 }
             }
         }
-    }, [rendering, isDataBeingFetched, cardChanged, isUserModifyingSteps, isValidTestScriptNameEntered, formProps, testScriptSteps, isAddStepButtonDisabled, isModifyButtonDisabled, isTestScriptSubmitted, handleError]);
+    }, [rendering, isDataBeingFetched, cardChanged, isUserModifyingSteps, isValidTestScriptNameEntered, formProps, testScriptSteps, isAddStepButtonDisabled, isModifyButtonDisabled, isTestScriptSubmitted, handleError, setIsNewlyAddedToFalseForExistingSteps]);
 
     const handleChangeCard = () => {
         setRendering(true);
         cardChanged.current = true;
-        isUserModifyingSteps
-            ? setIsUserModifyingSteps(false)
-            : setIsUserModifyingSteps(true);
+        if (isUserModifyingSteps) {
+           setTestScriptSteps(setIsNewlyAddedToFalseForExistingSteps(testScriptSteps));
+           setIsUserModifyingSteps(false);
+        } else {
+            setIsUserModifyingSteps(true);
+        }
     }
 
     const handleAddStep = () => {
         console.log("adding step");
         let stepCount = testScriptSteps.length;
         let uniqueID = uuidv4();
-        let newStep = { number: stepCount + 1, description: "", pass: false, uniqueID: uniqueID };
+        let newStep = { number: stepCount + 1, description: "", uniqueID: uniqueID, isNewlyAdded: true };
         let tempArray = testScriptSteps;
         tempArray.push(newStep);
         setTestScriptSteps([...tempArray]);
@@ -231,7 +239,7 @@ function ModifyExistingTestScript() {
             return obj["number"] === stepNumber
         });
         stepToUpdate = stepToUpdate[0];
-        let indexOfStepToUpdate = copyOfSteps.indexOf(stepToUpdate);
+        // let indexOfStepToUpdate = copyOfSteps.indexOf(stepToUpdate);
         stepToUpdate["description"] = updatedDescription;
         setTestScriptSteps([...copyOfSteps]);
     }
@@ -245,7 +253,7 @@ function ModifyExistingTestScript() {
         if (testScriptSteps.length) {
             copyOfSteps = await updateStepNumbers(copyOfSteps, stepNumber);
         }
-        console.log(copyOfSteps);
+        // console.log(copyOfSteps);
         setTestScriptSteps([...copyOfSteps]);
     }
 
@@ -305,7 +313,7 @@ function ModifyExistingTestScript() {
                 testScriptDescription: formProps["testScriptDescription"],
                 testScriptPrimaryWorkstream: formProps["testScriptPrimaryWorkstream"],
                 testScriptSteps: testScriptSteps
-            }, {timeout: 5000})
+            }, { timeout: 5000 })
                 .then(res => {
                     console.log(res);
                     async.current = false;
@@ -319,6 +327,7 @@ function ModifyExistingTestScript() {
     const removeEmptySteps = () => {
         if (testScriptSteps.length) {
             if (!testScriptSteps.slice(-1)[0]["description"].trim().length) {
+                console.log("removing empty step");
                 testScriptSteps.pop();
             }
         }
@@ -347,7 +356,7 @@ function ModifyExistingTestScript() {
                             existingSteps={testScriptSteps}
                             addStep={handleAddStep}
                             isAddStepButtonDisabled={isAddStepButtonDisabled}
-                            updateStepDescription={handleUpdateStepDescription}
+                            modifyStepDescription={handleUpdateStepDescription}
                             removeStep={handleRemoveStep}
                             isRemoveStepButtonDisabled={isRemoveStepButtonDisabled}
                             goBack={handleChangeCard}>

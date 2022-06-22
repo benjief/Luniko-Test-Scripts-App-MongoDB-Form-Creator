@@ -111,7 +111,7 @@ app.get("/get-test-script-testing-sessions/:testScriptID", async (req, res) => {
 app.get("/get-testing-session-responses/:testingSessionID", async (req, res) => {
     const testingSessionID = req.params.testingSessionID;
     try {
-        console.log("getting responses for:", testingSessionID);
+        // console.log("getting responses for:", testingSessionID);
         const responses = await StepResponse.find(
             { sessionID: testingSessionID }
         ).lean().exec();
@@ -128,7 +128,7 @@ app.put("/update-test-script", async (req, res) => {
     const testScriptName = req.body.testScriptName;
     const testScriptDescription = req.body.testScriptDescription;
     const testScriptPrimaryWorkstream = req.body.testScriptPrimaryWorkstream;
-    // const testScriptSteps = req.body.testScriptSteps;
+    const testScriptSteps = req.body.testScriptSteps;
     // console.log(req.body);
     try {
         const testScript = await TestScript.findOneAndUpdate(
@@ -138,12 +138,12 @@ app.put("/update-test-script", async (req, res) => {
                 owner: testScriptOwner,
                 description: testScriptDescription,
                 primaryWorkstream: testScriptPrimaryWorkstream,
-                // steps: testScriptSteps
+                steps: testScriptSteps
             },
             { new: true }
         ).exec();
         await deleteStepsAssociatedWithTestScript(testScript.toObject()._id.toString());
-        // await addSteps(testScriptName, testScriptSteps);
+        await addSteps(testScript.toObject()._id.toString(), testScriptSteps);
         res.status(201).json(testScript.toObject());
     } catch (e) {
         res.status(500).send;
@@ -163,8 +163,15 @@ app.delete("/delete-test-script/:testScriptID", async (req, res) => {
 
 // Helper functions
 const addSteps = async (testScriptID, stepsToAdd) => {
+    console.log(stepsToAdd);
+    console.log("adding IDs to steps")
     addTestScriptIDToSteps(testScriptID, stepsToAdd);
-    await Step.create(stepsToAdd);
+    console.log("adding steps");
+    try {
+        await Step.create(stepsToAdd);
+    } catch (e) {
+        console.log(e);
+    }
     // const updatedTestScript = await TestScript.updateOne(
     //     { name: testScriptName },
     //     { $set: { steps: steps } },
@@ -179,21 +186,30 @@ const addTestScriptIDToSteps = (testScriptID, stepsToAdd) => {
 }
 
 const addStepNumberAndDescription = async (responses) => {
-    for (let i = 0; i < responses.length; i++) {
-        const step = await Step.findOne(
-            { _id: responses[i].stepID },
-            {
-                "number": 1,
-                "description": 1,
-            }
-        ).lean().exec();
-        responses[i]["stepNumber"] = step["number"];
-        responses[i]["stepDescription"] = step["description"];
+    try {
+        for (let i = 0; i < responses.length; i++) {
+            const step = await Step.findOne(
+                { _id: responses[i].stepID },
+                {
+                    "number": 1,
+                    "description": 1,
+                }
+            ).lean().exec();
+            responses[i]["stepNumber"] = step["number"];
+            responses[i]["stepDescription"] = step["description"];
+        }
+    } catch (e) {
+        console.log(e);
     }
+
 }
 
 const deleteStepsAssociatedWithTestScript = async (testScriptID) => {
-    await Step.deleteMany({ testScriptID: testScriptID });
+    try {
+        await Step.deleteMany({ testScriptID: testScriptID });
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 connect()

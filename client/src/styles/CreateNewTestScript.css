@@ -48,6 +48,10 @@
     box-shadow: 2px 2px 4px rgba(43, 43, 43, 0.6);
 }
 
+.add-step-button {
+    margin-top: 30px;
+}
+
 .submit-or-update-test-script-button:not(:disabled), .add-step-button:not(:disabled) {
     background-color: var(--lunikoBlue);
 }

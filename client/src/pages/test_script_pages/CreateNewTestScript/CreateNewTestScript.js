@@ -163,19 +163,26 @@ function CreateNewTestScript() {
     //     }));
     // }
 
+    const setIsNewlyAddedToFalseForExistingSteps = (steps) => {
+        return steps.map(obj => ({ ...obj, isNewlyAdded: false }));
+    }
+
     const handleChangeCard = () => {
         setRendering(true);
         cardChanged.current = true;
-        isUserModifyingSteps
-            ? setIsUserModifyingSteps(false)
-            : setIsUserModifyingSteps(true);
+        if (isUserModifyingSteps) {
+            setTestScriptSteps(setIsNewlyAddedToFalseForExistingSteps(testScriptSteps));
+            setIsUserModifyingSteps(false);
+        } else {
+            setIsUserModifyingSteps(true);
+        }
     }
 
     const handleAddStep = () => {
         console.log("adding step");
         let stepCount = testScriptSteps.length;
         let uniqueID = uuidv4();
-        let newStep = { number: stepCount + 1, description: "", pass: false, uniqueID: uniqueID };
+        let newStep = { number: stepCount + 1, description: "", uniqueID: uniqueID, isNewlyCreated: true };
         let tempArray = testScriptSteps;
         tempArray.push(newStep);
         setTestScriptSteps([...tempArray]);
@@ -189,7 +196,7 @@ function CreateNewTestScript() {
             return obj["number"] === stepNumber
         });
         stepToUpdate = stepToUpdate[0];
-        let indexOfStepToUpdate = copyOfSteps.indexOf(stepToUpdate);
+        // let indexOfStepToUpdate = copyOfSteps.indexOf(stepToUpdate);
         stepToUpdate["description"] = updatedDescription;
         setTestScriptSteps([...copyOfSteps]);
     }

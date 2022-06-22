@@ -1,4 +1,4 @@
-import { display } from '@mui/system';
+// import { display } from '@mui/system';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import MaterialTextField from './MaterialTextField';
@@ -10,10 +10,11 @@ function ModifiableStep({
     modifyStepDescription,
     removeStep,
     removeDisabled,
+    isNewlyAdded,
 }) {
-    const [opacity, setOpacity] = React.useState("0%");
-    const [height, setHeight] = React.useState(stepNumber === 1 ? "49px" : "0");
-    const [marginBottom, setMarginBottom] = React.useState("0");
+    const [opacity, setOpacity] = React.useState(isNewlyAdded ? "0" : "100%");
+    const [height, setHeight] = React.useState(isNewlyAdded ? stepNumber === 1 ? "49px" : "0" : "172.91px");
+    const [marginBottom, setMarginBottom] = React.useState(isNewlyAdded ? "0" : "15px");
     const [removed, setRemoved] = React.useState(false);
 
     const handleModifyStepDescription = (returnedObject) => {
@@ -37,14 +38,14 @@ function ModifiableStep({
     }
 
     React.useEffect(() => {
-        if (!removed) {
+        if (!removed && isNewlyAdded) {
             setHeight("172.91px");
             setMarginBottom("20px");
             setTimeout(() => {
                 setOpacity("100%");
             }, 300);
-        }
-    }, [removed]);
+        } 
+    }, [removed, isNewlyAdded]);
 
     return (
         <div className="step-container" style={{ opacity: opacity, height: height, marginBottom: marginBottom }}>
@@ -80,6 +81,7 @@ ModifiableStep.propTypes = {
     modifyStepDescription: PropTypes.func,
     removeStep: PropTypes.func,
     removeDisabled: PropTypes.bool,
+    isNewlyAdded: PropTypes.bool,
 }
 
 ModifiableStep.defaultProps = {
@@ -88,6 +90,7 @@ ModifiableStep.defaultProps = {
     modifyStepDescription: () => { },
     removeStep: () => { },
     removeDisabled: true,
+    isNewlyAdded: true,
 }
 
 export default ModifiableStep;
