@@ -10,7 +10,7 @@ function CardWrapper({
     isUserModifyingSteps,
     isUserRetrievingTestingSessions,
     doTestingSessionsExist,
-    isUserViewingTestingSessionDetails,
+    // isUserViewingTestingSessionDetails,
 }) {
 
     return (
@@ -22,9 +22,9 @@ function CardWrapper({
                     ? "create-or-modify-test-script"
                     : isUserRetrievingTestingSessions
                         ? "view-test-script-testing-sessions"
-                        : isUserViewingTestingSessionDetails
-                            ? "view-testing-session-details"
-                            : "add-or-modify-steps"}>
+                        // : isUserViewingTestingSessionDetails
+                        // ? "view-testing-session-details"
+                        : "add-or-modify-steps"}>
                     <div className="page-message">
                         {isUserModifyingSteps
                             ? "Add or Modify Test Script Steps Below:"
@@ -32,23 +32,23 @@ function CardWrapper({
                                 ? doTestingSessionsExist
                                     ? "View Submitted Testing Sessions Below:"
                                     : "No Submissions Yet!"
-                                : isUserViewingTestingSessionDetails
-                                    ? "Review Testing Session Details Below:"
-                                    : "Please Fill in the Fields Below:"}
+                                // : isUserViewingTestingSessionDetails
+                                // ? "Review Testing Session Details Below:"
+                                : "Please Fill in the Fields Below:"}
                     </div>
                     <div className={isUserModifyingSteps
                         ? "add-or-modify-steps-container" :
                         isUserRetrievingTestingSessions
                             ? "view-test-script-testing-sessions-container"
-                            : isUserViewingTestingSessionDetails
-                                ? "view-testing-session-details-container"
+                            // : isUserViewingTestingSessionDetails
+                                // ? "view-testing-session-details-container"
                                 : "create-or-modify-test-script-container"}>
                         <div className={isUserModifyingSteps
                             ? "add-or-modify-steps-card"
                             : isUserRetrievingTestingSessions
                                 ? "view-test-script-testing-sessions-card"
-                                : isUserViewingTestingSessionDetails
-                                    ? "view-testing-session-details-card"
+                                // : isUserViewingTestingSessionDetails
+                                    // ? "view-testing-session-details-card"
                                     : "create-or-modify-test-script-card"}>
                             {children}
                         </div>
@@ -65,7 +65,7 @@ CardWrapper.propTypes = {
     isUserModifyingSteps: PropTypes.bool,
     isUserRetrievingTestingSessions: PropTypes.bool,
     doTestingSessionsExist: PropTypes.bool,
-    isUserViewingTestingSessionDetails: PropTypes.bool,
+    // isUserViewingTestingSessionDetails: PropTypes.bool,
     // setter: PropTypes.func,
     // myObject: PropTypes.shape({
     //     age: PropTypes.number
@@ -80,7 +80,7 @@ CardWrapper.defaultProps = {
     isUserModifyingSteps: false,
     isUserRetrievingTestingSessions: false,
     doTestingSessionsExist: false,
-    isUserViewingTestingSessionDetails: false,
+    // isUserViewingTestingSessionDetails: false,
     // setter: null
 }
 

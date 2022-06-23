@@ -34,6 +34,9 @@ const testingSession = new mongoose.Schema({
         required: true,
         ref: "testScript"
     },
+    // testScriptID: {
+    //     type: String
+    // },
     tester: {
         type: {
             firstName: String,
@@ -44,8 +47,18 @@ const testingSession = new mongoose.Schema({
     pass: {
         type: Boolean,
         required: true
-    }
-
+    },
+    complete: {
+        type: Boolean,
+        default: false
+    },
+    stoppedTestingAtStep: {
+        type: Number,
+    },
+    failedSteps: {
+        type: Array,
+        default: []
+    },
 }, { timestamps: true });
 
 const stepResponse = new mongoose.Schema({

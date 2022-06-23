@@ -16,8 +16,8 @@ function App() {
               <Route exact path="/" element={<LandingPage />} />
               <Route exact path="/create-new-test-script" element={<CreateNewTestScript />} />
               <Route exact path="/modify-existing-test-script" element={<ModifyExistingTestScript />} />
-              <Route exact path="/retrieve-test-script-testing-sessions/:existingTestScriptName" element={<RetrieveTestScriptTestingSessions />} />
-              <Route exact path="/view-test-script-testing-session-details/:testScriptName/:testingSessionID" element={<ViewTestScriptTestingSessionDetails />} />
+              <Route exact path="/retrieve-test-script-testing-sessions/" element={<RetrieveTestScriptTestingSessions />} />
+              {/* <Route exact path="/view-test-script-testing-session-details/:testScriptName/:testingSessionID" element={<ViewTestScriptTestingSessionDetails />} /> */}
             </Switch>
           </Router>
       </ValidationErrorProvider >

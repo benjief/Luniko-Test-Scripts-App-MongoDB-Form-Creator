@@ -84,7 +84,7 @@ function LandingPageOptionsCard() {
                                 Modify Existing Test Script
                             </button>
                         </Link>
-                        <Link to={`/retrieve-test-script-testing-sessions/${"null"}`}>
+                        <Link to={`/retrieve-test-script-testing-sessions/`}>
                             <button
                                 className="retrieve-test-script-testing-sessions-button">
                                 Retrieve Test Script Testing Sessions

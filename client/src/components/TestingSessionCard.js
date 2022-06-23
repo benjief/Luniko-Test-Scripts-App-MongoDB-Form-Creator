@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate, use } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -27,21 +27,26 @@ import Typography from '@mui/material/Typography';
 // }));
 
 function TestingSessionCard({
-    testScriptName,
+    // testScriptName,
     testingSessionID,
     submitter,
+    completed,
+    terminatedAtStep,
     result,
+    failedSteps,
+    responses,
     submissionDate,
+
 }) {
     // React.useEffect(() => {
     //     console.log(testScriptName);
     // }, [testScriptName]);
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
-    const handleOnClickViewDetails = () => {
-        navigate(`/view-test-script-testing-session-details/${testScriptName}/${testingSessionID}`);
-    }
+    // const handleOnClickViewDetails = () => {
+    //     navigate(`/view-test-script-testing-session-details/${testScriptName}/${testingSessionID}`);
+    // }
 
     return (
         <Card
@@ -69,20 +74,33 @@ function TestingSessionCard({
                         </Typography>
                         <Typography paragraph className="testing-session-result">
                             <strong>Result</strong><br />
-                            <span id="testing-session-result-contents">
-                                {result ? "pass" : "fail"}
-                                <img src={result ? require("../img/checkmark_icon_green.png") : require("../img/x_icon_red.png")} alt={result ? "pass" : "fail"} />
+                            <span id="testing-session-result-main-contents">
+                                {result ? completed ? "pass" : "incomplete" : completed ? "fail" : "fail, incomplete"}
+                                <img src={result ? completed ? require("../img/checkmark_icon_green.png") : require("../img/checkmark_icon_orange.png") : require("../img/x_icon_red.png")} alt={result ? completed ? "incomplete" : "pass" : "fail"} /> {/*TODO: check this*/}
                             </span>
+                            {result ? completed ? "" : `terminated at step ${terminatedAtStep}` : completed ? `failed at steps: ${failedSteps.join(', ')}` : [`failed at steps: ${failedSteps.join(', ')}`, <br />, `terminated at step ${terminatedAtStep}`]}
+
+                        </Typography>
+                        <Typography paragraph className="testing-session-comments">
+                            <strong>Comments</strong><br />
+                            {responses.length
+                                ? responses.map((response) => {
+                                    return <p
+                                        key={response._id}>
+                                        Step {response.step}:<br />{response.comments}
+                                    </p>
+                                })
+                                : <p>none</p>}
                         </Typography>
                         <Typography paragraph className="testing-session-submission-date">
-                            <strong>Submitted</strong><br />
+                            <strong>Date Submitted</strong><br />
                             {submissionDate.toString()}
                         </Typography>
-                        <button
+                        {/* <button
                             className="view-testing-session-details-button"
                             onClick={handleOnClickViewDetails}>
                             View Testing Session Details
-                        </button>
+                        </button> */}
                     </CardContent>
                 </Collapse>
             </div>
@@ -91,26 +109,32 @@ function TestingSessionCard({
 }
 
 TestingSessionCard.propTypes = {
-    testingScriptID: PropTypes.string,
     testingSessionID: PropTypes.string,
     submitter: PropTypes.shape({
         firstName: PropTypes.string,
         lastName: PropTypes.string,
         _id: PropTypes.string
     }),
+    completed: PropTypes.bool,
+    terminatedAtStep: PropTypes.number,
     result: PropTypes.bool,
+    failedSteps: PropTypes.array,
+    responses: PropTypes.array,
     submissionDate: PropTypes.instanceOf(Date),
 }
 
 TestingSessionCard.defaultProps = {
-    testingScriptID: "",
     testingSessionID: "",
     submitter: {
         firstName: "",
         lastName: "",
         _id: ""
     },
+    completed: false,
+    terminatedAtStep: -1,
     result: false,
+    failedSteps: [],
+    responses: [],
     submissionDate: new Date(),
 
 }

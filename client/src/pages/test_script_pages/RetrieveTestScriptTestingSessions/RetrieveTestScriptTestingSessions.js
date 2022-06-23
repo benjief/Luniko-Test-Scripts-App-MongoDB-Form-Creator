@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState, useRef, useCallback } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { useValidationErrorUpdate } from "../Context/ValidationErrorContext";
 import Axios from "axios";
 // import { v4 as uuidv4 } from "uuid";
@@ -28,13 +28,14 @@ function RetrieveTestScriptTestingSessions() {
     const [isRequestTestScriptButtonDisabled, setIsRequestTestScriptButtonDisabled] = useState(true);
     // const [isBeginTestingButtonDisabled, setIsBeginTestingButtonDisabled] = useState(true);
     // const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(true);
-    const { existingTestScriptName } = useParams();
+    // const { existingTestScriptName } = useParams();
     const [formProps, setFormProps] = useState({ // TODO: rename this so you can actually use it here without it looking weird (e.g. testScriptProps)
-        testScriptName: existingTestScriptName ? existingTestScriptName : "",
+        testScriptName: "",
     });
-    const [isValidTestScriptNameEntered, setIsValidTestScriptNameEntered] = useState(existingTestScriptName !== "null" ? true : false);
+    const [isValidTestScriptNameEntered, setIsValidTestScriptNameEntered] = useState(false);
     const testScriptID = useRef("");
     const [testingSessions, setTestingSessions] = useState([]);
+    // const [testingSessionResponses, setTestingSessionResponses] = useState([]);
     // const [testScriptSteps, setTestScriptSteps] = useState([]);
     // const [currentStepNumber, setCurrentStepNumber] = useState(1);
     // const [stepResponses, setStepResponses] = useState([]);
@@ -125,6 +126,7 @@ function RetrieveTestScriptTestingSessions() {
             isDataBeingFetched.current = true;
             await fetchTestScriptID(testScriptName);
             await fetchTestScriptTestingSessions();
+            // await fetchTestingSessionResponses();
             setRendering(false);
         }
 
@@ -153,7 +155,6 @@ function RetrieveTestScriptTestingSessions() {
                     .then(res => {
                         console.log(res.data);
                         setTestingSessions(res.data);
-
                     })
             } catch (e) {
                 console.log(e);
@@ -224,7 +225,7 @@ function RetrieveTestScriptTestingSessions() {
                 }
             }
         } else {
-            console.log(testScriptID.current);
+            // console.log(testScriptID.current);
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
             if (!isValidTestScriptNameEntered) {
@@ -450,10 +451,14 @@ function RetrieveTestScriptTestingSessions() {
                         ? testingSessions.map((testingSession) => {
                             return <TestingSessionCard
                                 key={new Date(testingSession.updatedAt)}
-                                testScriptName={formProps["testScriptName"]}
+                                // testScriptName={formProps["testScriptName"]}
                                 testingSessionID={testingSession._id}
                                 submitter={testingSession.tester}
+                                completed={testingSession.complete}
+                                terminatedAtStep={testingSession.stoppedTestingAtStep}
                                 result={testingSession.pass}
+                                failedSteps={testingSession.failedSteps}
+                                responses={testingSession.responses}
                                 submissionDate={new Date(testingSession.updatedAt)}>
                             </TestingSessionCard>
                         })

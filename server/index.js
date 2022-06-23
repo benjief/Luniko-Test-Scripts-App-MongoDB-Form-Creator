@@ -76,7 +76,7 @@ app.get("/get-test-script-steps/:testScriptID", async (req, res) => {
     try {
         const steps = await Step.find(
             { testScriptID: testScriptID }
-        ).sort({number: "asc"}).lean().exec();
+        ).sort({ number: "asc" }).lean().exec();
         res.status(200).json(steps);
     } catch (e) {
         res.status(500).send;
@@ -86,10 +86,11 @@ app.get("/get-test-script-steps/:testScriptID", async (req, res) => {
 app.get("/get-test-script-testing-sessions/:testScriptID", async (req, res) => {
     const testScriptID = req.params.testScriptID;
     try {
-        const steps = await TestingSession.find(
+        const testingSessions = await TestingSession.find(
             { testScriptID: testScriptID }
         ).lean().exec();
-        res.status(200).json(steps);
+        await getTestingSessionResponses(testingSessions)
+        res.status(200).json(testingSessions);
     } catch (e) {
         res.status(500).send;
     }
@@ -108,19 +109,33 @@ app.get("/get-test-script-testing-sessions/:testScriptID", async (req, res) => {
 //     }
 // });
 
-app.get("/get-testing-session-responses/:testingSessionID", async (req, res) => {
-    const testingSessionID = req.params.testingSessionID;
-    try {
-        // console.log("getting responses for:", testingSessionID);
-        const responses = await StepResponse.find(
-            { sessionID: testingSessionID }
-        ).lean().exec();
-        await addStepNumberAndDescription(responses);
-        res.status(200).json(responses);
-    } catch (e) {
-        res.status(500).send;
-    }
-});
+// app.get("/get-testing-session-responses/:testingSessionID", async (req, res) => {
+//     const testingSessionID = req.params.testingSessionID;
+//     try {
+//         // console.log("getting responses for:", testingSessionID);
+//         const responses = await StepResponse.find(
+//             { sessionID: testingSessionID }
+//         ).lean().exec();
+//         await addStepNumberAndDescription(responses);
+//         res.status(200).json(responses);
+//     } catch (e) {
+//         res.status(500).send;
+//     }
+// });
+
+// app.get("/get-testing-session-responses/:testingSessionID", async (req, res) => {
+//     const testingSessionID = req.params.testingSessionID;
+//     try {
+//         // console.log("getting responses for:", testingSessionID);
+//         const responses = await StepResponse.find(
+//             { sessionID: testingSessionID }
+//         ).lean().exec();
+//         await addStepNumber(responses);
+//         res.status(200).json(responses);
+//     } catch (e) {
+//         res.status(500).send;
+//     }
+// });
 
 app.put("/update-test-script", async (req, res) => {
     console.log("updating");
@@ -185,24 +200,55 @@ const addTestScriptIDToSteps = (testScriptID, stepsToAdd) => {
     }
 }
 
-const addStepNumberAndDescription = async (responses) => {
-    try {
-        for (let i = 0; i < responses.length; i++) {
-            const step = await Step.findOne(
-                { _id: responses[i].stepID },
-                {
-                    "number": 1,
-                    "description": 1,
-                }
+const getTestingSessionResponses = async (testingSessions) => {
+    for (let i = 0; i < testingSessions.length; i++) {
+        try {
+            const testingSessionResponses = await StepResponse.find(
+                { sessionID: testingSessions[i]._id, comments: { $ne: "" } }
             ).lean().exec();
-            responses[i]["stepNumber"] = step["number"];
-            responses[i]["stepDescription"] = step["description"];
+            await addStepNumberToStepResponses(testingSessionResponses);
+            testingSessions[i]["responses"] = testingSessionResponses;
+        } catch (e) {
+            console.log(e);
         }
-    } catch (e) {
-        console.log(e);
     }
-
 }
+
+const addStepNumberToStepResponses = async (stepResponses) => {
+    for (let i = 0; i < stepResponses.length; i++) {
+        try {
+            const stepNumber = await Step.find(
+                { _id: stepResponses[i].stepID },
+                { "number": 1 }
+            ).lean().exec();
+            stepResponses[i]["step"] = stepNumber[0]["number"];
+        } catch (e) {
+            console.log(e);
+        }
+    }
+}
+
+// const addTestingSessionResponsesToTestingSession = async (testingSession) => {
+
+// }
+
+// const addStepNumber/*AndDescription*/ = async (responses) => {
+//     try {
+//         for (let i = 0; i < responses.length; i++) {
+//             const step = await Step.findOne(
+//                 { _id: responses[i].stepID },
+//                 {
+//                     "number": 1,
+//                     // "description": 1,
+//                 }
+//             ).lean().exec();
+//             responses[i]["stepNumber"] = step["number"];
+//             // responses[i]["stepDescription"] = step["description"];
+//         }
+//     } catch (e) {
+//         console.log(e);
+//     }
+// }
 
 const deleteStepsAssociatedWithTestScript = async (testScriptID) => {
     try {
