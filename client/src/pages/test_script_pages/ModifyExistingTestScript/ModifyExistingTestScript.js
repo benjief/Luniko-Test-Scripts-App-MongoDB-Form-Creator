@@ -145,13 +145,6 @@ function ModifyExistingTestScript() {
                     "ownerLastName": testScriptInformation.owner["lastName"],
                 })
             );
-            // setFormProps({
-            //     testScriptName: testScriptInformation.name,
-            //     testScriptDescription: testScriptInformation.description,
-            //     testScriptPrimaryWorkstream: testScriptInformation.primaryWorkstream,
-            //     ownerFirstName: testScriptInformation.owner["firstName"],
-            //     ownerLastName: testScriptInformation.owner["lastName"],
-            // });
             testScriptID.current = testScriptInformation._id;
             async.current = false;
         }
@@ -187,7 +180,6 @@ function ModifyExistingTestScript() {
                 }
             }
         } else {
-            // console.log(testScriptSteps);
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
             if (!isValidTestScriptNameEntered) {
@@ -239,7 +231,6 @@ function ModifyExistingTestScript() {
             return obj["number"] === stepNumber
         });
         stepToUpdate = stepToUpdate[0];
-        // let indexOfStepToUpdate = copyOfSteps.indexOf(stepToUpdate);
         stepToUpdate["description"] = updatedDescription;
         setTestScriptSteps([...copyOfSteps]);
     }
@@ -253,7 +244,6 @@ function ModifyExistingTestScript() {
         if (testScriptSteps.length) {
             copyOfSteps = await updateStepNumbers(copyOfSteps, stepNumber);
         }
-        // console.log(copyOfSteps);
         setTestScriptSteps([...copyOfSteps]);
     }
 

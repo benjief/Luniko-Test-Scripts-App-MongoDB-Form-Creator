@@ -4,36 +4,17 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
-// import MaterialSingleSelect from './MaterialSingleSelect';
-// import MaterialSingleSelectFreeSolo from './MaterialSingleSelectFreeSolo';
 import MaterialTextField from './MaterialTextField';
-// import MaterialMultiSelect from './MaterialMultiSelect';
-// import MaterialMultiSelectFreeSolo from './MaterialMultiSelectFreeSolo';
-// import MaterialCheckBox from './MaterialCheckBox';
 import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
-
-// const ExpandMore = styled((props) => {
-//     const { expand, ...other } = props;
-//     return <IconButton {...other} />;
-// })(({ theme, expand }) => ({
-//     transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-//     marginLeft: 'auto',
-//     transition: theme.transitions.create('transform', {
-//         duration: theme.transitions.duration.shortest,
-//     }),
-// }));
-
 function CreateOrModifyTestScriptCard({
     setFormProps,
     isModificationCard,
     existingTestScriptName,
-    invalidTestScriptNames, // TODO: be careful with this and the above prop
+    invalidTestScriptNames,
     existingTestScriptDescription,
     existingTestScriptPrimaryWorkstream,
     existingOwnerFirstName,
     existingOwnerLastName,
-    // ownerEmail = "",
-    // submittedOwnerEmail = "",
     handleTransitionToStepsPage,
     isAddOrModifyStepsButtonDisabled,
     modifyTestScript,
@@ -41,8 +22,6 @@ function CreateOrModifyTestScriptCard({
     isSubmitOrModifyButtonDisabled,
     displayFadingBalls,
 }) {
-    // const [expanded, setExpanded] = React.useState(true);
-    // const [submitButtonColor, setSubmitButtonColor] = React.useState("#BFBFBF");
 
     const handleOnChange = (returnedObject) => {
         setFormProps(
@@ -50,15 +29,9 @@ function CreateOrModifyTestScriptCard({
         );
     }
 
-    // React.useEffect(() => {
-    //     console.log(invalidTestScriptNames);
-    // }, [invalidTestScriptNames]);
-
     return (
         <Card
             sx={{
-                // minWidth: 1,
-                // maxWidth: 1,
                 maxHeight: "calc(100vh - 166.52px)",
                 overflowY: "scroll",
                 borderRadius: "10px",
@@ -70,36 +43,9 @@ function CreateOrModifyTestScriptCard({
             <div className="card-content">
                 <CardHeader
                     titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif" }}
-                    // subheaderTypographyProps={{ color: "rgba(0, 0, 0, 0.7)", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt" }}
-                    // avatar={
-                    //     <Avatar sx={{
-                    //         bgcolor: "var(--lunikoBlue)"
-                    //     }}
-                    //         aria-label="status">
-                    //         {statusAbbreviation}
-                    //     </Avatar>
-                    // }
-                    title={<strong>Test Script Form</strong>}
-                />
-                {/* < CardActions
-                disableSpacing
-                style={{ justifyContent: "center", height: "40px", padding: 0, paddingBottom: "10px" }}>
-                <ExpandMore
-                    expand={expanded}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                    style={{ marginLeft: 0 }}
-                >
-                    <ExpandMoreIcon />
-                </ExpandMore>
-            </CardActions > */}
+                    title={<strong>Test Script Form</strong>}/>
                 <Collapse in={true} timeout="auto" unmountOnExit>
                     <CardContent>
-                        {/* <Typography
-                        paragraph>
-                        <strong>Updatable Fields</strong>
-                    </Typography> */}
                         <MaterialTextField
                             label="Test Script Name"
                             disabled={isModificationCard}
@@ -159,16 +105,6 @@ function CreateOrModifyTestScriptCard({
                             showCharCounter={false}
                             field="ownerLastName" >
                         </MaterialTextField>
-                        {/* <MaterialTextField
-                            label="Email"
-                            placeholder="Owner Email"
-                            type="email"
-                            inputValue={handleOnChange}
-                            multiline={false}
-                            required={true}
-                            showCharCounter={false}
-                            field="ownerEmail" >
-                        </MaterialTextField> */}
                         <button
                             className="add-or-modify-steps-button"
                             onClick={handleTransitionToStepsPage}
@@ -178,8 +114,7 @@ function CreateOrModifyTestScriptCard({
                         <button
                             className="submit-or-update-test-script-button"
                             onClick={isModificationCard ? modifyTestScript : submitTestScript}
-                            disabled={isSubmitOrModifyButtonDisabled}
-                            /*style={{ backgroundColor: submitButtonColor }}*/>
+                            disabled={isSubmitOrModifyButtonDisabled}>
                             {displayFadingBalls ?
                                 <div className="fading-balls-container">
                                     <FadingBalls

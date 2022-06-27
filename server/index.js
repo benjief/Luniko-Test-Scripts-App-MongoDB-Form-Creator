@@ -88,7 +88,7 @@ app.get("/get-test-script-testing-sessions/:testScriptID", async (req, res) => {
     try {
         const testingSessions = await TestingSession.find(
             { testScriptID: testScriptID }
-        ).lean().exec();
+        ).sort({updatedAt: "desc"}).lean().exec();
         await getTestingSessionResponses(testingSessions)
         res.status(200).json(testingSessions);
     } catch (e) {

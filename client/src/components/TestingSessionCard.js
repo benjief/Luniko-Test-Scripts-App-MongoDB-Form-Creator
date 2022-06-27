@@ -1,33 +1,11 @@
 import * as React from 'react';
-// import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
-// import MaterialSingleSelect from './MaterialSingleSelect';
-// import MaterialSingleSelectFreeSolo from './MaterialSingleSelectFreeSolo';
-// import MaterialTextField from './MaterialTextField';
-// import MaterialRadioButton from './MaterialRadioButton';
-// import MaterialMultiSelect from './MaterialMultiSelect';
-// import MaterialMultiSelectFreeSolo from './MaterialMultiSelectFreeSolo';
-// import MaterialCheckBox from './MaterialCheckBox';
-// import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
-
-// const ExpandMore = styled((props) => {
-//     const { expand, ...other } = props;
-//     return <IconButton {...other} />;
-// })(({ theme, expand }) => ({
-//     transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-//     marginLeft: 'auto',
-//     transition: theme.transitions.create('transform', {
-//         duration: theme.transitions.duration.shortest,
-//     }),
-// }));
-
 function TestingSessionCard({
-    // testScriptName,
     testingSessionID,
     submitter,
     completed,
@@ -38,21 +16,11 @@ function TestingSessionCard({
     submissionDate,
 
 }) {
-    // React.useEffect(() => {
-    //     console.log(testScriptName);
-    // }, [testScriptName]);
-
-    // const navigate = useNavigate();
-
-    // const handleOnClickViewDetails = () => {
-    //     navigate(`/view-test-script-testing-session-details/${testScriptName}/${testingSessionID}`);
-    // }
+    const word = failedSteps.length > 1 ? "steps" : "step";
 
     return (
         <Card
             sx={{
-                // minWidth: 1,
-                // maxWidth: 1,
                 maxHeight: "calc(100vh - 166.52px)",
                 overflowY: "scroll",
                 borderRadius: "10px",
@@ -78,10 +46,10 @@ function TestingSessionCard({
                                 {result ? completed ? "pass" : "incomplete" : completed ? "fail" : "fail, incomplete"}
                                 <img src={result ? completed ? require("../img/checkmark_icon_green.png") : require("../img/checkmark_icon_orange.png") : require("../img/x_icon_red.png")} alt={result ? completed ? "incomplete" : "pass" : "fail"} /> {/*TODO: check this*/}
                             </span>
-                            {result ? completed ? "" : `terminated at step ${terminatedAtStep}` : completed ? `failed at steps: ${failedSteps.join(', ')}` : [`failed at steps: ${failedSteps.join(', ')}`, <br />, `terminated at step ${terminatedAtStep}`]}
+                            {result ? completed ? "" : `terminated at step ${terminatedAtStep}` : completed ? `failed at ${word} ${failedSteps.join(', ')}` : [`failed at ${word} ${failedSteps.join(', ')}; `, `terminated at step ${terminatedAtStep}`]}
 
                         </Typography>
-                        <Typography paragraph className="testing-session-comments">
+                        <Typography component={"div"} variant={"body2"} className="testing-session-comments">
                             <strong>Comments</strong><br />
                             {responses.length
                                 ? responses.map((response) => {
@@ -96,11 +64,6 @@ function TestingSessionCard({
                             <strong>Date Submitted</strong><br />
                             {submissionDate.toString()}
                         </Typography>
-                        {/* <button
-                            className="view-testing-session-details-button"
-                            onClick={handleOnClickViewDetails}>
-                            View Testing Session Details
-                        </button> */}
                     </CardContent>
                 </Collapse>
             </div>

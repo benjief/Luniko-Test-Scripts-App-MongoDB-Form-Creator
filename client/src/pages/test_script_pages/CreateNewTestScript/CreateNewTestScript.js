@@ -3,11 +3,8 @@ import { useNavigate } from "react-router-dom";
 import LoadingWrapper from "../wrappers/LoadingWrapper/LoadingWrapper";
 import ErrorWrapper from "../wrappers/ErrorWrapper/ErrorWrapper";
 import CardWrapper from "../wrappers/CardWrapper/CardWrapper";
-// import NavBar from "../../components/Navbar";
-// import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
 import CreateOrModifyTestScriptCard from "../../../components/CreateOrModifyTestScriptCard";
 import AddOrModifyStepsCard from "../../../components/AddOrModifyStepsCard";
-// import MaterialAlert from "../../components/MaterialAlert";
 import { v4 as uuidv4 } from "uuid";
 import Axios from "axios";
 import "../../../styles/CreateNewTestScript.css";
@@ -27,7 +24,6 @@ function CreateNewTestScript() {
         testScriptPrimaryWorkstream: "",
         ownerFirstName: "",
         ownerLastName: "",
-        // ownerEmail: "",
     });
     const [testScriptSteps, setTestScriptSteps] = useState([]);
     const cardChanged = useRef(false);
@@ -81,7 +77,7 @@ function CreateNewTestScript() {
         const runReadAsyncFunctions = async () => {
             isDataBeingFetched.current = true;
             await fetchTestScriptNamesAlreadyInDB();
-            // await deleteTestScript("629669df8f74d1f0b25fe514");
+            // await deleteTestScript("629669df8f74d1f0b25fe514"); // TODO: here to test deletion functions in server side code
             setRendering(false);
         }
 
@@ -130,39 +126,6 @@ function CreateNewTestScript() {
         }
     }, [rendering, formProps, isUserModifyingSteps, testScriptSteps, isAddStepButtonDisabled, isSubmitButtonDisabled, isTestScriptSubmitted, handleError]);
 
-    // const deleteTestScript = async (testScriptID) => {
-    //     if (!async.current) {
-    //         console.log("deleting test script");
-    //         try {
-    //             console.log(testScriptID);
-    //             async.current = true;
-    //             await Axios.delete(`http://localhost:5000/delete-test-script/${testScriptID}`, {
-    //             })
-    //                 .then(res => {
-    //                     console.log(res);
-    //                     async.current = false;
-    //                 });
-    //         } catch (e) {
-    //             console.log(e);
-    //             handleError("r");
-    //         }
-    //     }
-    // }
-
-    // const handleFormCallback = (returnedObject) => {
-    //     const field = returnedObject.field;
-    //     const value = returnedObject.value;
-
-    //     setFormPropsForFieldAndValue(field, value);
-    // }
-
-    // const setFormPropsForFieldAndValue = (field, value) => {
-    //     setFormProps((prevState) => ({
-    //         ...prevState,
-    //         [field]: value,
-    //     }));
-    // }
-
     const setIsNewlyAddedToFalseForExistingSteps = (steps) => {
         return steps.map(obj => ({ ...obj, isNewlyAdded: false }));
     }
@@ -196,7 +159,6 @@ function CreateNewTestScript() {
             return obj["number"] === stepNumber
         });
         stepToUpdate = stepToUpdate[0];
-        // let indexOfStepToUpdate = copyOfSteps.indexOf(stepToUpdate);
         stepToUpdate["description"] = updatedDescription;
         setTestScriptSteps([...copyOfSteps]);
     }

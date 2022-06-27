@@ -3,11 +3,12 @@
     display: flex;
     margin-bottom: 15px !important;
     /* margin-top: 5px; */
-}
-
-.test-script-name {
     min-height: 78.91px !important;
 }
+
+/* .test-script-name {
+    min-height: 78.91px !important;
+} */
 
 .material-text-field {
     width: 100% !important;

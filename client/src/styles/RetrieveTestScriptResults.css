@@ -59,6 +59,10 @@
     background-color: var(--lunikoOrange) !important;
 } */
 
+.testing-session-comments {
+   margin-bottom: 25px !important; 
+}
+
 #testing-session-result-main-contents {
     display: flex;
     align-items: center;

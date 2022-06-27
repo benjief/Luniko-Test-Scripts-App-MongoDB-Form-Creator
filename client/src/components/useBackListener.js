@@ -7,7 +7,6 @@ const useBackListener = (callback) => {
 
   useEffect(() => {
     const listener = ({ location, action }) => {
-      // console.log("listener", { location, action });
       if (action === "POP") {
         callback({ location, action });
       }

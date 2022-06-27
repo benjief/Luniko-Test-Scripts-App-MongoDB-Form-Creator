@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/Navbar";
 import LandingPageOptionsCard from "../../components/LandingPageOptionsCard";
 import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
@@ -20,7 +19,7 @@ function LandingPage() {
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
         }
-    });
+    }, [rendering, setTransitionElementOpacity, setTransitionElementVisibility]);
 
     return (
         rendering

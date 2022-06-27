@@ -1,4 +1,3 @@
-// import { display } from '@mui/system';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import MaterialTextField from './MaterialTextField';
@@ -6,7 +5,6 @@ import MaterialTextField from './MaterialTextField';
 function ModifiableStep({
     stepNumber,
     stepDescription,
-    // existingStepDescription = "",
     modifyStepDescription,
     removeStep,
     removeDisabled,
