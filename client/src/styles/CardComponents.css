@@ -62,6 +62,8 @@
 
 .MuiCardActions-root button {
     box-shadow: none !important;
+    width: 30px !important;
+    height: 30px !important;
 }
 
 .MuiCardContent-root {

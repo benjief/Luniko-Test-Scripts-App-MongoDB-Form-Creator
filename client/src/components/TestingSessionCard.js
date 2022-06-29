@@ -1,10 +1,25 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import IconButton from '@mui/material/IconButton';
+
+const ExpandMore = styled((props) => {
+    const { expand, ...other } = props;
+    return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+    }),
+}));
 function TestingSessionCard({
     testingSessionID,
     submitter,
@@ -16,7 +31,12 @@ function TestingSessionCard({
     submissionDate,
 
 }) {
+    const [expanded, setExpanded] = React.useState(false);
     const word = failedSteps.length > 1 ? "steps" : "step";
+
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
 
     return (
         <Card
@@ -34,7 +54,20 @@ function TestingSessionCard({
                     titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt" }}
                     title={<strong>Testing Session {testingSessionID}</strong>}
                 />
-                <Collapse in={true} timeout="auto" unmountOnExit>
+                < CardActions
+                    disableSpacing
+                    style={{ justifyContent: "center", height: "40px", padding: 0, paddingBottom: "10px" }}>
+                    <ExpandMore
+                        expand={expanded}
+                        onClick={handleExpandClick}
+                        aria-expanded={expanded}
+                        aria-label="show more"
+                        style={{ marginLeft: 0 }}
+                    >
+                        <ExpandMoreIcon />
+                    </ExpandMore>
+                </CardActions >
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
                         <Typography paragraph className="testing-session-submitter">
                             <strong>Submitter</strong><br />
