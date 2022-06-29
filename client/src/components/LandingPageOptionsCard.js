@@ -25,13 +25,13 @@ function LandingPageOptionsCard() {
                     title={<strong>Please choose an option below</strong>}/>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
-                        <Link to={"/create-new-test-script"}>
+                        <Link to={"/create-or-modify-test-script/create"}>
                             <button
                                 className="create-new-test-script-button">
                                 Create New Test Script
                             </button>
                         </Link>
-                        <Link to={"/modify-existing-test-script"}>
+                        <Link to={"create-or-modify-test-script/modify"}>
                             <button
                                 className="modify-existing-test-script-button">
                                 Modify Existing Test Script

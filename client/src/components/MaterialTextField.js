@@ -115,7 +115,7 @@ function MaterialTextField({
   }
 
   const handleEmptyValue = (value) => {
-    setValue("");
+    setValue(value);
     inputValue({ field: field, value: "" });
     if (showCharCounter && value) {
       setInputLength(value.length);

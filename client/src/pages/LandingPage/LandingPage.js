@@ -1,14 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
-import NavBar from "../../components/Navbar";
+import LoadingWrapper from "../test_script_pages/wrappers/LoadingWrapper/LoadingWrapper";
 import LandingPageOptionsCard from "../../components/LandingPageOptionsCard";
-import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
 import "../../styles/InputComponents.css"
 import "../../styles/LandingPage.css";
 
 function LandingPage() {
     const [rendering, setRendering] = useState(true);
     const [transitionElementOpacity, setTransitionElementOpacity] = useState("100%");
-    const [transtitionElementVisibility, setTransitionElementVisibility] = useState("visible");
+    const [transitionElementVisibility, setTransitionElementVisibility] = useState("visible");
 
     useEffect(() => {
         if (rendering) {
@@ -22,37 +21,33 @@ function LandingPage() {
     }, [rendering, setTransitionElementOpacity, setTransitionElementVisibility]);
 
     return (
-        rendering
-            ? <div className="loading-spinner">
-                <Hypnosis
-                    className="spinner"
-                    color="var(--lunikoOrange)"
-                    width="100px"
-                    height="100px"
-                    duration="1.5s" />
+        <Fragment>
+            <div
+                className="transition-element"
+                style={{
+                    opacity: transitionElementOpacity,
+                    visibility: transitionElementVisibility
+                }}>
             </div>
-            : <Fragment>
-                <div
-                    className="transition-element"
-                    style={{
-                        opacity: transitionElementOpacity,
-                        visibility: transtitionElementVisibility
-                    }}>
+            <LoadingWrapper
+                rendering={rendering}
+                transitionElementOpacity={transitionElementOpacity}
+                transitionElementVisibility={transitionElementVisibility}>
+            </LoadingWrapper>
+            {/* <NavBar>
+                </NavBar> */}
+            <div className="landing-page-options">
+                <div className="page-message">
+                    Welcome!
                 </div>
-                <NavBar>
-                </NavBar>
-                <div className="landing-page-options">
-                    <div className="page-message">
-                        Welcome!
-                    </div>
-                    <div className="landing-page-options-container">
-                        <div className="landing-page-options-card">
-                            <LandingPageOptionsCard>
-                            </LandingPageOptionsCard>
-                        </div>
+                <div className="landing-page-options-container">
+                    <div className="landing-page-options-card">
+                        <LandingPageOptionsCard>
+                        </LandingPageOptionsCard>
                     </div>
                 </div>
-            </Fragment>
+            </div>
+        </Fragment>
     )
 };
 

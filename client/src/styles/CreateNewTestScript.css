@@ -1,4 +1,6 @@
-.create-or-modify-test-script, .add-or-modify-steps {
+.enter-valid-test-script-name,
+.create-or-modify-test-script,
+.add-or-modify-steps {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,15 +11,15 @@
     scrollbar-width: none;
 }
 
-.create-or-modify-test-script::-webkit-scrollbar {
-    display: none;
-}
-
+.enter-valid-test-script-name::-webkit-scrollbar,
+.create-or-modify-test-script::-webkit-scrollbar,
 .add-or-modify-steps::-webkit-scrollbar {
     display: none;
 }
 
-.create-or-modify-test-script-container, .add-or-modify-steps-container {
+.enter-valid-test-script-name-container,
+.create-or-modify-test-script-container,
+.add-or-modify-steps-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,11 +29,17 @@
     padding-bottom: 20px;
 }
 
-.create-or-modify-test-script-card, .add-or-modify-steps-card {
+.enter-valid-test-script-name-card,
+.create-or-modify-test-script-card,
+.add-or-modify-steps-card {
     width: 100%;
 }
 
-.add-or-modify-steps-button, .submit-or-update-test-script-button, .add-step-button, .back-button {
+.submit-test-script-name-button,
+.add-or-modify-steps-button,
+.submit-or-update-test-script-button,
+.add-step-button,
+.back-button {
     padding: 10px;
     /* margin-top: 5px; */
     margin-bottom: 10px;
@@ -52,28 +60,42 @@
     margin-top: 30px;
 }
 
-.submit-or-update-test-script-button:not(:disabled), .add-step-button:not(:disabled) {
+.back-button,
+.submit-or-update-script-button {
+    /* margin-top: 25px !important; */
+}
+
+.submit-test-script-name-button:not(:disabled),
+.submit-or-update-script-name-button:not(:disabled),
+.submit-or-update-script-button:not(:disabled),
+.add-step-button:not(:disabled) {
     background-color: var(--lunikoBlue);
 }
 
-
-.add-or-modify-steps-button:disabled, .submit-or-update-test-script-button:disabled, .add-step-button:disabled {
+.submit-test-script-name-button:disabled,
+.submit-or-update-script-name-button:disabled,
+.add-or-modify-steps-button:disabled,
+.submit-or-update-script-button:disabled,
+.add-step-button:disabled {
     background-color: #BFBFBF;
 }
 
-.submit-test-script-button:not(:disabled):hover {
+.submit-or-update-test-script-button:not(:disabled):hover {
     background-color: #009952 !important;
 }
 
-.add-or-modify-steps-button:not(:disabled):hover, .add-step-button:not(:disabled):hover, .back-button:not(:disabled):hover {
+.submit-test-script-name-button:not(:disabled):hover,
+.add-or-modify-steps-button:not(:disabled):hover,
+.add-step-button:not(:disabled):hover,
+.back-button:not(:disabled):hover {
     background-color: var(--lunikoOrange) !important;
-}
-
-.back-button, .submit-test-script-button {
-    margin-top: 25px !important;
 }
 
 .error-div {
     height: "100vw";
     width: "100%";
 }
+
+/* .step-container:not(:last-of-type) {
+    margin-bottom: 40px;
+} */

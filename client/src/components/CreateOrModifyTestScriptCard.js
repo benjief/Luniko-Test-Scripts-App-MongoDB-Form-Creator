@@ -17,8 +17,7 @@ function CreateOrModifyTestScriptCard({
     existingOwnerLastName,
     handleTransitionToStepsPage,
     isAddOrModifyStepsButtonDisabled,
-    modifyTestScript,
-    submitTestScript,
+    submitOrModifyTestScript,
     isSubmitOrModifyButtonDisabled,
     displayFadingBalls,
 }) {
@@ -113,7 +112,7 @@ function CreateOrModifyTestScriptCard({
                         </button>
                         <button
                             className="submit-or-update-test-script-button"
-                            onClick={isModificationCard ? modifyTestScript : submitTestScript}
+                            onClick={submitOrModifyTestScript}
                             disabled={isSubmitOrModifyButtonDisabled}>
                             {displayFadingBalls ?
                                 <div className="fading-balls-container">
@@ -145,8 +144,7 @@ CreateOrModifyTestScriptCard.propTypes = {
     existingOwnerLastName: PropTypes.string,
     handleTransitionToStepsPage: PropTypes.func,
     isAddOrModifyStepsButtonDisabled: PropTypes.bool,
-    modifyTestScript: PropTypes.func,
-    submitTestScript: PropTypes.func,
+    submitOrModifyTestScript: PropTypes.func,
     isSubmitOrModifyButtonDisabled: PropTypes.bool,
     displayFadingBalls: PropTypes.bool,
 }
@@ -162,8 +160,7 @@ CreateOrModifyTestScriptCard.defaultProps = {
     existingOwnerLastName: "",
     handleTransitionToStepsPage: () => { },
     isAddOrModifyStepsButtonDisabled: false,
-    modifyTestScript: () => { },
-    submitTestScript: () => { },
+    submitOrModifyTestScript: () => { },
     isSubmitOrModifyButtonDisabled: true,
     displayFadingBalls: false,
 }

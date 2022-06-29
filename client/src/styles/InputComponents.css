@@ -3,7 +3,7 @@
     display: flex;
     margin-bottom: 15px !important;
     /* margin-top: 5px; */
-    min-height: 78.91px !important;
+    min-height: 78.91px;
 }
 
 /* .test-script-name {

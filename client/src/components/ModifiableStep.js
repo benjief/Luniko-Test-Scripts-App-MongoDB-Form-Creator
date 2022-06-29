@@ -12,7 +12,7 @@ function ModifiableStep({
 }) {
     const [opacity, setOpacity] = React.useState(isNewlyAdded ? "0" : "100%");
     const [height, setHeight] = React.useState(isNewlyAdded ? stepNumber === 1 ? "49px" : "0" : "172.91px");
-    const [marginBottom, setMarginBottom] = React.useState(isNewlyAdded ? "0" : "15px");
+    const [marginBottom, setMarginBottom] = React.useState(isNewlyAdded ? "0" : "40px");
     const [removed, setRemoved] = React.useState(false);
 
     const handleModifyStepDescription = (returnedObject) => {
@@ -31,18 +31,18 @@ function ModifiableStep({
             }, 300);
             setTimeout(() => {
                 removeStep({ number: stepNumber });
-            }, 1000);
+            }, 552); // this seems to be the magic number so that the animation for removing a step remains smooth
         }
     }
 
     React.useEffect(() => {
         if (!removed && isNewlyAdded) {
             setHeight("172.91px");
-            setMarginBottom("20px");
+            setMarginBottom("30px");
             setTimeout(() => {
                 setOpacity("100%");
             }, 300);
-        } 
+        }
     }, [removed, isNewlyAdded]);
 
     return (
