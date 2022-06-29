@@ -52,8 +52,18 @@ function TestingSessionCard({
             <div className="card-content">
                 <CardHeader
                     titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt" }}
-                    title={<strong>Testing Session {testingSessionID}</strong>}
-                />
+                    title={<strong>Testing Session {testingSessionID}</strong>}>
+                </CardHeader>
+                <Typography paragraph className="testing-session-result">
+                    <span id="testing-session-result-header">
+                    <strong>Result</strong>
+                    <img src={result ? completed ? require("../img/checkmark_icon_green.png") : require("../img/checkmark_icon_orange.png") : require("../img/x_icon_red.png")} alt={result ? completed ? "incomplete" : "pass" : "fail"} /> {/*TODO: check this*/}
+                    </span>
+                            <span id="testing-session-result-main-contents">
+                                {result ? completed ? "pass" : "incomplete" : completed ? "fail" : "fail, incomplete"}
+                            </span>
+                            {result ? completed ? "" : `terminated at step ${terminatedAtStep}` : completed ? `failed at ${word} ${failedSteps.join(', ')}` : [`failed at ${word} ${failedSteps.join(', ')}; `, `terminated at step ${terminatedAtStep}`]}
+                        </Typography>
                 < CardActions
                     disableSpacing
                     style={{ justifyContent: "center", height: "40px", padding: 0, paddingBottom: "10px" }}>
@@ -72,15 +82,6 @@ function TestingSessionCard({
                         <Typography paragraph className="testing-session-submitter">
                             <strong>Submitter</strong><br />
                             {submitter.firstName + " " + submitter.lastName}
-                        </Typography>
-                        <Typography paragraph className="testing-session-result">
-                            <strong>Result</strong><br />
-                            <span id="testing-session-result-main-contents">
-                                {result ? completed ? "pass" : "incomplete" : completed ? "fail" : "fail, incomplete"}
-                                <img src={result ? completed ? require("../img/checkmark_icon_green.png") : require("../img/checkmark_icon_orange.png") : require("../img/x_icon_red.png")} alt={result ? completed ? "incomplete" : "pass" : "fail"} /> {/*TODO: check this*/}
-                            </span>
-                            {result ? completed ? "" : `terminated at step ${terminatedAtStep}` : completed ? `failed at ${word} ${failedSteps.join(', ')}` : [`failed at ${word} ${failedSteps.join(', ')}; `, `terminated at step ${terminatedAtStep}`]}
-
                         </Typography>
                         <Typography component={"div"} variant={"body2"} className="testing-session-comments">
                             <strong>Comments</strong><br />

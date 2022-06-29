@@ -59,17 +59,28 @@
     background-color: var(--lunikoOrange) !important;
 } */
 
-.testing-session-comments {
-   margin-bottom: 25px !important; 
+.testing-session-result {
+    padding-left: 16px;
+    padding-bottom: 0;
+    margin-bottom: 10px !important;
 }
 
-#testing-session-result-main-contents {
+
+#testing-session-result-header {
     display: flex;
     align-items: center;
 }
 
-#testing-session-result-main-contents img {
+#testing-session-result-header img {
     width: 20px;
     height: 20px;
     margin: -1px 0 0 10px;
 }
+
+#testing-session-result-main-contents {
+    display: flex;
+}
+
+.testing-session-comments {
+    margin-bottom: 25px !important; 
+ }
