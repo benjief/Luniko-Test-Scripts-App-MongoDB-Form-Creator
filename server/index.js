@@ -173,7 +173,6 @@ app.delete("/delete-test-script/:testScriptID", async (req, res) => {
     } catch (e) {
         res.status(500).send;
     }
-
 });
 
 // Helper functions

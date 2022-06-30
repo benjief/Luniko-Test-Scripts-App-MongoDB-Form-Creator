@@ -109,8 +109,11 @@ const testScript = new mongoose.Schema({
 }, { timestamps: true });
 
 testScript.pre('deleteOne', function (next) {
-    console.log("deleting steps associated with:", this.getQuery()._id);
-    Step.deleteMany({ testScriptID: this.getQuery()._id }).exec();
+    const testScriptID = this.getQuery()._id;
+    console.log("deleting testing sessions associated with:", testScriptID);
+    TestingSession.deleteMany({testScriptID: testScriptID}).exec();
+    console.log("deleting steps associated with:", testScriptID);
+    Step.deleteMany({ testScriptID: testScriptID }).exec();
     next();
 });
 

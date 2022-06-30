@@ -6,15 +6,19 @@ import React from 'react'
 function CardWrapper({
     children,
     rendering,
+    alert,
     isErrorThrown,
     isUserModifyingSteps,
     isUserRetrievingTestingSessions,
     doTestingSessionsExist,
-    // isUserViewingTestingSessionDetails,
 }) {
 
+    React.useEffect(() => {
+        console.log("alert:", alert);
+    }, [alert]);
+
     return (
-        rendering
+        rendering || alert
             ? <div></div>
             : isErrorThrown
                 ? <div></div> // TODO: test this!
@@ -22,8 +26,6 @@ function CardWrapper({
                     ? "create-or-modify-test-script"
                     : isUserRetrievingTestingSessions
                         ? "view-test-script-testing-sessions"
-                        // : isUserViewingTestingSessionDetails
-                        // ? "view-testing-session-details"
                         : "add-or-modify-steps"}>
                     <div className="page-message">
                         {isUserModifyingSteps
@@ -32,24 +34,18 @@ function CardWrapper({
                                 ? doTestingSessionsExist
                                     ? "View Submitted Testing Sessions Below:"
                                     : "No Submissions Yet!"
-                                // : isUserViewingTestingSessionDetails
-                                // ? "Review Testing Session Details Below:"
                                 : "Please Fill in the Fields Below:"}
                     </div>
                     <div className={isUserModifyingSteps
-                        ? "add-or-modify-steps-container" :
-                        isUserRetrievingTestingSessions
+                        ? "add-or-modify-steps-container"
+                        : isUserRetrievingTestingSessions
                             ? "view-test-script-testing-sessions-container"
-                            // : isUserViewingTestingSessionDetails
-                                // ? "view-testing-session-details-container"
-                                : "create-or-modify-test-script-container"}>
+                            : "create-or-modify-test-script-container"}>
                         <div className={isUserModifyingSteps
                             ? "add-or-modify-steps-card"
                             : isUserRetrievingTestingSessions
                                 ? "view-test-script-testing-sessions-card"
-                                // : isUserViewingTestingSessionDetails
-                                    // ? "view-testing-session-details-card"
-                                    : "create-or-modify-test-script-card"}>
+                                : "create-or-modify-test-script-card"}>
                             {children}
                         </div>
                     </div>
@@ -61,6 +57,7 @@ function CardWrapper({
 CardWrapper.propTypes = {
     children: PropTypes.node.isRequired,
     rendering: PropTypes.bool,
+    alert: PropTypes.bool,
     isErrorThrown: PropTypes.bool,
     isUserModifyingSteps: PropTypes.bool,
     isUserRetrievingTestingSessions: PropTypes.bool,
@@ -76,11 +73,11 @@ CardWrapper.propTypes = {
 
 CardWrapper.defaultProps = {
     rendering: false,
+    alert: false,
     isErrorThrown: false,
     isUserModifyingSteps: false,
     isUserRetrievingTestingSessions: false,
     doTestingSessionsExist: false,
-    // isUserViewingTestingSessionDetails: false,
     // setter: null
 }
 

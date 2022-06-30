@@ -31,7 +31,7 @@ function ModifiableStep({
             }, 300);
             setTimeout(() => {
                 removeStep({ number: stepNumber });
-            }, 552); // this seems to be the magic number so that the animation for removing a step remains smooth
+            }, 555); // this seems to be the magic number so that the animation for removing a step remains smooth
         }
     }
 

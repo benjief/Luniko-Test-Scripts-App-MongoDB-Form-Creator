@@ -9,7 +9,7 @@ import AddOrModifyStepsCard from "../../../components/AddOrModifyStepsCard";
 import EnterTestScriptNameCard from "../../../components/EnterTestScriptNameCard";
 import { v4 as uuidv4 } from "uuid";
 import Axios from "axios";
-import "../../../styles/CreateNewTestScript.css";
+import "../../../styles/CreateOrModifyNewTestScript.css";
 import "../../../styles/InputComponents.css";
 import "../../../styles/CardComponents.css";
 import "../../../styles/SelectorComponents.css";
@@ -43,7 +43,8 @@ function CreateOrModifyTestScript() {
     const async = useRef(false);
     const [isErrorThrown, setIsErrorThrown] = useState(false);
     const [alert, setAlert] = useState(false);
-    const alertMessage = useRef("Test script successfully submitted!");
+    const wordForAlertMessage = useRef(pageFunctionality === "create" ? "submitted" : "updated");
+    const successAlertMessage = useRef(`Test script successfully ${wordForAlertMessage.current}!`);
     const alertType = useRef("success-alert");
 
     const testScriptNamesAlreadyInDB = useRef([]);
@@ -52,7 +53,7 @@ function CreateOrModifyTestScript() {
     const wordForWriteErrorMessage = useRef(pageFunctionality === "create" ? "submit" : "update");
 
     const loadErrorMessage = "Apologies! We've encountered an error. Please attempt to re-load this page.";
-    const writeErrorMessage = `Apologies! We've encountered an error. Please attempt to re-${wordForWriteErrorMessage} your test script.`;
+    const writeErrorMessage = `Apologies! We've encountered an error. Please attempt to re-${wordForWriteErrorMessage.current} your test script.`;
 
     const navigate = useNavigate();
 
@@ -60,8 +61,8 @@ function CreateOrModifyTestScript() {
         setIsErrorThrown(true);
         alertType.current = "error-alert";
         errorType === "r"
-            ? alertMessage.current = loadErrorMessage
-            : alertMessage.current = writeErrorMessage;
+            ? successAlertMessage.current = loadErrorMessage
+            : successAlertMessage.current = writeErrorMessage;
 
         // Delay is set up just in case an error is generated before the is fully-displayed
         // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
@@ -89,7 +90,7 @@ function CreateOrModifyTestScript() {
         const runPrimaryReadAsyncFunctions = async () => {
             isDataBeingFetched.current = true;
             await fetchTestScriptNamesAlreadyInDB();
-            // await deleteTestScript("62b38a865e3d70fa249477a6"); // TODO: here to test deletion functions in server side code
+            // await deleteTestScript("62bc85cbd464df5341a56c0f"); // TODO: here to test deletion functions in server side code
             setRendering(false);
         }
 
@@ -195,6 +196,7 @@ function CreateOrModifyTestScript() {
                 setRendering(false);
             }
         } else {
+            // console.log(alert);
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
             if (pageFunctionality === "modify" && !isValidTestScriptNameEntered) {
@@ -227,7 +229,7 @@ function CreateOrModifyTestScript() {
     }
 
     const handleAddStep = () => {
-        console.log("adding step");
+        // console.log("adding step");
         let stepCount = testScriptSteps.length;
         let uniqueID = uuidv4();
         let newStep = { number: stepCount + 1, description: "", uniqueID: uniqueID, isNewlyCreated: true };
@@ -367,13 +369,14 @@ function CreateOrModifyTestScript() {
             </LoadingWrapper>
             < ErrorWrapper
                 alert={alert}
-                alertMessage={alertMessage.current}
+                alertMessage={successAlertMessage.current}
                 handleAlertClosed={handleAlertClosed}
                 alertType={alertType.current}>
             </ErrorWrapper>
             {pageFunctionality === "create" || (pageFunctionality === "modify" && isValidTestScriptNameEntered)
                 ? <CardWrapper
                     rendering={rendering}
+                    alert={alert}
                     isErrorThrown={isErrorThrown}
                     isUserModifyingSteps={isUserModifyingSteps}>
                     {isUserModifyingSteps
