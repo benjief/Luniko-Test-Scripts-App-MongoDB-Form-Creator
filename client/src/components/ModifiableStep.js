@@ -13,7 +13,8 @@ function ModifiableStep({
     const [opacity, setOpacity] = React.useState(isNewlyAdded ? "0" : "100%");
     const [height, setHeight] = React.useState(isNewlyAdded ? stepNumber === 1 ? "49px" : "0" : "172.91px");
     const [marginBottom, setMarginBottom] = React.useState(isNewlyAdded ? "0" : "40px");
-    const [removed, setRemoved] = React.useState(false);
+    const [isRemoved, setIsRemoved] = React.useState(false);
+    const stepRef = React.useRef(null);
 
     const handleModifyStepDescription = (returnedObject) => {
         const updatedStepDescription = returnedObject.value;
@@ -22,7 +23,8 @@ function ModifiableStep({
     }
 
     const handleRemoveStep = () => {
-        setRemoved(true);
+        setHeight(stepRef.current?.clientHeight + "px");
+        setIsRemoved(true);
         if (!removeDisabled) {
             setOpacity("0%");
             setTimeout(() => {
@@ -36,17 +38,18 @@ function ModifiableStep({
     }
 
     React.useEffect(() => {
-        if (!removed && isNewlyAdded) {
+        if (!isRemoved && isNewlyAdded) {
             setHeight("172.91px");
             setMarginBottom("30px");
             setTimeout(() => {
                 setOpacity("100%");
+                setHeight("auto");
             }, 300);
         }
-    }, [removed, isNewlyAdded]);
+    }, [isRemoved, isNewlyAdded]);
 
     return (
-        <div className="step-container" style={{ opacity: opacity, height: height, marginBottom: marginBottom }}>
+        <div className="step-container" ref={stepRef} style={{ opacity: opacity, height: height, marginBottom: marginBottom }}>
             <div className="step-number">
                 Step {stepNumber}
             </div>

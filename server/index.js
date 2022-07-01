@@ -169,6 +169,7 @@ app.delete("/delete-test-script/:testScriptID", async (req, res) => {
     const testScriptID = req.params.testScriptID;
     try {
         deletedTestScript = await TestScript.deleteOne({ _id: testScriptID });
+        console.log("deleted test script");
         res.status(204).send;
     } catch (e) {
         res.status(500).send;

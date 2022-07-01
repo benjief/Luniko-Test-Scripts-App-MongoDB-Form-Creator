@@ -13,10 +13,6 @@ function CardWrapper({
     doTestingSessionsExist,
 }) {
 
-    React.useEffect(() => {
-        console.log("alert:", alert);
-    }, [alert]);
-
     return (
         rendering || alert
             ? <div></div>

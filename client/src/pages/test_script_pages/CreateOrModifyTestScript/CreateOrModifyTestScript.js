@@ -90,7 +90,7 @@ function CreateOrModifyTestScript() {
         const runPrimaryReadAsyncFunctions = async () => {
             isDataBeingFetched.current = true;
             await fetchTestScriptNamesAlreadyInDB();
-            // await deleteTestScript("62bc85cbd464df5341a56c0f"); // TODO: here to test deletion functions in server side code
+            // await deleteTestScript("62bdd1bb2e74fb0276522634"); // TODO: here to test deletion functions in server side code
             setRendering(false);
         }
 
@@ -101,7 +101,10 @@ function CreateOrModifyTestScript() {
         //             await Axios.delete(`http://localhost:5000/delete-test-script/${idOfTestScriptToDelete}`, {
         //                 timeout: 5000
         //             })
-        //                 .then(console.log("test script deleted"));
+        //                 .then(res => {
+        //                     console.log("test script deleted");
+        //                     console.log(res);
+        //                 });
         //         } catch (e) {
         //             console.log(e);
         //         }

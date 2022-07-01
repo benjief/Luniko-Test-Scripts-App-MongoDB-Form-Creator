@@ -109,12 +109,27 @@ const testScript = new mongoose.Schema({
 }, { timestamps: true });
 
 testScript.pre('deleteOne', function (next) {
-    const testScriptID = this.getQuery()._id;
-    console.log("deleting testing sessions associated with:", testScriptID);
-    TestingSession.deleteMany({testScriptID: testScriptID}).exec();
-    console.log("deleting steps associated with:", testScriptID);
-    Step.deleteMany({ testScriptID: testScriptID }).exec();
-    next();
+    try {
+        const testScriptID = this.getQuery()._id;
+        console.log("deleting testing sessions associated with:", testScriptID);
+        TestingSession.deleteMany({ testScriptID: testScriptID }).exec();
+        console.log("deleting steps associated with:", testScriptID);
+        Step.deleteMany({ testScriptID: testScriptID }).exec();
+        next();
+    } catch (e) {
+        console.log(e);
+    }
+});
+
+testingSession.pre('remove', function (next) { // TODO: test this... doesn't seem to be working
+    const testingSessionID = this.getQuery()._id;
+    try {
+        console.log("deleting step responses associated with:", testingSession);
+        StepResponse.deleteMany({ sessionID: testingSessionID}).exec();
+        next();
+    } catch (e) {
+        console.log(e);
+    }
 });
 
 step.index(
@@ -122,7 +137,7 @@ step.index(
 );
 
 testingSession.index(
-    {testscript: 1, _id: 1}
+    { testscript: 1, _id: 1 }
 );
 
 const Step = mongoose.model("step", step);

@@ -48,7 +48,7 @@ textarea:focus {
   height: calc(100vh - 56.5px);
   /* height: 100vh; */
   background-image: url("img/background_pattern.png");
-  transition: 1500ms;
+  transition: 500ms;
   z-index: 2;
 }
 
