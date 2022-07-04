@@ -9,7 +9,7 @@ function AddOrModifyStepsCard({
     existingSteps,
     addStep,
     isAddStepButtonDisabled,
-    modifyStepDescription,
+    modifyStepInfo,
     removeStep,
     isRemoveStepButtonDisabled,
     goBack,
@@ -40,7 +40,8 @@ function AddOrModifyStepsCard({
                                     key={step.uniqueID ? step.uniqueID : step._id}
                                     stepNumber={step.number}
                                     stepDescription={step.description}
-                                    modifyStepDescription={modifyStepDescription}
+                                    stepDataInputtedByUser={step.dataInputtedByUser}
+                                    modifyStepInfo={modifyStepInfo}
                                     removeStep={removeStep}
                                     removeDisabled={isRemoveStepButtonDisabled}
                                     isNewlyAdded={step.isNewlyAdded}>
@@ -71,7 +72,7 @@ AddOrModifyStepsCard.propTypes = {
     existingSteps: PropTypes.array, // TODO: make this more specific (see CardWrapper.jsx)
     addStep: PropTypes.func,
     isAddStepButtonDisabled: PropTypes.bool,
-    modifyStepDescription: PropTypes.func,
+    modifyStepInfo: PropTypes.func,
     removeStep: PropTypes.func,
     goBack: PropTypes.func,
 }
@@ -80,7 +81,7 @@ AddOrModifyStepsCard.defaultProps = {
     existingSteps: [],
     addStep: () => { },
     isAddStepButtonDisabled: false,
-    modifyStepDescription: () => { },
+    modifyStepInfo: () => { },
     removeStep: () => { },
     goBack: () => { },
 }

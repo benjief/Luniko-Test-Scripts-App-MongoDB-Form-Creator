@@ -26,12 +26,20 @@
     font-size: 12pt !important;
 }
 
-.test-script-description .MuiOutlinedInput-root {
+/* .test-script-description .MuiOutlinedInput-root {
     min-height: 200px !important;
 }
 
+.test-script-description .MuiOutlinedInput-root {
+    min-height: 100px !important;
+} */
+
 .step-description .MuiOutlinedInput-root {
     min-height: 150px !important;
+}
+
+.step-data-inputted-by-user .MuiOutlinedInput-root {
+    min-height: 100px !important;
 }
 
 .MuiOutlinedInput-input {

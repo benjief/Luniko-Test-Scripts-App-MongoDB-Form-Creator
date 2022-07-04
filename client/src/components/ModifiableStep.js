@@ -5,21 +5,28 @@ import MaterialTextField from './MaterialTextField';
 function ModifiableStep({
     stepNumber,
     stepDescription,
-    modifyStepDescription,
+    stepDataInputtedByUser,
+    modifyStepInfo,
     removeStep,
     removeDisabled,
     isNewlyAdded,
 }) {
     const [opacity, setOpacity] = React.useState(isNewlyAdded ? "0" : "100%");
-    const [height, setHeight] = React.useState(isNewlyAdded ? stepNumber === 1 ? "49px" : "0" : "172.91px");
-    const [marginBottom, setMarginBottom] = React.useState(isNewlyAdded ? "0" : "40px");
+    const [height, setHeight] = React.useState(isNewlyAdded ? stepNumber === 1 ? "49px" : "0" : "432px");
+    const [marginBottom, setMarginBottom] = React.useState(isNewlyAdded ? "0" : "30px");
     const [isRemoved, setIsRemoved] = React.useState(false);
     const stepRef = React.useRef(null);
 
-    const handleModifyStepDescription = (returnedObject) => {
-        const updatedStepDescription = returnedObject.value;
-        const updatedStep = { number: stepNumber, description: updatedStepDescription }
-        modifyStepDescription(updatedStep);
+    const handleModifyStepInfo = (returnedObject) => {
+        let updatedStep = {number: stepNumber};
+        if (returnedObject.field === "description") {
+            updatedStep["description"] = returnedObject["value"];
+            updatedStep["dataInputtedByUser"] = stepDataInputtedByUser;
+        } else {
+            updatedStep["dataInputtedByUser"] = returnedObject["value"];
+            updatedStep["description"] = stepDescription;
+        }
+        modifyStepInfo(updatedStep);
     }
 
     const handleRemoveStep = () => {
@@ -33,13 +40,13 @@ function ModifiableStep({
             }, 300);
             setTimeout(() => {
                 removeStep({ number: stepNumber });
-            }, 555); // this seems to be the magic number so that the animation for removing a step remains smooth
+            }, 440); // this seems to be the magic number so that the animation for removing a step remains smooth
         }
     }
 
     React.useEffect(() => {
         if (!isRemoved && isNewlyAdded) {
-            setHeight("172.91px");
+            setHeight("432px");
             setMarginBottom("30px");
             setTimeout(() => {
                 setOpacity("100%");
@@ -55,13 +62,26 @@ function ModifiableStep({
             </div>
             <div className="step-description">
                 <MaterialTextField
+                    field="description"
                     label="Description"
                     characterLimit={1000}
                     defaultValue={stepDescription}
                     placeholder="Description"
-                    inputValue={handleModifyStepDescription}
+                    inputValue={handleModifyStepInfo}
                     multiline={true}
                     required={true}
+                    showCharCounter={true}>
+                </MaterialTextField>
+            </div>
+            <div className="step-data-inputted-by-user">
+                <MaterialTextField
+                    field="dataInputtedByUser"
+                    label="Data Inputted by User"
+                    characterLimit={1000}
+                    defaultValue={stepDataInputtedByUser}
+                    placeholder="Data Inputted By User"
+                    inputValue={handleModifyStepInfo}
+                    multiline={true}
                     showCharCounter={true}>
                 </MaterialTextField>
             </div>
@@ -79,7 +99,8 @@ function ModifiableStep({
 ModifiableStep.propTypes = {
     stepNumber: PropTypes.number,
     stepDescription: PropTypes.string,
-    modifyStepDescription: PropTypes.func,
+    stepDataInputtedByUser: PropTypes.string,
+    modifyStepInfo: PropTypes.func,
     removeStep: PropTypes.func,
     removeDisabled: PropTypes.bool,
     isNewlyAdded: PropTypes.bool,
@@ -88,7 +109,8 @@ ModifiableStep.propTypes = {
 ModifiableStep.defaultProps = {
     stepNumber: -1,
     stepDescription: "",
-    modifyStepDescription: () => { },
+    stepDataInputtedByUser: "",
+    modifyStepInfo: () => { },
     removeStep: () => { },
     removeDisabled: true,
     isNewlyAdded: true,

@@ -115,11 +115,12 @@ function MaterialTextField({
   }
 
   const handleEmptyValue = (value) => {
+    console.log("empty value");
     setValue(value);
     inputValue({ field: field, value: "" });
-    if (showCharCounter && value) {
-      setInputLength(value.length);
-    }
+    // if (showCharCounter && value) {
+      setInputLength(0); // TODO: test this - seems to work in specific data inputted by user scenario, but not sure about other text fields
+    // }
     if (required) {
       setErrorEnabled(true);
     }

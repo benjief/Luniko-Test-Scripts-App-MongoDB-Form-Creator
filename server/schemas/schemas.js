@@ -15,17 +15,11 @@ const step = new mongoose.Schema({
         maxlength: 1000,
         required: true
     },
-    // pass: {
-    //     type: Boolean,
-    //     default: false,
-    //     required: true
-    // },
-    // comments: {
-    //     type: String
-    // },
-    // id: {
-    //     type: String
-    // }
+    dataInputtedByUser: {
+        type: String,
+        maxlength: 1000,
+        default: ""
+    }
 });
 
 const testingSession = new mongoose.Schema({

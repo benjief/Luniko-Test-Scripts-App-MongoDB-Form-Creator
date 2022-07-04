@@ -95,12 +95,3 @@
     height: "100vw";
     width: "100%";
 }
-
-.step-container:not(:disabled) {
-    /* height: auto !important; */
-    /* height: fit-content !important; */
-}
-
-.step-container:first-of-type {
-    margin-top: 5px;
-}

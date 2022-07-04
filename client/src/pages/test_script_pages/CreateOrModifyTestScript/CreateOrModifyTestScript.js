@@ -241,15 +241,18 @@ function CreateOrModifyTestScript() {
         setTestScriptSteps([...tempArray]);
     }
 
-    const handleUpdateStepDescription = (updateInfo) => {
+    const handleUpdateStepInfo = (updateInfo) => {
+        // console.log(updateInfo);
         const stepNumber = updateInfo["number"];
         const updatedDescription = updateInfo["description"];
+        const updatedDataInputtedByUser = updateInfo["dataInputtedByUser"];
         let copyOfSteps = testScriptSteps;
         let stepToUpdate = copyOfSteps.filter(obj => {
             return obj["number"] === stepNumber
         });
         stepToUpdate = stepToUpdate[0];
         stepToUpdate["description"] = updatedDescription;
+        stepToUpdate["dataInputtedByUser"] = updatedDataInputtedByUser;
         setTestScriptSteps([...copyOfSteps]);
     }
 
@@ -312,10 +315,10 @@ function CreateOrModifyTestScript() {
     }
 
     const addTestScriptToDB = async () => {
-        console.log("adding test script to database");
+        // console.log("adding test script to database");
         async.current = true;
         try {
-            removeEmptySteps();
+            removeStepsWithoutADescription();
             await Axios.post("http://localhost:5000/add-test-script", {
                 testScriptOwner: { firstName: formProps["ownerFirstName"], lastName: formProps["ownerLastName"] },
                 testScriptName: formProps["testScriptName"],
@@ -334,10 +337,10 @@ function CreateOrModifyTestScript() {
     }
 
     const updateTestScriptInDB = async () => {
-        console.log("updating test script");
+        // console.log("updating test script");
         async.current = true;
         try {
-            removeEmptySteps();
+            removeStepsWithoutADescription();
             await Axios.put("http://localhost:5000/update-test-script", {
                 testScriptOwner: { firstName: formProps["ownerFirstName"], lastName: formProps["ownerLastName"] },
                 testScriptName: formProps["testScriptName"],
@@ -355,7 +358,7 @@ function CreateOrModifyTestScript() {
         }
     }
 
-    const removeEmptySteps = () => {
+    const removeStepsWithoutADescription = () => {
         if (testScriptSteps.length) {
             if (!testScriptSteps.slice(-1)[0]["description"].trim().length) {
                 testScriptSteps.pop();
@@ -387,7 +390,7 @@ function CreateOrModifyTestScript() {
                             existingSteps={testScriptSteps}
                             addStep={handleAddStep}
                             isAddStepButtonDisabled={isAddStepButtonDisabled}
-                            modifyStepDescription={handleUpdateStepDescription}
+                            modifyStepInfo={handleUpdateStepInfo}
                             removeStep={handleRemoveStep}
                             isRemoveStepButtonDisabled={isRemoveStepButtonDisabled}
                             goBack={handleChangeCard}>
