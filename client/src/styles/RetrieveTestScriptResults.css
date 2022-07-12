@@ -82,5 +82,33 @@
 }
 
 .testing-session-comments {
-    margin-bottom: 25px !important; 
- }
+    margin-bottom: 25px !important;
+}
+
+.delete-testing-session-button {
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 14pt;
+    height: 50px;
+    width: 100%;
+    transition: 200ms;
+    box-shadow: 2px 2px 4px rgba(43, 43, 43, 0.6);
+}
+
+.delete-testing-session-button:not(:disabled) {
+    background-color: var(--lunikoBlue);
+}
+
+.delete-testing-session-button:disabled {
+    background-color: #BFBFBF;
+}
+
+.delete-testing-session-button:not(:disabled):hover {
+    background-color: #d32f2f;
+}

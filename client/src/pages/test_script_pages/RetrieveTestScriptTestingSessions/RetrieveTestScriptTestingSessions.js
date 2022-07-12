@@ -112,6 +112,7 @@ function RetrieveTestScriptTestingSessions() {
                 })
                     .then(res => {
                         // console.log(res.data);
+                        async.current = false;
                         setTestingSessions(res.data);
                     })
             } catch (e) {
@@ -166,6 +167,23 @@ function RetrieveTestScriptTestingSessions() {
         return false;
     }
 
+    const deleteTestingSession = async (testingSessionID) => {
+        if (!async.current) {
+            try {
+                async.current = true;
+                await Axios.delete(`http://localhost:5000/delete-testing-session/${testingSessionID}`, {
+                    timeout: 5000
+                })
+                    .then(res => {
+                        console.log(res);
+                        async.current = false;
+                    });
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    }
+
     return (
         <Fragment>
             <LoadingWrapper
@@ -196,7 +214,8 @@ function RetrieveTestScriptTestingSessions() {
                                 result={testingSession.pass}
                                 failedSteps={testingSession.failedSteps}
                                 responses={testingSession.responses}
-                                submissionDate={new Date(testingSession.updatedAt)}>
+                                submissionDate={new Date(testingSession.updatedAt)}
+                                deleteTestingSession={deleteTestingSession}>
                             </TestingSessionCard>
                         })
                         : <div></div>}

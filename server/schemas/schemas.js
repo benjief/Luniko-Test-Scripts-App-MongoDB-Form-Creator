@@ -28,9 +28,6 @@ const testingSession = new mongoose.Schema({
         required: true,
         ref: "testScript"
     },
-    // testScriptID: {
-    //     type: String
-    // },
     tester: {
         type: {
             firstName: String,
@@ -51,7 +48,7 @@ const testingSession = new mongoose.Schema({
     },
     failedSteps: {
         type: Array,
-        default: []
+        default: [] 
     },
 }, { timestamps: true });
 
@@ -68,12 +65,16 @@ const stepResponse = new mongoose.Schema({
     },
     comments: {
         type: String,
-        required: true
     },
     pass: {
         type: Boolean,
-        // default: false,
         required: true
+    },
+    uploadedImage: {
+        type: {
+            imageName: String,
+            imageURL: String
+        }
     }
 });
 
@@ -99,39 +100,22 @@ const testScript = new mongoose.Schema({
         type: String,
         required: true
     },
-    /*steps: [step]*/
 }, { timestamps: true });
 
 testScript.pre('deleteOne', function (next) {
-    try {
-        const testScriptID = this.getQuery()._id;
-        console.log("deleting testing sessions associated with:", testScriptID);
-        TestingSession.deleteMany({ testScriptID: testScriptID }).exec();
-        console.log("deleting steps associated with:", testScriptID);
-        Step.deleteMany({ testScriptID: testScriptID }).exec();
-        next();
-    } catch (e) {
-        console.log(e);
-    }
+    console.log("deleting steps associated with:", this.getQuery()._id);
+    Step.deleteMany({ testScriptID: this.getQuery()._id }).exec();
+    next();
 });
 
-testingSession.pre('remove', function (next) { // TODO: test this... doesn't seem to be working
-    const testingSessionID = this.getQuery()._id;
-    try {
-        console.log("deleting step responses associated with:", testingSession);
-        StepResponse.deleteMany({ sessionID: testingSessionID}).exec();
-        next();
-    } catch (e) {
-        console.log(e);
-    }
-});
+testingSession.pre('deleteOne', function (next) {
+    console.log("deleting step responses associated with:", this.getQuery()._id);
+    StepResponse.deleteMany({sessionID: this.getQuery()._id}).exec();
+    next();
+})
 
 step.index(
     { testScript: 1, number: 1 }
-);
-
-testingSession.index(
-    { testscript: 1, _id: 1 }
 );
 
 const Step = mongoose.model("step", step);

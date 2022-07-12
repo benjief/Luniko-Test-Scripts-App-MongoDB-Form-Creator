@@ -115,7 +115,6 @@ function MaterialTextField({
   }
 
   const handleEmptyValue = (value) => {
-    console.log("empty value");
     setValue(value);
     inputValue({ field: field, value: "" });
     // if (showCharCounter && value) {

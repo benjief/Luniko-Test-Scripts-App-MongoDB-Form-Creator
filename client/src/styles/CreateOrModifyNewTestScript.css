@@ -45,7 +45,7 @@
     margin-bottom: 10px;
     border: none;
     color: white;
-    background-color: var(--lunikoBlue);
+    /* background-color: var(--lunikoBlue); */
     border-radius: 5px;
     font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 600;
@@ -60,10 +60,10 @@
     margin-top: 10px;
 }
 
-.back-button,
+/* .back-button,
 .submit-or-update-script-button {
-    /* margin-top: 25px !important; */
-}
+    margin-top: 25px !important;
+} */
 
 .submit-test-script-name-button:not(:disabled),
 .submit-or-update-script-name-button:not(:disabled),
@@ -80,12 +80,13 @@
     background-color: #BFBFBF;
 }
 
-.submit-or-update-test-script-button:not(:disabled):hover {
+/* .submit-or-update-test-script-button:not(:disabled):hover {
     background-color: #009952 !important;
-}
+} */
 
 .submit-test-script-name-button:not(:disabled):hover,
 .add-or-modify-steps-button:not(:disabled):hover,
+.submit-or-update-test-script-button:not(:disabled):hover,
 .add-step-button:not(:disabled):hover,
 .back-button:not(:disabled):hover {
     background-color: var(--lunikoOrange) !important;

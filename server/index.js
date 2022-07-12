@@ -9,6 +9,9 @@ const connect = require("./connect");
 const { Step, TestingSession, StepResponse, TestScript } = require("./schemas/schemas");
 // const e = require("express");
 
+// import { test } from "./test";
+import { deleteStepResponseImage } from "./firebase/config";
+
 // Middleware
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
@@ -88,7 +91,7 @@ app.get("/get-test-script-testing-sessions/:testScriptID", async (req, res) => {
     try {
         const testingSessions = await TestingSession.find(
             { testScriptID: testScriptID }
-        ).sort({updatedAt: "desc"}).lean().exec();
+        ).sort({ updatedAt: "desc" }).lean().exec();
         await getTestingSessionResponses(testingSessions)
         res.status(200).json(testingSessions);
     } catch (e) {
@@ -170,6 +173,17 @@ app.delete("/delete-test-script/:testScriptID", async (req, res) => {
     try {
         deletedTestScript = await TestScript.deleteOne({ _id: testScriptID });
         console.log("deleted test script");
+        res.status(204).json("this is 204 response");
+    } catch (e) {
+        res.status(500).send;
+    }
+});
+
+app.delete("/delete-testing-session/:testingSessionID", async (req, res) => {
+    const testingSessionID = req.params.testingSessionID;
+    try {
+        await deleteImagesAssociatedWithTestingSession(testingSessionID);
+        console.log("deleted images associated with testing session");
         res.status(204).send;
     } catch (e) {
         res.status(500).send;
@@ -253,6 +267,21 @@ const addStepNumberToStepResponses = async (stepResponses) => {
 const deleteStepsAssociatedWithTestScript = async (testScriptID) => {
     try {
         await Step.deleteMany({ testScriptID: testScriptID });
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+const deleteImagesAssociatedWithTestingSession = async (testingSessionID) => {
+    try {
+        const stepResponsesToDelete = await StepResponse.find(
+            {sessionID: testingSessionID},
+            { "uploadedImage": 1 }
+        ).lean().exec();
+        for (let i = 0; i < stepResponsesToDelete.length; i++) {
+            console.log("deleting", stepResponsesToDelete[i]["uploadedImage"].imageName);
+            await deleteStepResponseImage(stepResponsesToDelete[i]["uploadedImage"].imageName);
+        }
     } catch (e) {
         console.log(e);
     }
