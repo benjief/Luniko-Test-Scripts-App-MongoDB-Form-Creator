@@ -17,10 +17,8 @@ const storage = getStorage(app);
 const deleteStepResponseImage = async (imageName) => {
   const deleteRef = ref(storage, imageName);
   try {
-    deleteObject(deleteRef)
-      .then(() => {
-        console.log("image deleted from storage");
-      });
+    await deleteObject(deleteRef)
+    console.log("image deleted from storage");
   } catch (e) {
     console.log(e);
   }

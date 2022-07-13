@@ -171,9 +171,12 @@ app.put("/update-test-script", async (req, res) => {
 app.delete("/delete-test-script/:testScriptID", async (req, res) => {
     const testScriptID = req.params.testScriptID;
     try {
-        deletedTestScript = await TestScript.deleteOne({ _id: testScriptID });
-        console.log("deleted test script");
-        res.status(204).json("this is 204 response");
+        await TestScript.deleteOne({ _id: testScriptID })
+        .then(response => {
+            console.log(response);
+            console.log("deleted test script");
+            res.status(204).send(response);
+        })
     } catch (e) {
         res.status(500).send;
     }
@@ -184,7 +187,12 @@ app.delete("/delete-testing-session/:testingSessionID", async (req, res) => {
     try {
         await deleteImagesAssociatedWithTestingSession(testingSessionID);
         console.log("deleted images associated with testing session");
-        res.status(204).send;
+        await TestingSession.deleteOne({ _id: testingSessionID })
+            .then(response => {
+                console.log(response);
+                console.log("testing session deleted");
+                res.status(204).send(response);
+            });
     } catch (e) {
         res.status(500).send;
     }
@@ -275,7 +283,7 @@ const deleteStepsAssociatedWithTestScript = async (testScriptID) => {
 const deleteImagesAssociatedWithTestingSession = async (testingSessionID) => {
     try {
         const stepResponsesToDelete = await StepResponse.find(
-            {sessionID: testingSessionID},
+            { sessionID: testingSessionID },
             { "uploadedImage": 1 }
         ).lean().exec();
         for (let i = 0; i < stepResponsesToDelete.length; i++) {

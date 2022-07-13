@@ -31,6 +31,7 @@ function RetrieveTestScriptTestingSessions() {
     const alertType = useRef("success-alert");
     const testScriptNamesAlreadyInDB = useRef([]);
     const isDataBeingFetched = useRef(false);
+    const [pageMessageOpacity, setPageMessageOpacity] = useState("100%");
 
     const loadErrorMessage = "Apologies! We've encountered an error. Please attempt to re-load this page.";
 
@@ -137,7 +138,7 @@ function RetrieveTestScriptTestingSessions() {
             }
             if (testScriptID.current.length && !testingSessions.length) {
                 setTimeout(() => {
-                    window.location.reload(false);
+                    window.location.reload();
                 }, 3000)
             }
         }
@@ -175,7 +176,25 @@ function RetrieveTestScriptTestingSessions() {
                     timeout: 5000
                 })
                     .then(res => {
-                        console.log(res);
+                        console.log(res); 
+                        // setTestingSessions(testingSessions.filter((val) => {
+                        //     return val._id !== testingSessionID;
+                        // }));
+                        if (testingSessions.length <= 1) {
+                            setPageMessageOpacity("0%");
+                           setTimeout(() => {
+                                setTestingSessions(testingSessions.filter((val) => {
+                                    return val._id !== testingSessionID;
+                                }));
+                            }, 500);
+                            setTimeout(() => {
+                                setPageMessageOpacity("100%");
+                            }, 500);
+                        } else {
+                            setTestingSessions(testingSessions.filter((val) => {
+                                return val._id !== testingSessionID;
+                            }));
+                        }
                         async.current = false;
                     });
             } catch (e) {
@@ -202,7 +221,8 @@ function RetrieveTestScriptTestingSessions() {
                     rendering={rendering}
                     isErrorThrown={isErrorThrown}
                     isUserRetrievingTestingSessions={true}
-                    doTestingSessionsExist={testingSessions.length ? true : false}>
+                    doTestingSessionsExist={testingSessions.length ? true : false}
+                    pageMessageOpacity={pageMessageOpacity}>
                     {testingSessions.length
                         ? testingSessions.map((testingSession) => {
                             return <TestingSessionCard

@@ -11,6 +11,7 @@ function CardWrapper({
     isUserModifyingSteps,
     isUserRetrievingTestingSessions,
     doTestingSessionsExist,
+    pageMessageOpacity
 }) {
 
     return (
@@ -23,7 +24,9 @@ function CardWrapper({
                     : isUserRetrievingTestingSessions
                         ? "view-test-script-testing-sessions"
                         : "add-or-modify-steps"}>
-                    <div className="page-message">
+                    <div 
+                    className="page-message"
+                    style={{opacity: pageMessageOpacity, transition: "0.5s"}}>
                         {isUserModifyingSteps
                             ? "Add or Modify Test Script Steps Below:"
                             : isUserRetrievingTestingSessions
@@ -58,6 +61,7 @@ CardWrapper.propTypes = {
     isUserModifyingSteps: PropTypes.bool,
     isUserRetrievingTestingSessions: PropTypes.bool,
     doTestingSessionsExist: PropTypes.bool,
+    pageMessageOpacity: PropTypes.string,
     // isUserViewingTestingSessionDetails: PropTypes.bool,
     // setter: PropTypes.func,
     // myObject: PropTypes.shape({
@@ -74,6 +78,7 @@ CardWrapper.defaultProps = {
     isUserModifyingSteps: false,
     isUserRetrievingTestingSessions: false,
     doTestingSessionsExist: false,
+    pageMessageOpacity: "100%",
     // setter: null
 }
 

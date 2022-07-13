@@ -9,6 +9,10 @@
     scrollbar-width: none;
 }
 
+.alert-container::-webkit-scrollbar {
+    display: none;
+}
+
 .alert-container .MuiPaper-root {
     flex-direction: row !important;
     font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;

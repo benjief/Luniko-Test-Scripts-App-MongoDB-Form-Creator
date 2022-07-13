@@ -5,6 +5,7 @@
     align-items: center;
     margin: auto;
     margin-top: 20px;
+    width: 100%;
     height: calc(100vh - 76.52px);
     overflow: auto;
     -ms-overflow-style: none;
@@ -25,11 +26,19 @@
     width: 95%;
     max-width: 600px;
     padding-bottom: 20px;
+    overflow-y: auto;
 }
 
-.enter-valid-test-script-name-card,
-.view-test-script-testing-sessions-card {
+.view-test-script-testing-sessions-container::-webkit-scrollbar {
+    display: none;
+}
+
+.enter-valid-test-script-name-card {
     width: 100%;
+}
+
+.view-test-script-testing-sessions-card {
+    width: 95%;
 }
 
 /* .view-testing-session-details-button {

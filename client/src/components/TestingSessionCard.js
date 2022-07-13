@@ -33,25 +33,42 @@ function TestingSessionCard({
 }) {
     const [expanded, setExpanded] = React.useState(false);
     const word = failedSteps.length > 1 ? "steps" : "step";
+    const testingSessionRef = React.useRef(null);
+    const [opacity, setOpacity] = React.useState("100%");
+    const [height, setHeight] = React.useState(testingSessionRef.current?.clientHeight + "px");
+    const [marginBottom, setMarginBottom] = React.useState("20px");
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
     const handleDeleteTestingSession = () => {
-        deleteTestingSession(testingSessionID);
+        // setTimeout(() => {
+        setHeight(testingSessionRef.current?.clientHeight + "px");
+        setOpacity("0%");
+        // }, 0);
+        setTimeout(() => {
+            setMarginBottom("0");
+            setHeight("0");
+        }, 10);
+        setTimeout(() => {
+            deleteTestingSession(testingSessionID);
+        }, 500);
     }
 
     return (
         <Card
+            ref={testingSessionRef}
             sx={{
+                opacity: opacity,
+                height: height,
                 maxHeight: "calc(100vh - 166.52px)",
                 overflowY: "scroll",
                 borderRadius: "10px",
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
-                transition: "0.5s",
+                transition: "1s",
                 backgroundColor: "var(--lunikoDarkGrey)",
-                marginBottom: "20px"
+                marginBottom: marginBottom
             }}>
             <div className="card-content">
                 <CardHeader
