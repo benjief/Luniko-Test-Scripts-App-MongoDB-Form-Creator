@@ -11,6 +11,7 @@ import "../../../styles/InputComponents.css";
 import "../../../styles/CardComponents.css";
 import "../../../styles/SelectorComponents.css";
 import "../../../styles/AlertComponents.css";
+import "../../../styles/DialogComponents.css";
 
 function RetrieveTestScriptTestingSessions() {
     const [rendering, setRendering] = useState(true);
@@ -177,29 +178,30 @@ function RetrieveTestScriptTestingSessions() {
                 })
                     .then(res => {
                         console.log(res); 
-                        // setTestingSessions(testingSessions.filter((val) => {
-                        //     return val._id !== testingSessionID;
-                        // }));
-                        if (testingSessions.length <= 1) {
-                            setPageMessageOpacity("0%");
-                           setTimeout(() => {
-                                setTestingSessions(testingSessions.filter((val) => {
-                                    return val._id !== testingSessionID;
-                                }));
-                            }, 500);
-                            setTimeout(() => {
-                                setPageMessageOpacity("100%");
-                            }, 500);
-                        } else {
-                            setTestingSessions(testingSessions.filter((val) => {
-                                return val._id !== testingSessionID;
-                            }));
-                        }
+                        updateTestingSessionsAfterRemoval(testingSessionID);
                         async.current = false;
                     });
             } catch (e) {
                 console.log(e);
             }
+        }
+    }
+
+    const updateTestingSessionsAfterRemoval = (testingSessionID) => {
+        if (testingSessions.length <= 1) {
+            setPageMessageOpacity("0%");
+           setTimeout(() => {
+                setTestingSessions(testingSessions.filter((val) => {
+                    return val._id !== testingSessionID;
+                }));
+            }, 500);
+            setTimeout(() => {
+                setPageMessageOpacity("100%");
+            }, 500);
+        } else {
+            setTestingSessions(testingSessions.filter((val) => {
+                return val._id !== testingSessionID;
+            }));
         }
     }
 

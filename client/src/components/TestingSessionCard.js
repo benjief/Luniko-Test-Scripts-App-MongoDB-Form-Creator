@@ -9,6 +9,7 @@ import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IconButton from '@mui/material/IconButton';
+import MaterialImageDialog from './MaterialImageDialog';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -110,7 +111,16 @@ function TestingSessionCard({
                                 ? responses.map((response) => {
                                     return <p
                                         key={response._id}>
-                                        Step {response.step}:<br />{response.comments}
+                                        <span id="test-span">
+                                            <u>Step {response.step}</u>
+                                            {response.uploadedImage
+                                                ? <MaterialImageDialog
+                                                    imageSource={response.uploadedImage["imageURL"]}
+                                                    buttonText={"uploaded image"}>
+                                                </MaterialImageDialog>
+                                                : ""}<br />
+                                        </span>
+                                        {response.comments}
                                     </p>
                                 })
                                 : <p>none</p>}

@@ -1,0 +1,9 @@
+.image-dialog-button {
+    background-color: transparent;
+    border: none;
+}
+
+.image-dialog-button img {
+    height: 22px;
+    width: 22px;
+}
