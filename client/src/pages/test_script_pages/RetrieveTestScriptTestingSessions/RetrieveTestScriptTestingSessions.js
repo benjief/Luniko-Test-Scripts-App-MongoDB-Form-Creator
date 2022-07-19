@@ -235,6 +235,7 @@ function RetrieveTestScriptTestingSessions() {
                                 terminatedAtStep={testingSession.stoppedTestingAtStep}
                                 result={testingSession.pass}
                                 failedSteps={testingSession.failedSteps}
+                                stepsWithMinorIssues={testingSession.stepsWithMinorIssues}
                                 responses={testingSession.responses}
                                 submissionDate={new Date(testingSession.updatedAt)}
                                 deleteTestingSession={deleteTestingSession}>

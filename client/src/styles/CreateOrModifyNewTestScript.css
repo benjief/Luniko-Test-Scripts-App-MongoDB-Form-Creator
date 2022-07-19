@@ -66,17 +66,20 @@
 } */
 
 .submit-test-script-name-button:not(:disabled),
-.submit-or-update-script-name-button:not(:disabled),
-.submit-or-update-script-button:not(:disabled),
-.add-step-button:not(:disabled) {
+.submit-or-update-test-script-name-button:not(:disabled),
+.add-or-modify-steps-button,
+.submit-or-update-test-script-button:not(:disabled),
+.add-step-button:not(:disabled),
+.back-button:not(:disabled) {
     background-color: var(--lunikoBlue);
 }
 
 .submit-test-script-name-button:disabled,
-.submit-or-update-script-name-button:disabled,
+.submit-or-update-test-script-name-button:disabled,
 .add-or-modify-steps-button:disabled,
-.submit-or-update-script-button:disabled,
-.add-step-button:disabled {
+.submit-or-update-test-script-button:disabled,
+.add-step-button:disabled
+.back-button:disabled {
     background-color: #BFBFBF;
 }
 
@@ -85,6 +88,7 @@
 } */
 
 .submit-test-script-name-button:not(:disabled):hover,
+.submit-or-update-test-script-name-button:not(:disabled):hover,
 .add-or-modify-steps-button:not(:disabled):hover,
 .submit-or-update-test-script-button:not(:disabled):hover,
 .add-step-button:not(:disabled):hover,

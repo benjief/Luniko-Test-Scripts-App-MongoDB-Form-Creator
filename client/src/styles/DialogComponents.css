@@ -1,9 +1,18 @@
+.image-dialog .MuiPaper-root {
+    min-height: 95%;
+    min-width: 95%;
+}
+
 .image-dialog-button {
     background-color: transparent;
     border: none;
 }
 
+.image-dialog-button:active {
+    border: none;
+}
+
 .image-dialog-button img {
-    height: 22px;
-    width: 22px;
+    height: 19px;
+    width: 19px;
 }

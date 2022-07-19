@@ -50,6 +50,10 @@ const testingSession = new mongoose.Schema({
         type: Array,
         default: [] 
     },
+    stepsWithMinorIssues: {
+        type: Array,
+        default: []
+    }
 }, { timestamps: true });
 
 const stepResponse = new mongoose.Schema({
@@ -67,7 +71,8 @@ const stepResponse = new mongoose.Schema({
         type: String,
     },
     pass: {
-        type: Boolean,
+        type: String,
+        enum: ["T", "I", "F"],
         required: true
     },
     uploadedImage: {
@@ -104,24 +109,9 @@ const testScript = new mongoose.Schema({
 
 testScript.pre('deleteOne', function (next) {
     console.log("deleting steps associated with:", this.getQuery()._id);
-    try {
-        Step.deleteMany({ testScriptID: this.getQuery()._id }).exec();
-        next();
-    } catch (e) {
-        console.log(e);
-    }
+    Step.deleteMany({ testScriptID: this.getQuery()._id }).exec();
+    next();
 });
-
-testingSession.pre('deleteOne', function (next) {
-    console.log("deleting step responses associated with:", this.getQuery()._id);
-    try {
-        StepResponse.deleteMany({sessionID: this.getQuery()._id}).exec();
-        console.log("finished deleting step responses");
-        next();
-    } catch (e) {
-        console.log(e);
-    }
-})
 
 step.index(
     { testScript: 1, number: 1 }
