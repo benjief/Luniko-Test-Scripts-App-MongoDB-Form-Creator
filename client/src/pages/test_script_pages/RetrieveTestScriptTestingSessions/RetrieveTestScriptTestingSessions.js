@@ -182,7 +182,7 @@ function RetrieveTestScriptTestingSessions() {
                         async.current = false;
                     });
             } catch (e) {
-                console.log(e);
+                console.log(e); // TODO: add some sort of error handling here!
             }
         }
     }
@@ -194,10 +194,10 @@ function RetrieveTestScriptTestingSessions() {
                 setTestingSessions(testingSessions.filter((val) => {
                     return val._id !== testingSessionID;
                 }));
-            }, 500);
+            }, 300);
             setTimeout(() => {
                 setPageMessageOpacity("100%");
-            }, 500);
+            }, 300);
         } else {
             setTestingSessions(testingSessions.filter((val) => {
                 return val._id !== testingSessionID;

@@ -72,7 +72,7 @@ const stepResponse = new mongoose.Schema({
     },
     pass: {
         type: String,
-        enum: ["T", "I", "F"],
+        enum: ["P", "I", "F"],
         required: true
     },
     uploadedImage: {
@@ -110,8 +110,15 @@ const testScript = new mongoose.Schema({
 testScript.pre('deleteOne', function (next) {
     console.log("deleting steps associated with:", this.getQuery()._id);
     Step.deleteMany({ testScriptID: this.getQuery()._id }).exec();
+    TestingSession.deleteMany({testScriptID: this.getQuery()._id}).exec();
     next();
 });
+
+testingSession.pre('deleteOne', function (next) {
+    StepResponse.deleteMany({sessionID: this.getQuery()._id}).exec();
+    next();
+})
+
 
 step.index(
     { testScript: 1, number: 1 }

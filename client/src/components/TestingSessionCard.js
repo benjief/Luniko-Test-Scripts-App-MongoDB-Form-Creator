@@ -108,22 +108,27 @@ function TestingSessionCard({
                             {submitter.firstName + " " + submitter.lastName}
                         </Typography>
                         <Typography component={"div"} variant={"body2"} className="testing-session-comments">
-                            <strong>Comments</strong><br />
+                            <strong>Step Overview</strong><br />
                             {responses.length
                                 ? responses.map((response) => {
-                                    return <p
-                                        key={response._id}>
-                                        <span id="test-span">
-                                            <u>Step {response.step}</u>
-                                            {response.uploadedImage
-                                                ? <MaterialImageDialog
-                                                    imageSource={response.uploadedImage["imageURL"]}
-                                                    buttonText={"uploaded image"}>
-                                                </MaterialImageDialog>
-                                                : ""}<br />
-                                        </span>
-                                        {response.comments}
-                                    </p>
+                                    {
+                                        return response.comments || response.uploadedImage
+                                            ? <p key={response._id}>
+                                                <span id="step-header-span">
+                                                    {response.comments || response.uploadedImage
+                                                        ? <span><u>Step {response.step}</u>
+                                                            {response.uploadedImage
+                                                                ? <MaterialImageDialog
+                                                                    imageSource={response.uploadedImage["imageURL"]}
+                                                                    buttonText={"uploaded image"}>
+                                                                </MaterialImageDialog>
+                                                                : ""}<br /></span>
+                                                        : <span />}
+                                                </span>
+                                                {response.comments}
+                                            </p>
+                                            : ""
+                                    }
                                 })
                                 : <p>none</p>}
                         </Typography>

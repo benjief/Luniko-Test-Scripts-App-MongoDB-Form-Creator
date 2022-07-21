@@ -1,6 +1,18 @@
 .image-dialog .MuiPaper-root {
-    min-height: 95%;
+    min-height: 93vh;
     min-width: 95%;
+}
+
+.image-dialog .MuiDialogContent-root {
+    display: flex;
+    /* flex-direction: column !important; */
+    align-items: center;
+    justify-content: center;
+}
+
+.image-dialog img {
+    width: 100%;
+    height: 100%;
 }
 
 .image-dialog-button {

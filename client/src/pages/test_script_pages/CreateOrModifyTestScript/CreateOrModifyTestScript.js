@@ -44,7 +44,7 @@ function CreateOrModifyTestScript() {
     const [isErrorThrown, setIsErrorThrown] = useState(false);
     const [alert, setAlert] = useState(false);
     const wordForAlertMessage = useRef(pageFunctionality === "create" ? "submitted" : "updated");
-    const successAlertMessage = useRef(`Test script successfully ${wordForAlertMessage.current}!`);
+    const alertMessage = useRef(`Test script successfully ${wordForAlertMessage.current}!`);
     const alertType = useRef("success-alert");
 
     const testScriptNamesAlreadyInDB = useRef([]);
@@ -61,8 +61,8 @@ function CreateOrModifyTestScript() {
         setIsErrorThrown(true);
         alertType.current = "error-alert";
         errorType === "r"
-            ? successAlertMessage.current = loadErrorMessage
-            : successAlertMessage.current = writeErrorMessage;
+            ? alertMessage.current = loadErrorMessage
+            : alertMessage.current = writeErrorMessage;
 
         // Delay is set up just in case an error is generated before the is fully-displayed
         // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
@@ -375,7 +375,7 @@ function CreateOrModifyTestScript() {
             </LoadingWrapper>
             < ErrorWrapper
                 alert={alert}
-                alertMessage={successAlertMessage.current}
+                alertMessage={alertMessage.current}
                 handleAlertClosed={handleAlertClosed}
                 alertType={alertType.current}>
             </ErrorWrapper>

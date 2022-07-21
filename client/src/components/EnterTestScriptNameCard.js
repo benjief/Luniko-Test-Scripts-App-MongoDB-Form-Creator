@@ -10,6 +10,7 @@ function EnterTestScriptNameCard({
     setFormProps,
     requestTestScript,
     isSubmitButtonDisabled,
+    isDeletionForm,
 }) {
     const expanded = true;
     const invalidTestScriptNameError = useValidationErrorUpdate();
@@ -35,7 +36,7 @@ function EnterTestScriptNameCard({
             <div className="load-sheet-name-card-content">
                 <CardHeader
                     titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt" }}
-                    title={<strong>Please enter a valid test script name</strong>}/>
+                    title={<strong>Please enter a valid test script name</strong>} />
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
                         <MaterialTextField
@@ -49,10 +50,10 @@ function EnterTestScriptNameCard({
                             field={"testScriptName"}>
                         </MaterialTextField>
                         <button
-                            className="submit-test-script-name-button"
+                            className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
                             onClick={requestTestScript}
                             disabled={isSubmitButtonDisabled}>
-                            Submit
+                            {isDeletionForm ? "Delete" : "Submit"}
                         </button>
                     </CardContent>
                 </Collapse>
@@ -65,12 +66,14 @@ EnterTestScriptNameCard.propTypes = {
     setFormProps: PropTypes.func,
     requestTestScript: PropTypes.func,
     isSubmitButtonDisabled: PropTypes.bool,
+    isDeletionForm: PropTypes.bool,
 }
 
 EnterTestScriptNameCard.defaultProps = {
     setFormProps: () => { },
     requestTestScript: () => { },
     isSubmitButtonDisabled: true,
+    isDeletionForm: false,
 }
 
 export default EnterTestScriptNameCard;

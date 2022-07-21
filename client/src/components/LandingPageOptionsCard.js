@@ -11,7 +11,7 @@ function LandingPageOptionsCard() {
     return (
         <Card
             sx={{
-                minHeight: "249.56px",
+                minHeight: "303.56px",
                 overflowY: "scroll",
                 borderRadius: "10px",
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
@@ -41,6 +41,12 @@ function LandingPageOptionsCard() {
                             <button
                                 className="retrieve-test-script-testing-sessions-button">
                                 Retrieve Test Script Testing Sessions
+                            </button>
+                        </Link>
+                        <Link to={`/delete-test-script/`}>
+                            <button
+                                className="delete-test-script-button-landing-page">
+                                Delete Test Script
                             </button>
                         </Link>
                     </CardContent>
