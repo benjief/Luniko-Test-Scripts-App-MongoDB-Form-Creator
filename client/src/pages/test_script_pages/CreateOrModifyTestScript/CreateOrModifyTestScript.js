@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState, useRef, useCallback } from "react
 import { useValidationErrorUpdate } from "../Context/ValidationErrorContext";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingWrapper from "../wrappers/LoadingWrapper/LoadingWrapper";
-import ErrorWrapper from "../wrappers/ErrorWrapper/ErrorWrapper";
+import AlertWrapper from "../wrappers/AlertWrapper/AlertWrapper";
 import CardWrapper from "../wrappers/CardWrapper/CardWrapper";
 import CreateOrModifyTestScriptCard from "../../../components/CreateOrModifyTestScriptCard";
 import AddOrModifyStepsCard from "../../../components/AddOrModifyStepsCard";
@@ -373,12 +373,12 @@ function CreateOrModifyTestScript() {
                 transitionElementOpacity={transitionElementOpacity}
                 transitionElementVisibility={transitionElementVisibility}>
             </LoadingWrapper>
-            < ErrorWrapper
+            < AlertWrapper
                 alert={alert}
                 alertMessage={alertMessage.current}
                 handleAlertClosed={handleAlertClosed}
                 alertType={alertType.current}>
-            </ErrorWrapper>
+            </AlertWrapper>
             {pageFunctionality === "create" || (pageFunctionality === "modify" && isValidTestScriptNameEntered)
                 ? <CardWrapper
                     rendering={rendering}

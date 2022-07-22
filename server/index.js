@@ -227,7 +227,7 @@ const getTestingSessionResponses = async (testingSessions) => {
     for (let i = 0; i < testingSessions.length; i++) {
         try {
             const testingSessionResponses = await StepResponse.find(
-                { sessionID: testingSessions[i]._id }
+                { sessionID: testingSessions[i]._id, $or: [{ comments: { $ne: "" } }, { uploadedImage: { $ne: null } }] }
             ).lean().exec();
             await addStepNumberToStepResponses(testingSessionResponses);
             testingSessions[i]["responses"] = testingSessionResponses;

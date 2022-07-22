@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import MaterialAlert from '../../../../components/MaterialAlert';
 
-function ErrorWrapper({
+function AlertWrapper({
     alert,
     alertMessage,
     handleAlertClosed,
@@ -22,18 +22,18 @@ function ErrorWrapper({
     )
 };
 
-ErrorWrapper.propTypes = {
+AlertWrapper.propTypes = {
     alert: PropTypes.bool,
     alertMessage: PropTypes.string,
     handleAlertClosed: PropTypes.func,
     alertType: PropTypes.string,
 };
 
-ErrorWrapper.defaultProps = {
+AlertWrapper.defaultProps = {
     alert: false,
     alertMessage: "",
     handleAlertClosed: () => { },
     alertType: "",
 };
 
-export default ErrorWrapper;
+export default AlertWrapper;

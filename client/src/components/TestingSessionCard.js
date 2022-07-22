@@ -29,7 +29,7 @@ function TestingSessionCard({
     result,
     failedSteps,
     stepsWithMinorIssues,
-    responses,
+    responsesWithAttachedContent,
     submissionDate,
     deleteTestingSession,
 }) {
@@ -109,8 +109,8 @@ function TestingSessionCard({
                         </Typography>
                         <Typography component={"div"} variant={"body2"} className="testing-session-comments">
                             <strong>Step Overview</strong><br />
-                            {responses.length
-                                ? responses.map((response) => {
+                            {responsesWithAttachedContent.length
+                                ? responsesWithAttachedContent.map((response) => {
                                     {
                                         return response.comments || response.uploadedImage
                                             ? <p key={response._id}>
@@ -130,7 +130,7 @@ function TestingSessionCard({
                                             : ""
                                     }
                                 })
-                                : <p>none</p>}
+                                : <p>no attached images or comments</p>}
                         </Typography>
                         <Typography paragraph className="testing-session-submission-date">
                             <strong>Date Submitted</strong><br />
@@ -160,7 +160,7 @@ TestingSessionCard.propTypes = {
     result: PropTypes.bool,
     failedSteps: PropTypes.array,
     stepsWithMinorIssues: PropTypes.array,
-    responses: PropTypes.array,
+    responsesWithAttachedContent: PropTypes.array,
     submissionDate: PropTypes.instanceOf(Date),
     deleteTestingSession: PropTypes.func,
 }
@@ -177,7 +177,7 @@ TestingSessionCard.defaultProps = {
     result: false,
     failedSteps: [],
     stepsWithMinorIssues: [],
-    responses: [],
+    responsesWithAttachedContent: [],
     submissionDate: new Date(),
     deleteTestingSession: () => { },
 }

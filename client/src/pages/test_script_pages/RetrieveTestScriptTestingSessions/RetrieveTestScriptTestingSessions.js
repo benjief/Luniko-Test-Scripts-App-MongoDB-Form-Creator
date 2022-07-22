@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState, useRef, useCallback } from "react
 import { useValidationErrorUpdate } from "../Context/ValidationErrorContext";
 import Axios from "axios";
 import LoadingWrapper from "../wrappers/LoadingWrapper";
-import ErrorWrapper from "../wrappers/ErrorWrapper";
+import AlertWrapper from "../wrappers/AlertWrapper";
 import CardWrapper from "../wrappers/CardWrapper";
 import EnterTestScriptNameCard from "../../../components/EnterTestScriptNameCard"
 import TestingSessionCard from "../../../components/TestingSessionCard";
@@ -212,12 +212,12 @@ function RetrieveTestScriptTestingSessions() {
                 transitionElementOpacity={transitionElementOpacity}
                 transitionElementVisibility={transtitionElementVisibility}>
             </LoadingWrapper>
-            <ErrorWrapper
+            <AlertWrapper
                 alert={alert}
                 alertMessage={alertMessage.current}
                 handleAlertClosed={handleAlertClosed}
                 alertType={alertType.current}> {/* TODO: change alertType hook to useState? */}
-            </ErrorWrapper>
+            </AlertWrapper>
             {isValidTestScriptNameEntered
                 ? <CardWrapper
                     rendering={rendering}
@@ -236,7 +236,7 @@ function RetrieveTestScriptTestingSessions() {
                                 result={testingSession.pass}
                                 failedSteps={testingSession.failedSteps}
                                 stepsWithMinorIssues={testingSession.stepsWithMinorIssues}
-                                responses={testingSession.responses}
+                                responsesWithAttachedContent={testingSession.responses}
                                 submissionDate={new Date(testingSession.updatedAt)}
                                 deleteTestingSession={deleteTestingSession}>
                             </TestingSessionCard>
