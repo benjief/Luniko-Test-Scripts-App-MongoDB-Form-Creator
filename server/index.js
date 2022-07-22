@@ -170,6 +170,7 @@ app.put("/update-test-script", async (req, res) => {
 
 app.delete("/delete-test-script/:testScriptID", async (req, res) => {
     const testScriptID = req.params.testScriptID;
+    console.log("deleting", testScriptID);
     try {
         await TestScript.deleteOne({ _id: testScriptID })
             .then(response => {

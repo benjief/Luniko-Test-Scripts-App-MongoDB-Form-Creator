@@ -6,11 +6,14 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
 import MaterialTextField from './MaterialTextField';
+import SubmitButton from './SubmitButton';
+import FadingBalls from 'react-cssfx-loading/lib/FadingBalls';
 function EnterTestScriptNameCard({
     setFormProps,
     requestTestScript,
     isSubmitButtonDisabled,
     isDeletionForm,
+    displayFadingBalls,
 }) {
     const expanded = true;
     const invalidTestScriptNameError = useValidationErrorUpdate();
@@ -49,12 +52,32 @@ function EnterTestScriptNameCard({
                             authenticationField={true}
                             field={"testScriptName"}>
                         </MaterialTextField>
-                        <button
+                        <SubmitButton
+                        className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
+                       submitButtonText={isDeletionForm ? "Delete" : "Submit"}
+                        isSubmitButtonDisabled={isSubmitButtonDisabled}
+                        displayFadingBalls={displayFadingBalls}
+                        handleOnClick={true}
+                        handleOnClickFunction={requestTestScript}>   
+                        </SubmitButton>
+                        {/* <button
                             className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
                             onClick={requestTestScript}
                             disabled={isSubmitButtonDisabled}>
-                            {isDeletionForm ? "Delete" : "Submit"}
-                        </button>
+                            {displayFadingBalls
+                                ? <div className="fading-balls-container">
+                                    <FadingBalls
+                                        className="spinner"
+                                        color="white"
+                                        width="9px"
+                                        height="9px"
+                                        duration="0.5s"
+                                    />
+                                </div>
+                                : isDeletionForm
+                                    ? "Delete"
+                                    : "Submit"}
+                        </button> */}
                     </CardContent>
                 </Collapse>
             </div>
@@ -67,6 +90,7 @@ EnterTestScriptNameCard.propTypes = {
     requestTestScript: PropTypes.func,
     isSubmitButtonDisabled: PropTypes.bool,
     isDeletionForm: PropTypes.bool,
+    displayFadingBalls: PropTypes.bool,
 }
 
 EnterTestScriptNameCard.defaultProps = {
@@ -74,6 +98,7 @@ EnterTestScriptNameCard.defaultProps = {
     requestTestScript: () => { },
     isSubmitButtonDisabled: true,
     isDeletionForm: false,
+    displayFadingBalls: false,
 }
 
 export default EnterTestScriptNameCard;

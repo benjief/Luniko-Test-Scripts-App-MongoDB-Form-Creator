@@ -3,6 +3,8 @@ import React from 'react';
 import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 
 function SubmitButton({
+    className,
+    submitButtonText,
     isSubmitButtonDisabled,
     displayFadingBalls,
     handleOnClick,
@@ -10,7 +12,7 @@ function SubmitButton({
 }) {
     return (
         <button
-            className="submit-test-script-button"
+            className={className}
             disabled={isSubmitButtonDisabled}
             onClick={handleOnClick ? handleOnClickFunction : undefined}>
             {displayFadingBalls ?
@@ -18,17 +20,19 @@ function SubmitButton({
                     <FadingBalls
                         className="spinner"
                         color="white"
-                        width="7px"
-                        height="7px"
+                        width="9px"
+                        height="9px"
                         duration="0.5s"
                     />
                 </div> :
-                <p>Submit</p>}
+                <p>{submitButtonText}</p>}
         </button>
     )
 };
 
 SubmitButton.propTypes = {
+    className: PropTypes.string,
+    submitButtonText: PropTypes.string,
     isSubmitButtonDisabled: PropTypes.bool,
     displayFadingBalls: PropTypes.bool,
     handleOnClick: PropTypes.bool,
@@ -36,6 +40,8 @@ SubmitButton.propTypes = {
 };
 
 SubmitButton.defaultProps = {
+    className: "",
+    submitButtonText: "Submit",
     isSubmitButtonDisabled: true,
     displayFadingBalls: false,
     handleOnClick: false,

@@ -13,12 +13,14 @@ function ModifiableStep({
 }) {
     const [opacity, setOpacity] = React.useState(isNewlyAdded ? "0" : "100%");
     const [height, setHeight] = React.useState(isNewlyAdded ? stepNumber === 1 ? "49px" : "0" : "432px");
+    const [padding, setPadding] = React.useState("10px");
     const [marginBottom, setMarginBottom] = React.useState(isNewlyAdded ? "0" : "30px");
+    const [overflow, setOverflow] = React.useState("auto");
     const [isRemoved, setIsRemoved] = React.useState(false);
     const stepRef = React.useRef(null);
 
     const handleModifyStepInfo = (returnedObject) => {
-        let updatedStep = {number: stepNumber};
+        let updatedStep = { number: stepNumber };
         if (returnedObject.field === "description") {
             updatedStep["description"] = returnedObject["value"];
             updatedStep["dataInputtedByUser"] = stepDataInputtedByUser;
@@ -37,10 +39,12 @@ function ModifiableStep({
             setTimeout(() => {
                 setMarginBottom("0");
                 setHeight("0");
-            }, 300);
+                setPadding("0");
+                setOverflow("hidden");
+            }, 200);
             setTimeout(() => {
                 removeStep({ number: stepNumber });
-            }, 440); // this seems to be the magic number so that the animation for removing a step remains smooth
+            }, 500); // this seems to be the magic number so that the animation for removing a step remains smooth
         }
     }
 
@@ -56,7 +60,15 @@ function ModifiableStep({
     }, [isRemoved, isNewlyAdded]);
 
     return (
-        <div className="step-container" ref={stepRef} style={{ opacity: opacity, height: height, marginBottom: marginBottom }}>
+        <div className="step-container"
+            ref={stepRef}
+            style={{
+                opacity: opacity,
+                height: height,
+                padding: padding,
+                marginBottom: marginBottom,
+                overflow: overflow
+            }}>
             <div className="step-number">
                 Step {stepNumber}
             </div>

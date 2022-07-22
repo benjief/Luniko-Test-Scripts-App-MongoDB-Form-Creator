@@ -5,6 +5,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
 import MaterialTextField from './MaterialTextField';
+import SubmitButton from './SubmitButton';
 import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 function CreateOrModifyTestScriptCard({
     setFormProps,
@@ -110,22 +111,14 @@ function CreateOrModifyTestScriptCard({
                             disabled={isAddOrModifyStepsButtonDisabled}>
                             Add/Modify Steps
                         </button>
-                        <button
-                            className="submit-or-update-test-script-button"
-                            onClick={submitOrModifyTestScript}
-                            disabled={isSubmitOrModifyButtonDisabled}>
-                            {displayFadingBalls ?
-                                <div className="fading-balls-container">
-                                    <FadingBalls
-                                        className="spinner"
-                                        color="white"
-                                        width="7px"
-                                        height="7px"
-                                        duration="0.5s"
-                                    />
-                                </div> :
-                                <p>{isModificationCard ? "Update" : "Submit"}</p>}
-                        </button>
+                        <SubmitButton
+                        className={"submit-or-update-test-script-button"}
+                        submitButtonText={isModificationCard ? "Update" : "Submit"}
+                        displayFadingBalls={displayFadingBalls}
+                        handleOnClick={true}
+                        handleOnClickFunction={submitOrModifyTestScript}
+                        isSubmitButtonDisabled={isSubmitOrModifyButtonDisabled}>                      
+                        </SubmitButton>
                     </CardContent>
                 </Collapse>
             </div>

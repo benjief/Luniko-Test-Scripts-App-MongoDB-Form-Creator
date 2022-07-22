@@ -24,6 +24,7 @@ function DeleteTestScript() {
     });
     const [isValidTestScriptNameEntered, setIsValidTestScriptNameEntered] = useState(false);
     const testScriptID = useRef("");
+    const testingSessions = useRef([]);
     // const [testingSessions, setTestingSessions] = useState([]);
     const async = useRef(false);
     const [isErrorThrown, setIsErrorThrown] = useState(false);
@@ -32,6 +33,7 @@ function DeleteTestScript() {
     const alertType = useRef("success-alert");
     const testScriptNamesAlreadyInDB = useRef([]);
     const isDataBeingFetched = useRef(false);
+    const [displayFadingBalls, setDisplayFadingBalls] = useState(false);
 
     const loadErrorMessage = "Apologies! We've encountered an error. Please attempt to re-load this page.";
     const deleteErrorMessage = "Apologies! We were unable to remove the requested test script. Please try again.";
@@ -89,7 +91,7 @@ function DeleteTestScript() {
         if (rendering) {
             if (!isValidTestScriptNameEntered && !isDataBeingFetched.current) {
                 runPrimaryReadAsyncFunctions();
-            } 
+            }
         } else {
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
@@ -106,7 +108,11 @@ function DeleteTestScript() {
                 isDataBeingFetched.current = false;
                 // setRendering(true);
                 setIsDeleteTestScriptButtonDisabled(true);
+                setDisplayFadingBalls(true);
                 await runSecondaryReadAsyncFunctions(formProps["testScriptName"])
+                for (let i = 0; i < testingSessions.current.length; i++) {
+                    await deleteTestingSession(testingSessions.current[i]._id);
+                }
                 await deleteTestScript(testScriptID.current);
                 setAlert(true);
             } else {
@@ -129,6 +135,7 @@ function DeleteTestScript() {
     const runSecondaryReadAsyncFunctions = async (testScriptName) => {
         isDataBeingFetched.current = true;
         await fetchTestScriptID(testScriptName);
+        await fetchTestScriptTestingSessions();
     }
 
     const fetchTestScriptID = async (testScriptName) => {
@@ -139,10 +146,46 @@ function DeleteTestScript() {
             })
                 .then(res => {
                     testScriptID.current = res.data._id;
+                    async.current = false;
                 })
         } catch (e) {
             console.log(e);
             handleError("r");
+        }
+    }
+
+    const fetchTestScriptTestingSessions = async () => {
+        try {
+            async.current = true;
+            await Axios.get(`http://localhost:5000/get-test-script-testing-sessions/${testScriptID.current}`, {
+                timeout: 5000
+            })
+                .then(res => {
+                    // console.log(res.data);
+                    testingSessions.current = res.data;
+                    async.current = false;
+                })
+        } catch (e) {
+            console.log(e);
+            handleError("r");
+        }
+    }
+
+    const deleteTestingSession = async (testingSessionID) => {
+        if (!async.current) {
+            try {
+                async.current = true;
+                await Axios.delete(`http://localhost:5000/delete-testing-session/${testingSessionID}`, {
+                    timeout: 5000
+                })
+                    .then(res => {
+                        console.log(res);
+                        async.current = false;
+                    });
+            } catch (e) {
+                console.log(e);
+                handleError("d");
+            }
         }
     }
 
@@ -189,7 +232,8 @@ function DeleteTestScript() {
                                 setFormProps={setFormProps}
                                 requestTestScript={handleDeleteTestScript}
                                 isSubmitButtonDisabled={isDeleteTestScriptButtonDisabled}
-                                isDeletionForm={true}>
+                                isDeletionForm={true}
+                                displayFadingBalls={displayFadingBalls}>
                             </EnterTestScriptNameCard>
                         </div>
                     </div>

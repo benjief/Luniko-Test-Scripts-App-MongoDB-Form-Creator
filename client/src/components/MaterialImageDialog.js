@@ -10,17 +10,35 @@ function MaterialImageDialog({
 }) {
     const [open, setOpen] = React.useState(false);
     const [rendering, setRendering] = React.useState(true);
+    const [imageOpacity, setImageOpacity] = React.useState("0%");
+    const [imageVisibility, setImageVisibility] = React.useState("hidden");
+
+    React.useEffect(() => {
+        if (!rendering) {
+            setTimeout(() => {
+                setImageOpacity("100%");
+                setImageVisibility("visible");
+            }, 50);
+        } else {
+            setImageOpacity("0%");
+            setImageVisibility("hidden");
+        }
+    }, [rendering, setImageOpacity, setImageVisibility]);
 
     const handleClickOpen = () => {
         setOpen(true);
         setTimeout(() => {
             setRendering(false);
+            // setImageOpacity("100%");
+            // setImageVisibility("visible");
         }, 300);
     };
 
     const handleClose = () => {
         setOpen(false);
         setTimeout(() => {
+            // setImageOpacity("0%");
+            // setImageVisibility("hidden");
             setRendering(true);
         }, 100);
     };
@@ -41,12 +59,14 @@ function MaterialImageDialog({
                 <DialogContent>
                     {rendering
                         ? <Hypnosis
-                                className="spinner"
-                                color="var(--lunikoOrange)"
-                                width="100px"
-                                height="100px"
-                                duration="1.5s" />
-                        : <img className="image-dialog-content" src={imageSource} alt="dialog" />
+                            className="spinner"
+                            color="var(--lunikoOrange)"
+                            width="100px"
+                            height="100px"
+                            duration="1.5s" />
+                        : <div className="image-dialog-image"
+                            style={{ "--imageURL": `url(${imageSource})`, "--imageOpacity": imageOpacity, "--imageVisibility": imageVisibility }}>
+                        </div>
                     }
                 </DialogContent>
             </Dialog>
