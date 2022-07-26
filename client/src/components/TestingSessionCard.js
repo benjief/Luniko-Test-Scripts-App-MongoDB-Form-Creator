@@ -10,6 +10,8 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IconButton from '@mui/material/IconButton';
 import MaterialImageDialog from './MaterialImageDialog';
+import SubmitButton from './SubmitButton';
+import MaterialDialog from './MaterialDialog';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -32,6 +34,7 @@ function TestingSessionCard({
     responsesWithAttachedContent,
     submissionDate,
     deleteTestingSession,
+    isDeleteButtonDisabled,
 }) {
     const [expanded, setExpanded] = React.useState(false);
     const word = failedSteps.length > 1 ? "steps" : "step";
@@ -45,17 +48,18 @@ function TestingSessionCard({
     };
 
     const handleDeleteTestingSession = () => {
+        deleteTestingSession(testingSessionID);
         // setTimeout(() => {
-        setHeight(testingSessionRef.current?.clientHeight + "px");
-        setOpacity("0%");
-        // }, 0);
-        setTimeout(() => {
-            setMarginBottom("0");
-            setHeight("0");
-        }, 10);
-        setTimeout(() => {
-            deleteTestingSession(testingSessionID);
-        }, 500);
+        // setHeight(testingSessionRef.current?.clientHeight + "px");
+        // setOpacity("0%");
+        // // }, 0);
+        // setTimeout(() => {
+        //     setMarginBottom("0");
+        //     setHeight("0");
+        // }, 10);
+        // setTimeout(() => {
+        //     deleteTestingSession(testingSessionID);
+        // }, 500);
     }
 
     return (
@@ -64,7 +68,7 @@ function TestingSessionCard({
             sx={{
                 opacity: opacity,
                 height: height,
-                maxHeight: "calc(100vh - 166.52px)",
+                // maxHeight: expanded ? "calc(100vh - 166.52px)" : height,
                 overflowY: "scroll",
                 borderRadius: "10px",
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
@@ -74,7 +78,7 @@ function TestingSessionCard({
             }}>
             <div className="card-content">
                 <CardHeader
-                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt" }}
+                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt", textAlign: "center" }}
                     title={<strong>Testing Session {testingSessionID}</strong>}>
                 </CardHeader>
                 <Typography paragraph className="testing-session-result">
@@ -111,24 +115,22 @@ function TestingSessionCard({
                             <strong>Step Overview</strong><br />
                             {responsesWithAttachedContent.length
                                 ? responsesWithAttachedContent.map((response) => {
-                                    {
-                                        return response.comments || response.uploadedImage
-                                            ? <p key={response._id}>
-                                                <span id="step-header-span">
-                                                    {response.comments || response.uploadedImage
-                                                        ? <span><u>Step {response.step}</u>
-                                                            {response.uploadedImage
-                                                                ? <MaterialImageDialog
-                                                                    imageSource={response.uploadedImage["imageURL"]}
-                                                                    buttonText={"uploaded image"}>
-                                                                </MaterialImageDialog>
-                                                                : ""}<br /></span>
-                                                        : <span />}
-                                                </span>
-                                                {response.comments}
-                                            </p>
-                                            : ""
-                                    }
+                                    return response.comments || response.uploadedImage
+                                        ? <p key={response._id}>
+                                            <span id="step-header-span">
+                                                {response.comments || response.uploadedImage
+                                                    ? <span><u>Step {response.step}</u>
+                                                        {response.uploadedImage
+                                                            ? <MaterialImageDialog
+                                                                imageSource={response.uploadedImage["imageURL"]}
+                                                                buttonText={"uploaded image"}>
+                                                            </MaterialImageDialog>
+                                                            : ""}<br /></span>
+                                                    : <span />}
+                                            </span>
+                                            {response.comments}
+                                        </p>
+                                        : ""
                                 })
                                 : <p>no attached images or comments</p>}
                         </Typography>
@@ -136,11 +138,29 @@ function TestingSessionCard({
                             <strong>Date Submitted</strong><br />
                             {submissionDate.toString()}
                         </Typography>
-                        <button
+                        <MaterialDialog
+                            className="material-dialog-delete"
+                                exteriorButton={
+                                    <SubmitButton
+                                        className="delete-testing-session-button"
+                                        submitButtonText={"Delete"}
+                                        isSubmitButtonDisabled={isDeleteButtonDisabled}
+                                        /*handleOnClick={true}
+                                        handleOnClickFunction={requestTestScript}*/>
+                                    </SubmitButton>
+                                }
+                                inactiveButtonText="Cancel"
+                                displayActiveButton={true}
+                                activeButtonFunction={handleDeleteTestingSession}
+                                activeButtonText="Delete"
+                                dialogDescription={<p>Are you sure you want to permanently delete this testing session? This action cannot be undone.</p>}>
+                            </MaterialDialog>
+                        {/* <button
                             className="delete-testing-session-button"
-                            onClick={handleDeleteTestingSession}>
+                            onClick={handleDeleteTestingSession}
+                            disabled={deleteButtonDisabled}>
                             Delete
-                        </button>
+                        </button> */}
                     </CardContent>
                 </Collapse>
             </div>
@@ -163,6 +183,7 @@ TestingSessionCard.propTypes = {
     responsesWithAttachedContent: PropTypes.array,
     submissionDate: PropTypes.instanceOf(Date),
     deleteTestingSession: PropTypes.func,
+    isDeleteButtonDisabled: PropTypes.bool,
 }
 
 TestingSessionCard.defaultProps = {
@@ -180,6 +201,7 @@ TestingSessionCard.defaultProps = {
     responsesWithAttachedContent: [],
     submissionDate: new Date(),
     deleteTestingSession: () => { },
+    isDeleteButtonDisabled: false,
 }
 
 export default TestingSessionCard;

@@ -37,7 +37,7 @@
     font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 600;
     font-size: 14pt;
-    height: 50px;
+    min-height: 50px;
     width: 100%;
     transition: 200ms;
     box-shadow: 2px 2px 4px rgba(43, 43, 43, 0.6);
@@ -53,4 +53,8 @@
 
 .delete-test-script-button:not(:disabled):hover {
     background-color: #d32f2f;
+}
+
+.material-dialog-delete .MuiPaper-root {
+    width: 95%;
 }

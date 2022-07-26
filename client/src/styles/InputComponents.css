@@ -26,11 +26,11 @@
     font-size: 12pt !important;
 }
 
-/* .test-script-description .MuiOutlinedInput-root {
-    min-height: 200px !important;
+.test-script-description .MuiOutlinedInput-root {
+    min-height: 250px !important;
 }
 
-.test-script-description .MuiOutlinedInput-root {
+/* .test-script-description .MuiOutlinedInput-root {
     min-height: 100px !important;
 } */
 

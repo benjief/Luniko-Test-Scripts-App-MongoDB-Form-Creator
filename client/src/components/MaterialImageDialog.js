@@ -18,7 +18,7 @@ function MaterialImageDialog({
             setTimeout(() => {
                 setImageOpacity("100%");
                 setImageVisibility("visible");
-            }, 200);
+            }, 400);
         } else {
             setImageOpacity("0%");
             setImageVisibility("hidden");

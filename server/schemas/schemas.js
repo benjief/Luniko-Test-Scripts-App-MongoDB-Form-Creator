@@ -89,6 +89,11 @@ const testScript = new mongoose.Schema({
         required: true,
         unique: true
     },
+    name_lowercase: {
+        type: String,
+        required: true,
+        unique: true
+    },
     owner: {
         type: {
             firstName: String,

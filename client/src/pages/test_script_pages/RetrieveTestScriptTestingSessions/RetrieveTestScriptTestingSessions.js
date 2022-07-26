@@ -28,18 +28,24 @@ function RetrieveTestScriptTestingSessions() {
     const async = useRef(false);
     const [isErrorThrown, setIsErrorThrown] = useState(false);
     const [alert, setAlert] = useState(false);
-    const alertMessage = useRef("Test script results successfully submitted!");
-    const alertType = useRef("success-alert");
+    const alertMessage = useRef("alert message placeholder");
+    const alertType = useRef("error-alert");
     const testScriptNamesAlreadyInDB = useRef([]);
     const isDataBeingFetched = useRef(false);
     const [pageMessageOpacity, setPageMessageOpacity] = useState("100%");
+    const [pageContentOpacity, setPageContentOpacity] = useState("100%");
+    // const [displayFadingBalls, setDisplayFadingBalls] = useState(false);
 
     const loadErrorMessage = "Apologies! We've encountered an error. Please attempt to re-load this page.";
+    const deleteErrorMessage = "Apologies! We were unable to remove the requested testing session. Please try again.";
 
-    const handleError = useCallback(() => {
+    const handleError = useCallback((errorType) => {
         setIsErrorThrown(true);
-        alertType.current = "error-alert";
+        // alertType.current = "error-alert";
         alertMessage.current = loadErrorMessage;
+        errorType === "r"
+            ? alertMessage.current = loadErrorMessage
+            : alertMessage.current = deleteErrorMessage;
 
         // Delay is set up just in case an error is generated before the is fully-displayed
         // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
@@ -52,7 +58,7 @@ function RetrieveTestScriptTestingSessions() {
         setTimeout(() => {
             setAlert(true);
         }, delay);
-    }, [alertType, rendering]);
+    }, [rendering]);
 
     const handleAlertClosed = () => {
         console.log("closing alert");
@@ -75,12 +81,12 @@ function RetrieveTestScriptTestingSessions() {
                     timeout: 5000
                 })
                     .then(res => {
-                        testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name);
+                        testScriptNamesAlreadyInDB.current = res.data.map(({ name_lowercase }) => name_lowercase);
                         async.current = false;
                     });
             } catch (e) {
                 console.log(e);
-                handleError();
+                handleError("r");
             }
         }
 
@@ -98,6 +104,12 @@ function RetrieveTestScriptTestingSessions() {
                     timeout: 5000
                 })
                     .then(res => {
+                        setFormProps(
+                            prev => ({
+                                ...prev,
+                                "testScriptName": res.data.name
+                            })
+                        );
                         testScriptID.current = res.data._id;
                     })
             } catch (e) {
@@ -169,40 +181,53 @@ function RetrieveTestScriptTestingSessions() {
         return false;
     }
 
-    const deleteTestingSession = async (testingSessionID) => {
+    const deleteTestingSession = (testingSessionID) => {
         if (!async.current) {
             try {
-                async.current = true;
-                await Axios.delete(`http://localhost:5000/delete-testing-session/${testingSessionID}`, {
-                    timeout: 5000
-                })
-                    .then(res => {
-                        console.log(res); 
-                        updateTestingSessionsAfterRemoval(testingSessionID);
-                        async.current = false;
-                    });
+                setPageContentOpacity("0%");
+                setTimeout(async () => {
+                    async.current = true;
+                    setPageContentOpacity("100%");
+                    await Axios.delete(`http://localhost:5000/delete-testing-session/${testingSessionID}`, {
+                        timeout: 5000
+                    })
+                        .then(res => {
+                            console.log(res);
+                            updateTestingSessionsAfterRemoval(testingSessionID);
+                            // setDisplayFadingBalls(false);
+                        });
+                    updateTestingSessionsAfterRemoval(testingSessionID);
+                }, 300);
             } catch (e) {
-                console.log(e); // TODO: add some sort of error handling here!
+                console.log(e);
+                handleError("d");
             }
         }
     }
 
     const updateTestingSessionsAfterRemoval = (testingSessionID) => {
-        if (testingSessions.length <= 1) {
-            setPageMessageOpacity("0%");
-           setTimeout(() => {
+        setTimeout(() => {
+            setPageContentOpacity("0%");
+            if (testingSessions.length <= 1) {
+                setPageMessageOpacity("0%");
+                setTimeout(() => {
+                    setTestingSessions(testingSessions.filter((val) => {
+                        return val._id !== testingSessionID;
+                    }));
+                }, 300);
+                setTimeout(() => {
+                    setPageMessageOpacity("100%");
+                }, 300);
+            } else {
                 setTestingSessions(testingSessions.filter((val) => {
                     return val._id !== testingSessionID;
                 }));
-            }, 300);
+            }
             setTimeout(() => {
-                setPageMessageOpacity("100%");
+                async.current = false;
+                setPageContentOpacity("100%");
             }, 300);
-        } else {
-            setTestingSessions(testingSessions.filter((val) => {
-                return val._id !== testingSessionID;
-            }));
-        }
+        }, 500);
     }
 
     return (
@@ -224,22 +249,28 @@ function RetrieveTestScriptTestingSessions() {
                     isErrorThrown={isErrorThrown}
                     isUserRetrievingTestingSessions={true}
                     doTestingSessionsExist={testingSessions.length ? true : false}
-                    pageMessageOpacity={pageMessageOpacity}>
+                    pageMessageOpacity={pageMessageOpacity}
+                    pageContentOpacity={pageContentOpacity}
+                    testScriptName={formProps["testScriptName"]}
+                    isTestingSessionBeingDeleted={async.current}>
                     {testingSessions.length
                         ? testingSessions.map((testingSession) => {
-                            return <TestingSessionCard
-                                key={new Date(testingSession.updatedAt)}
-                                testingSessionID={testingSession._id}
-                                submitter={testingSession.tester}
-                                completed={testingSession.complete}
-                                terminatedAtStep={testingSession.stoppedTestingAtStep}
-                                result={testingSession.pass}
-                                failedSteps={testingSession.failedSteps}
-                                stepsWithMinorIssues={testingSession.stepsWithMinorIssues}
-                                responsesWithAttachedContent={testingSession.responses}
-                                submissionDate={new Date(testingSession.updatedAt)}
-                                deleteTestingSession={deleteTestingSession}>
-                            </TestingSessionCard>
+                            return <div className="testing-session-card" key={new Date(testingSession.updatedAt)}>
+                                <TestingSessionCard
+                                    // key={new Date(testingSession.updatedAt)}
+                                    testingSessionID={testingSession._id}
+                                    submitter={testingSession.tester}
+                                    completed={testingSession.complete}
+                                    terminatedAtStep={testingSession.stoppedTestingAtStep}
+                                    result={testingSession.pass}
+                                    failedSteps={testingSession.failedSteps}
+                                    stepsWithMinorIssues={testingSession.stepsWithMinorIssues}
+                                    responsesWithAttachedContent={testingSession.responses}
+                                    submissionDate={new Date(testingSession.updatedAt)}
+                                    deleteTestingSession={deleteTestingSession}
+                                    isDeleteButtonDisabled={async.current}>
+                                </TestingSessionCard>
+                            </div>
                         })
                         : <div></div>}
                 </CardWrapper >

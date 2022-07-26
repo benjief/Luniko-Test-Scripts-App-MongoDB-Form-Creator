@@ -36,6 +36,7 @@
 }
 
 .submit-test-script-name-button,
+.cancel-button,
 .add-or-modify-steps-button,
 .submit-or-update-test-script-button,
 .add-step-button,
@@ -50,7 +51,7 @@
     font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif;
     font-weight: 600;
     font-size: 14pt;
-    height: 50px;
+    min-height: 50px;
     width: 100%;
     transition: 200ms;
     box-shadow: 2px 2px 4px rgba(43, 43, 43, 0.6);
@@ -67,6 +68,7 @@
 
 .submit-test-script-name-button:not(:disabled),
 .submit-or-update-test-script-name-button:not(:disabled),
+.cancel-button:not(:disabled),
 .add-or-modify-steps-button,
 .submit-or-update-test-script-button:not(:disabled),
 .add-step-button:not(:disabled),
@@ -76,6 +78,7 @@
 
 .submit-test-script-name-button:disabled,
 .submit-or-update-test-script-name-button:disabled,
+.cancel-button:disabled,
 .add-or-modify-steps-button:disabled,
 .submit-or-update-test-script-button:disabled,
 .add-step-button:disabled
@@ -89,6 +92,7 @@
 
 .submit-test-script-name-button:not(:disabled):hover,
 .submit-or-update-test-script-name-button:not(:disabled):hover,
+.cancel-button:not(:disabled):hover,
 .add-or-modify-steps-button:not(:disabled):hover,
 .submit-or-update-test-script-button:not(:disabled):hover,
 .add-step-button:not(:disabled):hover,

@@ -57,3 +57,8 @@ textarea:focus {
   justify-content: center;
   height: 100%;
 }
+
+button p {
+  margin-top: 0;
+  margin-bottom: 0;
+}

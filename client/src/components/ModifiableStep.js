@@ -41,10 +41,10 @@ function ModifiableStep({
                 setHeight("0");
                 setPadding("0");
                 setOverflow("hidden");
-            }, 200);
+            }, 400);
             setTimeout(() => {
                 removeStep({ number: stepNumber });
-            }, 500); // this seems to be the magic number so that the animation for removing a step remains smooth
+            }, 600); // this seems to be the magic number so that the animation for removing a step remains smooth
         }
     }
 

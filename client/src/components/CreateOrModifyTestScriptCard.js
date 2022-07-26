@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -6,7 +7,6 @@ import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
 import MaterialTextField from './MaterialTextField';
 import SubmitButton from './SubmitButton';
-import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 function CreateOrModifyTestScriptCard({
     setFormProps,
     isModificationCard,
@@ -20,6 +20,7 @@ function CreateOrModifyTestScriptCard({
     isAddOrModifyStepsButtonDisabled,
     submitOrModifyTestScript,
     isSubmitOrModifyButtonDisabled,
+    isCancelButtonDisabled,
     displayFadingBalls,
 }) {
 
@@ -42,8 +43,8 @@ function CreateOrModifyTestScriptCard({
             }}>
             <div className="card-content">
                 <CardHeader
-                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif" }}
-                    title={<strong>Test Script Form</strong>}/>
+                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", textAlign: "center"  }}
+                    title={<strong>Test Script Form</strong>} />
                 <Collapse in={true} timeout="auto" unmountOnExit>
                     <CardContent>
                         <MaterialTextField
@@ -112,13 +113,20 @@ function CreateOrModifyTestScriptCard({
                             Add/Modify Steps
                         </button>
                         <SubmitButton
-                        className={"submit-or-update-test-script-button"}
-                        submitButtonText={isModificationCard ? "Update" : "Submit"}
-                        displayFadingBalls={displayFadingBalls}
-                        handleOnClick={true}
-                        handleOnClickFunction={submitOrModifyTestScript}
-                        isSubmitButtonDisabled={isSubmitOrModifyButtonDisabled}>                      
+                            className={"submit-or-update-test-script-button"}
+                            submitButtonText={isModificationCard ? "Update" : "Submit"}
+                            displayFadingBalls={displayFadingBalls}
+                            handleOnClick={true}
+                            handleOnClickFunction={submitOrModifyTestScript}
+                            isSubmitButtonDisabled={isSubmitOrModifyButtonDisabled}>
                         </SubmitButton>
+                        <Link to={`/`}>
+                            <button
+                                className="cancel-button"
+                                disabled={isCancelButtonDisabled}>
+                                Cancel
+                            </button>
+                        </Link>
                     </CardContent>
                 </Collapse>
             </div>
@@ -139,6 +147,7 @@ CreateOrModifyTestScriptCard.propTypes = {
     isAddOrModifyStepsButtonDisabled: PropTypes.bool,
     submitOrModifyTestScript: PropTypes.func,
     isSubmitOrModifyButtonDisabled: PropTypes.bool,
+    isCancelButtonDisabled: PropTypes.bool,
     displayFadingBalls: PropTypes.bool,
 }
 
@@ -155,6 +164,7 @@ CreateOrModifyTestScriptCard.defaultProps = {
     isAddOrModifyStepsButtonDisabled: false,
     submitOrModifyTestScript: () => { },
     isSubmitOrModifyButtonDisabled: true,
+    isCancelButtonDisabled: false,
     displayFadingBalls: false,
 }
 

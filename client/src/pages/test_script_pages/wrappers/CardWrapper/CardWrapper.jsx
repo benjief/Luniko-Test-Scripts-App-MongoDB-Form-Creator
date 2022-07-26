@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react'
+import FadingBalls from 'react-cssfx-loading/lib/FadingBalls';
 
 // const CREATE_VIEW = 'CREATE_VIEW'
 
@@ -11,7 +12,10 @@ function CardWrapper({
     isUserModifyingSteps,
     isUserRetrievingTestingSessions,
     doTestingSessionsExist,
-    pageMessageOpacity
+    pageMessageOpacity,
+    pageContentOpacity,
+    testScriptName,
+    isTestingSessionBeingDeleted,
 }) {
 
     return (
@@ -20,34 +24,48 @@ function CardWrapper({
             : isErrorThrown
                 ? <div></div> // TODO: test this!
                 : <div className={isUserModifyingSteps
-                    ? "create-or-modify-test-script"
+                    ? "add-or-modify-steps"
                     : isUserRetrievingTestingSessions
                         ? "view-test-script-testing-sessions"
-                        : "add-or-modify-steps"}>
-                    <div 
-                    className="page-message"
-                    style={{opacity: pageMessageOpacity, transition: "0.5s"}}>
+                        : "create-or-modify-test-script"}>
+                    <div
+                        className="page-message"
+                        style={{ opacity: pageMessageOpacity, transition: "0.5s" }}>
                         {isUserModifyingSteps
                             ? "Add or Modify Test Script Steps Below:"
                             : isUserRetrievingTestingSessions
                                 ? doTestingSessionsExist
-                                    ? "View Submitted Testing Sessions Below:"
+                                    ? `View Submitted Testing Sessions for ${testScriptName} Below:`
                                     : "No Submissions Yet!"
                                 : "Please Fill in the Fields Below:"}
                     </div>
-                    <div className={isUserModifyingSteps
-                        ? "add-or-modify-steps-container"
-                        : isUserRetrievingTestingSessions
-                            ? "view-test-script-testing-sessions-container"
-                            : "create-or-modify-test-script-container"}>
-                        <div className={isUserModifyingSteps
-                            ? "add-or-modify-steps-card"
-                            : isUserRetrievingTestingSessions
-                                ? "view-test-script-testing-sessions-card"
-                                : "create-or-modify-test-script-card"}>
-                            {children}
+                    {isUserRetrievingTestingSessions
+                        ? <div className="view-test-script-testing-sessions-container"
+                            style={{ opacity: pageContentOpacity, transition: "0.3s" }}>
+                            {isTestingSessionBeingDeleted
+                                ? < div className="fading-balls-container-testing-session-deletion">
+                                    <FadingBalls
+                                        className="spinner"
+                                        color="var(--lunikoMidGrey)"
+                                        width="12px"
+                                        height="12px"
+                                        duration="0.5s"
+                                    />
+                                </div>
+                                : children}
                         </div>
-                    </div>
+                        : <div className={isUserModifyingSteps
+                            ? "add-or-modify-steps-container"
+                            : "create-or-modify-test-script-container"}>
+                            <div className={isUserModifyingSteps
+                                ? "add-or-modify-steps-card"
+                                : isUserRetrievingTestingSessions
+                                    ? "view-test-script-testing-sessions-card"
+                                    : "create-or-modify-test-script-card"}>
+                                {children}
+                            </div>
+                        </div>
+                    }
                 </div >
     )
 };
@@ -62,6 +80,9 @@ CardWrapper.propTypes = {
     isUserRetrievingTestingSessions: PropTypes.bool,
     doTestingSessionsExist: PropTypes.bool,
     pageMessageOpacity: PropTypes.string,
+    pageContentOpacity: PropTypes.string,
+    testScriptName: PropTypes.string,
+    isTestingSessionBeingDeleted: PropTypes.bool,
     // isUserViewingTestingSessionDetails: PropTypes.bool,
     // setter: PropTypes.func,
     // myObject: PropTypes.shape({
@@ -79,6 +100,9 @@ CardWrapper.defaultProps = {
     isUserRetrievingTestingSessions: false,
     doTestingSessionsExist: false,
     pageMessageOpacity: "100%",
+    pageContentOpacity: "100%",
+    testScriptName: "",
+    isTestingSessionBeingDeleted: false,
     // setter: null
 }
 

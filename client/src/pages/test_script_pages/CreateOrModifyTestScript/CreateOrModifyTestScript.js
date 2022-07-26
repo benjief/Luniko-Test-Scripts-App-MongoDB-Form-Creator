@@ -119,8 +119,9 @@ function CreateOrModifyTestScript() {
                     timeout: 5000
                 })
                     .then(res => {
-                        testScriptNamesAlreadyInDB.current = res.data.map(({ name }) => name.toLowerCase());
+                        testScriptNamesAlreadyInDB.current = res.data.map(({ name_lowercase }) => name_lowercase);
                         async.current = false;
+                        // console.log(testScriptNamesAlreadyInDB.current);
                     });
             } catch (e) {
                 console.log(e);
@@ -131,7 +132,6 @@ function CreateOrModifyTestScript() {
         const runSecondaryReadAsyncFunctions = async (testScriptName) => {
             isDataBeingFetched.current = true;
             await fetchTestScriptInformation(testScriptName);
-            console.log(testScriptID.current);
             await fetchTestScriptSteps(testScriptID.current);
             setRendering(false);
         }
@@ -408,6 +408,7 @@ function CreateOrModifyTestScript() {
                             isAddOrModifyStepsButtonDisabled={isAddOrModifyStepsButtonDisabled}
                             submitOrModifyTestScript={handleSubmitOrUpdate}
                             isSubmitOrModifyButtonDisabled={isSubmitOrModifyButtonDisabled}
+                            isCancelButtonDisabled={async.current}
                             displayFadingBalls={displayFadingBalls}>
                         </CreateOrModifyTestScriptCard>}
                 </CardWrapper>

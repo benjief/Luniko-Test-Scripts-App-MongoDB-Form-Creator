@@ -17,11 +17,11 @@ function LandingPageOptionsCard() {
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
                 transition: "0.5s",
                 backgroundColor: "var(--lunikoDarkGrey)",
-                marginBottom: "20px"
+                marginBottom: "20px",
             }}>
             <div className="card-content">
                 <CardHeader
-                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt" }}
+                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt", textAlign: "center"  }}
                     title={<strong>Please choose an option below</strong>}/>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>

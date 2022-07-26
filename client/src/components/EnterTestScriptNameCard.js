@@ -7,7 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
 import MaterialTextField from './MaterialTextField';
 import SubmitButton from './SubmitButton';
-import FadingBalls from 'react-cssfx-loading/lib/FadingBalls';
+import MaterialDialog from './MaterialDialog';
 function EnterTestScriptNameCard({
     setFormProps,
     requestTestScript,
@@ -21,7 +21,7 @@ function EnterTestScriptNameCard({
     const handleOnChange = (returnedObject) => {
         invalidTestScriptNameError("");
         setFormProps(
-            prev => ({ ...prev, [returnedObject.field]: returnedObject.value.trim() })
+            prev => ({ ...prev, [returnedObject.field]: returnedObject.value.trim().toLowerCase() })
         );
     }
 
@@ -38,7 +38,7 @@ function EnterTestScriptNameCard({
             }}>
             <div className="load-sheet-name-card-content">
                 <CardHeader
-                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt" }}
+                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt", textAlign: "center" }}
                     title={<strong>Please enter a valid test script name</strong>} />
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
@@ -52,14 +52,41 @@ function EnterTestScriptNameCard({
                             authenticationField={true}
                             field={"testScriptName"}>
                         </MaterialTextField>
-                        <SubmitButton
-                        className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
-                       submitButtonText={isDeletionForm ? "Delete" : "Submit"}
-                        isSubmitButtonDisabled={isSubmitButtonDisabled}
-                        displayFadingBalls={displayFadingBalls}
-                        handleOnClick={true}
-                        handleOnClickFunction={requestTestScript}>   
-                        </SubmitButton>
+                        {isDeletionForm
+                            ? <MaterialDialog
+                            className="material-dialog-delete"
+                                exteriorButton={
+                                    <SubmitButton
+                                        className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
+                                        submitButtonText={isDeletionForm ? "Delete" : "Submit"}
+                                        isSubmitButtonDisabled={isSubmitButtonDisabled}
+                                        displayFadingBalls={displayFadingBalls}
+                                        /*handleOnClick={true}
+                                        handleOnClickFunction={requestTestScript}*/>
+                                    </SubmitButton>
+                                }
+                                inactiveButtonText="Cancel"
+                                displayActiveButton={true}
+                                activeButtonFunction={requestTestScript}
+                                activeButtonText="Delete"
+                                dialogDescription={<p>Are you sure you want to permanently delete this test script? This action cannot be undone.</p>}>
+                            </MaterialDialog>
+                            : <SubmitButton
+                                className="submit-test-script-name-button"
+                                submitButtonText="Submit"
+                                isSubmitButtonDisabled={isSubmitButtonDisabled}
+                                displayFadingBalls={displayFadingBalls}
+                                handleOnClick={true}
+                                handleOnClickFunction={requestTestScript}>
+                            </SubmitButton>}
+                        {/* <SubmitButton
+                            className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
+                            submitButtonText={isDeletionForm ? "Delete" : "Submit"}
+                            isSubmitButtonDisabled={isSubmitButtonDisabled}
+                            displayFadingBalls={displayFadingBalls}
+                            handleOnClick={true}
+                            handleOnClickFunction={requestTestScript}>
+                        </SubmitButton> */}
                         {/* <button
                             className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
                             onClick={requestTestScript}
@@ -99,6 +126,7 @@ EnterTestScriptNameCard.defaultProps = {
     isSubmitButtonDisabled: true,
     isDeletionForm: false,
     displayFadingBalls: false,
+    isMaterialDialogActive: false,
 }
 
 export default EnterTestScriptNameCard;
