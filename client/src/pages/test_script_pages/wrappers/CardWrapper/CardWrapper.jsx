@@ -11,6 +11,7 @@ function CardWrapper({
     isErrorThrown,
     isUserModifyingSteps,
     isUserRetrievingTestingSessions,
+    isUserDeletingTestScript,
     doTestingSessionsExist,
     pageMessageOpacity,
     pageContentOpacity,
@@ -27,17 +28,21 @@ function CardWrapper({
                     ? "add-or-modify-steps"
                     : isUserRetrievingTestingSessions
                         ? "view-test-script-testing-sessions"
-                        : "create-or-modify-test-script"}>
+                        : isUserDeletingTestScript
+                            ? "delete-test-script"
+                            : "create-or-modify-test-script"}>
                     <div
                         className="page-message"
                         style={{ opacity: pageMessageOpacity, transition: "0.5s" }}>
                         {isUserModifyingSteps
                             ? "Add or Modify Test Script Steps Below:"
-                            : isUserRetrievingTestingSessions
-                                ? doTestingSessionsExist
-                                    ? `View Submitted Testing Sessions for ${testScriptName} Below:`
-                                    : "No Submissions Yet!"
-                                : "Please Fill in the Fields Below:"}
+                            : isUserDeletingTestScript
+                                ? "Enter the Name of the Test Script to Delete Below:"
+                                : isUserRetrievingTestingSessions
+                                    ? doTestingSessionsExist
+                                        ? `View Submitted Testing Sessions for ${testScriptName} Below:`
+                                        : "No Submissions Yet!"
+                                    : "Please Fill in the Fields Below:"}
                     </div>
                     {isUserRetrievingTestingSessions
                         ? <div className="view-test-script-testing-sessions-container"
@@ -56,12 +61,16 @@ function CardWrapper({
                         </div>
                         : <div className={isUserModifyingSteps
                             ? "add-or-modify-steps-container"
-                            : "create-or-modify-test-script-container"}>
+                            : isUserDeletingTestScript
+                                ? "delete-test-script-container"
+                                : "create-or-modify-test-script-container"}>
                             <div className={isUserModifyingSteps
                                 ? "add-or-modify-steps-card"
-                                : isUserRetrievingTestingSessions
-                                    ? "view-test-script-testing-sessions-card"
-                                    : "create-or-modify-test-script-card"}>
+                                : isUserDeletingTestScript
+                                    ? "delete-test-script-card"
+                                    : isUserRetrievingTestingSessions
+                                        ? "view-test-script-testing-sessions-card"
+                                        : "create-or-modify-test-script-card"}>
                                 {children}
                             </div>
                         </div>
@@ -78,6 +87,7 @@ CardWrapper.propTypes = {
     isErrorThrown: PropTypes.bool,
     isUserModifyingSteps: PropTypes.bool,
     isUserRetrievingTestingSessions: PropTypes.bool,
+    isUserDeletingTestScript: PropTypes.bool,
     doTestingSessionsExist: PropTypes.bool,
     pageMessageOpacity: PropTypes.string,
     pageContentOpacity: PropTypes.string,
@@ -98,6 +108,7 @@ CardWrapper.defaultProps = {
     isErrorThrown: false,
     isUserModifyingSteps: false,
     isUserRetrievingTestingSessions: false,
+    isUserDeletingTestScript: false,
     doTestingSessionsExist: false,
     pageMessageOpacity: "100%",
     pageContentOpacity: "100%",

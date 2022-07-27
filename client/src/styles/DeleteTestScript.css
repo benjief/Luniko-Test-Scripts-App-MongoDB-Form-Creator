@@ -1,4 +1,4 @@
-.enter-valid-test-script-name {
+.delete-test-script {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,11 +9,11 @@
     scrollbar-width: none;
 }
 
-.enter-valid-test-script-name::-webkit-scrollbar {
+.delete-test-script::-webkit-scrollbar {
     display: none;
 }
 
-.enter-valid-test-script-name-container {
+.delete-test-script-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -23,7 +23,7 @@
     padding-bottom: 20px;
 }
 
-.enter-valid-test-script-name-card {
+.delete-test-script-card {
     width: 100%;
 }
 

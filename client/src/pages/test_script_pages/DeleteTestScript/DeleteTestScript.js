@@ -11,6 +11,7 @@ import "../../../styles/InputComponents.css";
 import "../../../styles/CardComponents.css";
 import "../../../styles/SelectorComponents.css";
 import "../../../styles/AlertComponents.css";
+import CardWrapper from "../wrappers/CardWrapper/CardWrapper";
 // import "../../../styles/DialogComponents.css";
 
 function DeleteTestScript() {
@@ -220,7 +221,20 @@ function DeleteTestScript() {
                 handleAlertClosed={handleAlertClosed}
                 alertType={alertType.current}> {/* TODO: change alertType hook to useState? */}
             </AlertWrapper>
-            {isErrorThrown
+            <CardWrapper
+                rendering={rendering}
+                alert={alert}
+                isErrorThrown={isErrorThrown}
+                isUserDeletingTestScript={true}>
+                <EnterTestScriptNameCard
+                    setFormProps={setFormProps}
+                    requestTestScript={handleDeleteTestScript}
+                    isSubmitButtonDisabled={isDeleteTestScriptButtonDisabled}
+                    isDeletionForm={true}
+                    displayFadingBalls={displayFadingBalls}>
+                </EnterTestScriptNameCard>
+            </CardWrapper>
+            {/* {isErrorThrown
                 ? <div></div>
                 : <div className="enter-valid-test-script-name">
                     <div className="enter-valid-test-script-name-container">
@@ -237,7 +251,7 @@ function DeleteTestScript() {
                             </EnterTestScriptNameCard>
                         </div>
                     </div>
-                </div>}
+                </div>} */}
         </Fragment >
     )
 };
