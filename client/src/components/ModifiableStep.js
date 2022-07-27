@@ -13,7 +13,7 @@ function ModifiableStep({
 }) {
     const [opacity, setOpacity] = React.useState(isNewlyAdded ? "0" : "100%");
     const [height, setHeight] = React.useState(isNewlyAdded ? stepNumber === 1 ? "49px" : "0" : "432px");
-    const [padding, setPadding] = React.useState("10px");
+    const [padding, setPadding] = React.useState(isNewlyAdded ? "0" : "10px");
     const [marginBottom, setMarginBottom] = React.useState(isNewlyAdded ? "0" : "30px");
     const [overflow, setOverflow] = React.useState("auto");
     const [isRemoved, setIsRemoved] = React.useState(false);
@@ -37,14 +37,14 @@ function ModifiableStep({
         if (!removeDisabled) {
             setOpacity("0%");
             setTimeout(() => {
-                setMarginBottom("0");
-                setHeight("0");
-                setPadding("0");
                 setOverflow("hidden");
+                setMarginBottom("0");
+                setPadding("0");
+                setHeight("0");
             }, 400);
             setTimeout(() => {
                 removeStep({ number: stepNumber });
-            }, 600); // this seems to be the magic number so that the animation for removing a step remains smooth
+            }, 800); // this seems to be the magic number so that the animation for removing a step remains smooth
         }
     }
 
@@ -52,10 +52,11 @@ function ModifiableStep({
         if (!isRemoved && isNewlyAdded) {
             setHeight("432px");
             setMarginBottom("30px");
+            setPadding("10px");
             setTimeout(() => {
                 setOpacity("100%");
                 setHeight("auto");
-            }, 300);
+            }, 400);
         }
     }, [isRemoved, isNewlyAdded]);
 
