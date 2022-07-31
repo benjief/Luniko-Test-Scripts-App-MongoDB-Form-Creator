@@ -15,10 +15,10 @@ function MaterialImageDialog({
 
     React.useEffect(() => {
         if (!rendering) {
-            setTimeout(() => {
-                setImageOpacity("100%");
-                setImageVisibility("visible");
-            }, 400);
+            // setTimeout(() => {
+            setImageOpacity("100%");
+            setImageVisibility("visible");
+            // }, 50);
         } else {
             setImageOpacity("0%");
             setImageVisibility("hidden");
@@ -31,7 +31,7 @@ function MaterialImageDialog({
             setRendering(false);
             // setImageOpacity("100%");
             // setImageVisibility("visible");
-        }, 300);
+        }, 400);
     };
 
     const handleClose = () => {
@@ -40,7 +40,7 @@ function MaterialImageDialog({
             // setImageOpacity("0%");
             // setImageVisibility("hidden");
             setRendering(true);
-        }, 100);
+        }, 200);
     };
 
     return (
@@ -57,17 +57,18 @@ function MaterialImageDialog({
                 onClose={handleClose}
             >
                 <DialogContent>
-                    {rendering
-                        ? <Hypnosis
+                    <div className="image-loading-spinner"
+                        style={{ opacity: rendering ? "100%" : "0%", display: rendering ? "visible" : "hidden" }} >
+                        <Hypnosis
                             className="spinner"
                             color="var(--lunikoOrange)"
                             width="100px"
                             height="100px"
                             duration="1.5s" />
-                        : <div className="image-dialog-image"
-                            style={{ "--imageURL": `url(${imageSource})`, "--imageOpacity": imageOpacity, "--imageVisibility": imageVisibility }}>
-                        </div>
-                    }
+                    </div>
+                    <div className="image-dialog-image"
+                        style={{ "--imageURL": `url(${imageSource})`, "--imageOpacity": imageOpacity, "--imageVisibility": imageVisibility }}>
+                    </div>
                 </DialogContent>
             </Dialog>
         </span>

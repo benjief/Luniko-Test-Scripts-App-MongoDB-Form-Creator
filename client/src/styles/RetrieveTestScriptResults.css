@@ -152,3 +152,7 @@
 .fading-balls-container-testing-session-deletion {
     margin-top: 20px;
 }
+
+.view-test-script-testing-sessions-container p {
+    white-space: pre-wrap;
+}

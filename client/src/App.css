@@ -20,11 +20,11 @@
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #999;
+  background: rgba(153, 153, 153, 0.589);
   /* border: thin solid gray; */
   border-radius: 10px;
 }
