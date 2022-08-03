@@ -73,13 +73,13 @@ function TestingSessionCard({
                 borderRadius: "10px",
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
                 transition: "1s",
-                backgroundColor: "var(--lunikoDarkGrey)",
+                backgroundColor: "var(--lunikoLightGrey)",
                 marginBottom: marginBottom
             }}>
             <div className="card-content">
                 <CardHeader
-                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt", textAlign: "center" }}
-                    title={<strong>Testing Session {testingSessionID}</strong>}>
+                    titleTypographyProps={{ color: "rgba(0, 0, 0, 0.7)", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "12pt", textAlign: "center" }}
+                    title={"Testing Session " + testingSessionID}>
                 </CardHeader>
                 <Typography paragraph className="testing-session-result">
                     <span id="testing-session-result-header">

@@ -35,10 +35,6 @@
     width: 100%;
 }
 
-.test {
-    transition: 300ms;
-}
-
 .submit-test-script-name-button,
 .cancel-button,
 .add-or-modify-steps-button,

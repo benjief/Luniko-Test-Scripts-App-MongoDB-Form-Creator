@@ -58,7 +58,9 @@ function CardWrapper({
                                         duration="0.5s"
                                     />
                                 </div>
-                                : children}
+                                : <div className="view-test-script-testing-sessions-card">
+                                    {children}
+                                </div>}
                         </div>
                         : isUserModifyingSteps
                             ? <div className="add-or-modify-steps-container"

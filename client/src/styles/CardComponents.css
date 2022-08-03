@@ -37,8 +37,8 @@
     font-size: 13.2pt !important;
 }
 
-.create-request-container .MuiCardHeader-title {
-    margin-top: 10px;
+.testing-session-card .MuiCardHeader-title {
+    font-weight: 700;
 }
 
 /* .unowned-requests-container .MuiCardHeader-title,

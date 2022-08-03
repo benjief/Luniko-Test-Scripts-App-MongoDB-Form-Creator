@@ -5,7 +5,8 @@ import LoadingWrapper from "../wrappers/LoadingWrapper";
 import AlertWrapper from "../wrappers/AlertWrapper";
 import CardWrapper from "../wrappers/CardWrapper";
 import EnterTestScriptNameCard from "../../../components/EnterTestScriptNameCard"
-import TestingSessionCard from "../../../components/TestingSessionCard";
+import ViewTestingSessionsCard from "../../../components/ViewTestingSessionsCard";
+// import TestingSessionCard from "../../../components/TestingSessionCard";
 import "../../../styles/RetrieveTestScriptResults.css";
 import "../../../styles/InputComponents.css";
 import "../../../styles/CardComponents.css";
@@ -254,24 +255,11 @@ function RetrieveTestScriptTestingSessions() {
                     testScriptName={formProps["testScriptName"]}
                     isTestingSessionBeingDeleted={async.current}>
                     {testingSessions.length
-                        ? testingSessions.map((testingSession) => {
-                            return <div className="testing-session-card" key={new Date(testingSession.updatedAt)}>
-                                <TestingSessionCard
-                                    // key={new Date(testingSession.updatedAt)}
-                                    testingSessionID={testingSession._id}
-                                    submitter={testingSession.tester}
-                                    completed={testingSession.complete}
-                                    terminatedAtStep={testingSession.stoppedTestingAtStep}
-                                    result={testingSession.pass}
-                                    failedSteps={testingSession.failedSteps}
-                                    stepsWithMinorIssues={testingSession.stepsWithMinorIssues}
-                                    responsesWithAttachedContent={testingSession.responses}
-                                    submissionDate={new Date(testingSession.updatedAt)}
-                                    deleteTestingSession={deleteTestingSession}
-                                    isDeleteButtonDisabled={async.current}>
-                                </TestingSessionCard>
-                            </div>
-                        })
+                        ? <ViewTestingSessionsCard
+                            testingSessions={testingSessions}
+                            async={async.current}
+                            deleteTestingSession={deleteTestingSession}>
+                        </ViewTestingSessionsCard>
                         : <div></div>}
                 </CardWrapper >
                 : <div className="enter-valid-test-script-name">
