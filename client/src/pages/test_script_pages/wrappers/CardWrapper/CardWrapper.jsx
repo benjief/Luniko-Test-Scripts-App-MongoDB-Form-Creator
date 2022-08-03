@@ -17,6 +17,7 @@ function CardWrapper({
     pageContentOpacity,
     testScriptName,
     isTestingSessionBeingDeleted,
+    isStepBeingRemoved,
 }) {
 
     return (
@@ -59,21 +60,34 @@ function CardWrapper({
                                 </div>
                                 : children}
                         </div>
-                        : <div className={isUserModifyingSteps
-                            ? "add-or-modify-steps-container"
-                            : isUserDeletingTestScript
+                        : isUserModifyingSteps
+                            ? <div className="add-or-modify-steps-container"
+                                style={{ opacity: pageContentOpacity, transition: "0.3s" }}>
+                                {isStepBeingRemoved
+                                    ? < div className="fading-balls-container-testing-session-deletion">
+                                        <FadingBalls
+                                            className="spinner"
+                                            color="var(--lunikoMidGrey)"
+                                            width="12px"
+                                            height="12px"
+                                            duration="0.5s"
+                                        />
+                                    </div>
+                                    : <div className="add-or-modify-steps-card">
+                                        {children}
+                                    </div>}
+                            </div>
+                            : <div className={isUserDeletingTestScript
                                 ? "delete-test-script-container"
                                 : "create-or-modify-test-script-container"}>
-                            <div className={isUserModifyingSteps
-                                ? "add-or-modify-steps-card"
-                                : isUserDeletingTestScript
+                                <div className={isUserDeletingTestScript
                                     ? "delete-test-script-card"
                                     : isUserRetrievingTestingSessions
                                         ? "view-test-script-testing-sessions-card"
                                         : "create-or-modify-test-script-card"}>
-                                {children}
+                                    {children}
+                                </div>
                             </div>
-                        </div>
                     }
                 </div >
     )
@@ -93,6 +107,7 @@ CardWrapper.propTypes = {
     pageContentOpacity: PropTypes.string,
     testScriptName: PropTypes.string,
     isTestingSessionBeingDeleted: PropTypes.bool,
+    isStepBeingRemoved: PropTypes.bool,
     // isUserViewingTestingSessionDetails: PropTypes.bool,
     // setter: PropTypes.func,
     // myObject: PropTypes.shape({
@@ -114,6 +129,7 @@ CardWrapper.defaultProps = {
     pageContentOpacity: "100%",
     testScriptName: "",
     isTestingSessionBeingDeleted: false,
+    isStepBeingRemoved: false,
     // setter: null
 }
 

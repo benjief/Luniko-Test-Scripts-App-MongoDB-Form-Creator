@@ -16,6 +16,10 @@ function AddOrModifyStepsCard({
 }) {
     const expanded = true;
 
+    // React.useEffect(() => {
+    //     console.log(existingSteps);
+    // }, [existingSteps])
+
     return (
         <Card
             sx={{
@@ -72,6 +76,7 @@ AddOrModifyStepsCard.propTypes = {
     existingSteps: PropTypes.array, // TODO: make this more specific (see CardWrapper.jsx)
     addStep: PropTypes.func,
     isAddStepButtonDisabled: PropTypes.bool,
+    isRemoveStepButtonDisabled: PropTypes.bool,
     modifyStepInfo: PropTypes.func,
     removeStep: PropTypes.func,
     goBack: PropTypes.func,
@@ -80,7 +85,8 @@ AddOrModifyStepsCard.propTypes = {
 AddOrModifyStepsCard.defaultProps = {
     existingSteps: [],
     addStep: () => { },
-    isAddStepButtonDisabled: false,
+    isAddStepButtonDisabled: true,
+    isRemoveStepButtonDisabled: false,
     modifyStepInfo: () => { },
     removeStep: () => { },
     goBack: () => { },

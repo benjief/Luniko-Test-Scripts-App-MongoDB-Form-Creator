@@ -6,10 +6,10 @@
     border-radius: 10px;
     /* align-items: center; */
     /* margin-bottom: 20px; */
-    /* background-color: var(--lunikoLightGrey); */
+    background-color: var(--lunikoLightGrey);
     box-shadow: 1px 1px 4px rgba(43, 43, 43, 0.6);
     /* background-color: white; */
-    background-image: url("../img/background_pattern_card.png");
+    /* background-image: url("../img/background_pattern_card.png"); */
     transition: 500ms;
 }
 

@@ -39,9 +39,9 @@ function TestingSessionCard({
     const [expanded, setExpanded] = React.useState(false);
     const word = failedSteps.length > 1 ? "steps" : "step";
     const testingSessionRef = React.useRef(null);
-    const [opacity, setOpacity] = React.useState("100%");
-    const [height, setHeight] = React.useState(testingSessionRef.current?.clientHeight + "px");
-    const [marginBottom, setMarginBottom] = React.useState("20px");
+    const [opacity, setOpacity] = React.useState("100%"); // TODO: remove this
+    const [height, setHeight] = React.useState(testingSessionRef.current?.clientHeight + "px"); // TODO: remove this
+    const [marginBottom, setMarginBottom] = React.useState("20px"); // TODO: remove this
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -140,21 +140,21 @@ function TestingSessionCard({
                         </Typography>
                         <MaterialDialog
                             className="material-dialog-delete"
-                                exteriorButton={
-                                    <SubmitButton
-                                        className="delete-testing-session-button"
-                                        submitButtonText={"Delete"}
-                                        isSubmitButtonDisabled={isDeleteButtonDisabled}
+                            exteriorButton={
+                                <SubmitButton
+                                    className="delete-testing-session-button"
+                                    submitButtonText={"Delete"}
+                                    isSubmitButtonDisabled={isDeleteButtonDisabled}
                                         /*handleOnClick={true}
                                         handleOnClickFunction={requestTestScript}*/>
-                                    </SubmitButton>
-                                }
-                                inactiveButtonText="Cancel"
-                                displayActiveButton={true}
-                                activeButtonFunction={handleDeleteTestingSession}
-                                activeButtonText="Delete"
-                                dialogDescription={<p>Are you sure you want to permanently delete this testing session? This action cannot be undone.</p>}>
-                            </MaterialDialog>
+                                </SubmitButton>
+                            }
+                            inactiveButtonText="Cancel"
+                            displayActiveButton={true}
+                            activeButtonFunction={handleDeleteTestingSession}
+                            activeButtonText="Delete"
+                            dialogDescription={<p>Are you sure you want to permanently delete this testing session? This action cannot be undone.</p>}>
+                        </MaterialDialog>
                         {/* <button
                             className="delete-testing-session-button"
                             onClick={handleDeleteTestingSession}

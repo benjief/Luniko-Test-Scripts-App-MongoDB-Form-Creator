@@ -49,6 +49,8 @@ function CreateOrModifyTestScript() {
 
     const testScriptNamesAlreadyInDB = useRef([]);
     const isDataBeingFetched = useRef(false);
+    const [isStepBeingRemoved, setIsStepBeingRemoved] = useState(false);
+    const [pageContentOpacity, setPageContentOpacity] = useState("100%");
     const isTestScriptSubmitted = useRef(false);
     const wordForWriteErrorMessage = useRef(pageFunctionality === "create" ? "submit" : "update");
 
@@ -199,7 +201,6 @@ function CreateOrModifyTestScript() {
                 setRendering(false);
             }
         } else {
-            // console.log(alert);
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
             if (pageFunctionality === "modify" && !isValidTestScriptNameEntered) {
@@ -256,16 +257,30 @@ function CreateOrModifyTestScript() {
         setTestScriptSteps([...copyOfSteps]);
     }
 
-    const handleRemoveStep = async (stepInfo) => {
-        const stepNumber = stepInfo["number"];
-        let copyOfSteps = testScriptSteps;
-        copyOfSteps = copyOfSteps.filter(obj => {
-            return obj["number"] !== stepNumber
-        });
-        if (testScriptSteps.length) {
-            copyOfSteps = await updateStepNumbers(copyOfSteps, stepNumber);
-        }
-        setTestScriptSteps([...copyOfSteps]);
+    const handleRemoveStep = (stepInfo) => {
+        setPageContentOpacity("0%");
+        setTimeout(async () => {
+            setIsStepBeingRemoved(true);
+            setPageContentOpacity("100%");
+            const stepNumber = stepInfo["number"];
+            let copyOfSteps = testScriptSteps;
+            copyOfSteps = copyOfSteps.filter(obj => {
+                return obj["number"] !== stepNumber
+            });
+            if (testScriptSteps.length) {
+                copyOfSteps = await updateStepNumbers(copyOfSteps, stepNumber);
+            }
+            setTimeout(() => {
+                setTestScriptSteps([...copyOfSteps]);
+                setPageContentOpacity("0%");
+                setTimeout(() => {
+                    setIsStepBeingRemoved(false);
+                    setTimeout(() => {
+                        setPageContentOpacity("100%");
+                    }, 400);
+                }, 300);
+            }, 500);
+        }, 300);
     }
 
     const updateStepNumbers = (listOfSteps, startingStepNumber) => {
@@ -384,7 +399,9 @@ function CreateOrModifyTestScript() {
                     rendering={rendering}
                     alert={alert}
                     isErrorThrown={isErrorThrown}
-                    isUserModifyingSteps={isUserModifyingSteps}>
+                    isUserModifyingSteps={isUserModifyingSteps}
+                    pageContentOpacity={pageContentOpacity}
+                    isStepBeingRemoved={isStepBeingRemoved}>
                     {isUserModifyingSteps
                         ? <AddOrModifyStepsCard
                             existingSteps={testScriptSteps}
@@ -429,7 +446,8 @@ function CreateOrModifyTestScript() {
                                 </div>
                             </div>
                         </div>}
-                </Fragment>}
+                </Fragment>
+            }
         </Fragment >
     )
 };

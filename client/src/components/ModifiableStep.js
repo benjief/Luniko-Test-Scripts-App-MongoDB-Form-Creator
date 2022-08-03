@@ -32,20 +32,20 @@ function ModifiableStep({
     }
 
     const handleRemoveStep = () => {
-        setHeight(stepRef.current?.clientHeight + "px");
-        setIsRemoved(true);
-        if (!removeDisabled) {
-            setOpacity("0%");
-            setTimeout(() => {
-                setOverflow("hidden");
-                setMarginBottom("0");
-                setPadding("0");
-                setHeight("0");
-            }, 400);
-            setTimeout(() => {
-                removeStep({ number: stepNumber });
-            }, 800); // this seems to be the magic number so that the animation for removing a step remains smooth
-        }
+        // setHeight(stepRef.current?.clientHeight + "px");
+        // setIsRemoved(true);
+        // if (!removeDisabled) {
+        //     setOpacity("0%");
+        //     setTimeout(() => {
+        //         setOverflow("hidden");
+        //         setMarginBottom("0");
+        //         setPadding("0");
+        //         setHeight("0");
+        //     }, 400);
+        // setTimeout(() => {
+        removeStep({ number: stepNumber });
+        // }, 800); // this seems to be the magic number so that the animation for removing a step remains smooth
+        // }
     }
 
     React.useEffect(() => {

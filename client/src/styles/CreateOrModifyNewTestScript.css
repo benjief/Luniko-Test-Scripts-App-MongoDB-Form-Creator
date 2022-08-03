@@ -35,6 +35,10 @@
     width: 100%;
 }
 
+.test {
+    transition: 300ms;
+}
+
 .submit-test-script-name-button,
 .cancel-button,
 .add-or-modify-steps-button,
@@ -42,7 +46,6 @@
 .add-step-button,
 .back-button {
     padding: 10px;
-    /* margin-top: 5px; */
     margin-bottom: 10px;
     border: none;
     color: white;
@@ -102,4 +105,10 @@
 .error-div {
     height: "100vw";
     width: "100%";
+}
+
+.fading-balls-container-step-removal {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
