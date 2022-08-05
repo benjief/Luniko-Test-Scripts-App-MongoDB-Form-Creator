@@ -155,7 +155,7 @@ function RetrieveTestScriptTestingSessions() {
             }
             if (testScriptID.current.length && !testingSessions.length) {
                 setTimeout(() => {
-                    window.location.reload();
+                    navigate("/");
                 }, 3000)
             }
         }

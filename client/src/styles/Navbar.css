@@ -6,6 +6,8 @@
   z-index: 0;
 }
 
-.navbar-brand img {
+.navbar img {
   width: 50px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }

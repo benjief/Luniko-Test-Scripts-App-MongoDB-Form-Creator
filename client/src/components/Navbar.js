@@ -15,9 +15,9 @@ function NavBar() {
             fixed=""
             light>
             <Link to={'/'}>
-                <NavbarBrand>
-                    <img src={require("../img/logo_exp.png")} alt="Luniko"></img>
-                </NavbarBrand>
+                {/* <NavbarBrand> */}
+                <img src={require("../img/logo_exp.png")} alt="Luniko"></img>
+                {/* </NavbarBrand> */}
             </Link>
         </Navbar >
     );
