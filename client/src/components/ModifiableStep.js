@@ -90,7 +90,7 @@ function ModifiableStep({
                 <MaterialTextField
                     field="dataInputtedByUser"
                     label="Data Inputted by User"
-                    characterLimit={1000}
+                    characterLimit={500}
                     defaultValue={stepDataInputtedByUser}
                     placeholder="Data Inputted By User"
                     inputValue={handleModifyStepInfo}
