@@ -31,7 +31,7 @@ function MaterialImageDialog({
             setRendering(false);
             // setImageOpacity("100%");
             // setImageVisibility("visible");
-        }, 400);
+        }, 500);
     };
 
     const handleClose = () => {

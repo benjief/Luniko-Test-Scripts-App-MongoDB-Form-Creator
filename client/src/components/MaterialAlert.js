@@ -26,19 +26,17 @@ function MaterialAlert({
     );
 
     return (
-        <div>
-            <Snackbar
-                className={className}
-                open
-                anchorOrigin={{ vertical, horizontal }}
-                onClose={handleAlertClosed}
-                message={message}
-                action={action}
-                key={vertical + horizontal}
-                autoHideDuration={3000}
-            >
-            </Snackbar>
-        </div>
+        <Snackbar
+            className={className}
+            open
+            anchorOrigin={{ vertical, horizontal }}
+            onClose={handleAlertClosed}
+            message={message}
+            action={action}
+            key={vertical + horizontal}
+            autoHideDuration={3000}
+        >
+        </Snackbar>
     );
 }
 
@@ -54,7 +52,7 @@ MaterialAlert.defaultProps = {
     vertical: "top",
     horizontal: "center",
     message: "",
-    handleAlertClosed: () => {},
+    handleAlertClosed: () => { },
     className: "success-alert",
 }
 

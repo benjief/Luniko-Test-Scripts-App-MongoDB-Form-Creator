@@ -10,7 +10,7 @@ const { Step, TestingSession, StepResponse, TestScript } = require("./schemas/sc
 // const e = require("express");
 
 // import { test } from "./test";
-import { deleteStepResponseImage } from "./firebase/config";
+// import { deleteStepResponseImage } from "./firebase/config";
 
 // Middleware
 app.use(morgan("dev"));
@@ -282,8 +282,14 @@ const deleteStepsAssociatedWithTestScript = async (testScriptID) => {
     }
 }
 
+// const loadFirebaseConfig = async () => {
+//     const { deleteStepResponseImage } = await import("./firebase/config.mjs");
+// }
+
 const deleteImagesAssociatedWithTestingSession = async (testingSessionID) => {
     try {
+        const { deleteStepResponseImage } = await import("./firebase/config.mjs"); // dynamically import firebase function
+        console.log("module loaded");
         const stepResponsesToDelete = await StepResponse.find(
             { sessionID: testingSessionID },
             { "uploadedImage": 1 }
@@ -300,7 +306,12 @@ const deleteImagesAssociatedWithTestingSession = async (testingSessionID) => {
 }
 
 connect()
-    .then(() => app.listen(5000, () => {
-        console.log("Yay! Your server is running on http://localhost:5000!");
+    // .then(() => app.listen(5000, () => {
+    //     console.log("Yay! Your server is running on http://localhost:5000!");
+    // }))
+    // .catch(e => console.error(e));
+
+    .then(() => app.listen(process.env.PORT || 5000, () => {
+        console.log("Yay! Your server is running on port 5000!");
     }))
     .catch(e => console.error(e));

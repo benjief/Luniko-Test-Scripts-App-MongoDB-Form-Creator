@@ -100,7 +100,7 @@ function CreateOrModifyTestScript() {
         //     if (!async.current) {
         //         try {
         //             async.current = true;
-        //             await Axios.delete(`http://localhost:5000/delete-test-script/${idOfTestScriptToDelete}`, {
+        //             await Axios.delete(`https://test-scripts-app-creator.herokuapp.com/delete-test-script/${idOfTestScriptToDelete}`, {
         //                 timeout: 5000
         //             })
         //                 .then(res => {
@@ -117,7 +117,7 @@ function CreateOrModifyTestScript() {
             console.log("fetching existing test script names");
             try {
                 async.current = true;
-                await Axios.get("http://localhost:5000/get-test-script-names", {
+                await Axios.get("https://test-scripts-app-creator.herokuapp.com/get-test-script-names", {
                     timeout: 5000
                 })
                     .then(res => {
@@ -141,7 +141,7 @@ function CreateOrModifyTestScript() {
         const fetchTestScriptInformation = async (testScriptName) => {
             try {
                 async.current = true;
-                await Axios.get(`http://localhost:5000/get-test-script/${testScriptName}`, {
+                await Axios.get(`https://test-scripts-app-creator.herokuapp.com/get-test-script/${testScriptName}`, {
                     timeout: 5000
                 })
                     .then(res => {
@@ -172,7 +172,7 @@ function CreateOrModifyTestScript() {
             if (!async.current) {
                 try {
                     async.current = true;
-                    await Axios.get(`http://localhost:5000/get-test-script-steps/${testScriptID}`, {
+                    await Axios.get(`https://test-scripts-app-creator.herokuapp.com/get-test-script-steps/${testScriptID}`, {
                         timeout: 5000
                     })
                         .then(res => {
@@ -334,7 +334,7 @@ function CreateOrModifyTestScript() {
         async.current = true;
         try {
             removeStepsWithoutADescription();
-            await Axios.post("http://localhost:5000/add-test-script", {
+            await Axios.post("https://test-scripts-app-creator.herokuapp.com/add-test-script", {
                 testScriptOwner: { firstName: formProps["ownerFirstName"], lastName: formProps["ownerLastName"] },
                 testScriptName: formProps["testScriptName"],
                 testScriptDescription: formProps["testScriptDescription"],
@@ -356,7 +356,7 @@ function CreateOrModifyTestScript() {
         async.current = true;
         try {
             removeStepsWithoutADescription();
-            await Axios.put("http://localhost:5000/update-test-script", {
+            await Axios.put("https://test-scripts-app-creator.herokuapp.com/update-test-script", {
                 testScriptOwner: { firstName: formProps["ownerFirstName"], lastName: formProps["ownerLastName"] },
                 testScriptName: formProps["testScriptName"],
                 testScriptDescription: formProps["testScriptDescription"],

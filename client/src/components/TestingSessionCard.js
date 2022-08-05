@@ -84,7 +84,7 @@ function TestingSessionCard({
                 <Typography paragraph className="testing-session-result">
                     <span id="testing-session-result-header">
                         <strong>Result</strong>
-                        <img src={result ? completed ? require("../img/checkmark_icon_green.png") : require("../img/checkmark_icon_yellow.png") : require("../img/x_icon_red.png")} alt={result ? completed ? "incomplete" : "pass" : "fail"} /> {/*TODO: check this*/}
+                        <img src={result ? completed ? require("../img/checkmark_icon_green.png") : require("../img/checkmark_icon_green_hollow.png") : require("../img/x_icon_red.png")} alt={result ? completed ? "incomplete" : "pass" : "fail"} /> {/*TODO: check this*/}
                     </span>
                     <span id="testing-session-result-main-contents">
                         {result ? completed ? "pass" : "incomplete" : completed ? "fail" : "fail, incomplete"}

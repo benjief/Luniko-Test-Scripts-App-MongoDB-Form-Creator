@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState, useRef, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useValidationErrorUpdate } from "../Context/ValidationErrorContext";
 import Axios from "axios";
 import LoadingWrapper from "../wrappers/LoadingWrapper";
@@ -40,6 +41,8 @@ function RetrieveTestScriptTestingSessions() {
     const loadErrorMessage = "Apologies! We've encountered an error. Please attempt to re-load this page.";
     const deleteErrorMessage = "Apologies! We were unable to remove the requested testing session. Please try again.";
 
+    const navigate = useNavigate();
+
     const handleError = useCallback((errorType) => {
         setIsErrorThrown(true);
         // alertType.current = "error-alert";
@@ -63,7 +66,7 @@ function RetrieveTestScriptTestingSessions() {
 
     const handleAlertClosed = () => {
         console.log("closing alert");
-        window.location.reload();
+        navigate("/");
         setIsErrorThrown(false); // TODO: test this... is it needed anymore?
     }
 
@@ -78,7 +81,7 @@ function RetrieveTestScriptTestingSessions() {
             console.log("fetching existing test script names");
             try {
                 async.current = true;
-                await Axios.get("http://localhost:5000/get-test-script-names", {
+                await Axios.get("https://test-scripts-app-creator.herokuapp.com/get-test-script-names", {
                     timeout: 5000
                 })
                     .then(res => {
@@ -101,7 +104,7 @@ function RetrieveTestScriptTestingSessions() {
         const fetchTestScriptID = async (testScriptName) => {
             try {
                 async.current = true;
-                await Axios.get(`http://localhost:5000/get-test-script/${testScriptName}`, {
+                await Axios.get(`https://test-scripts-app-creator.herokuapp.com/get-test-script/${testScriptName}`, {
                     timeout: 5000
                 })
                     .then(res => {
@@ -122,7 +125,7 @@ function RetrieveTestScriptTestingSessions() {
         const fetchTestScriptTestingSessions = async () => {
             try {
                 async.current = true;
-                await Axios.get(`http://localhost:5000/get-test-script-testing-sessions/${testScriptID.current}`, {
+                await Axios.get(`https://test-scripts-app-creator.herokuapp.com/get-test-script-testing-sessions/${testScriptID.current}`, {
                     timeout: 5000
                 })
                     .then(res => {
@@ -189,7 +192,7 @@ function RetrieveTestScriptTestingSessions() {
                 setTimeout(async () => {
                     async.current = true;
                     setPageContentOpacity("100%");
-                    await Axios.delete(`http://localhost:5000/delete-testing-session/${testingSessionID}`, {
+                    await Axios.delete(`https://test-scripts-app-creator.herokuapp.com/delete-testing-session/${testingSessionID}`, {
                         timeout: 5000
                     })
                         .then(res => {
