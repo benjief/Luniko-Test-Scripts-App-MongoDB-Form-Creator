@@ -206,10 +206,15 @@ function CreateOrModifyTestScript() {
             if (pageFunctionality === "modify" && !isValidTestScriptNameEntered) {
                 formProps["testScriptName"].trim().length ? setIsRequestTestScriptButtonDisabled(false) : setIsRequestTestScriptButtonDisabled(true);
             } else if (!isTestScriptSubmitted.current) {
-                (formProps["testScriptName"].trim() !== "" && formProps["testScriptDescription"].trim() !== "" && formProps["testScriptPrimaryWorkstream"].trim() !== ""
-                    && formProps["ownerFirstName"].trim() !== "" && formProps["ownerLastName"].trim() !== "" /*&& formProps["ownerEmail"] !== ""*/)
-                    ? setSubmitOrModifyButtonDisabled(false)
-                    : setSubmitOrModifyButtonDisabled(true);
+                if (formProps["testScriptName"].trim() !== "" && formProps["testScriptDescription"].trim() !== "" && formProps["testScriptPrimaryWorkstream"].trim() !== ""
+                    && formProps["ownerFirstName"].trim() !== "" && formProps["ownerLastName"].trim() !== "") {
+                    setIsAddOrModifyStepsButtonDisabled(false);
+                    setSubmitOrModifyButtonDisabled(false);
+
+                } else {
+                    setIsAddOrModifyStepsButtonDisabled(true);
+                    setSubmitOrModifyButtonDisabled(true);
+                }
                 testScriptSteps.length && !testScriptSteps.slice(-1)[0]["description"].trim().length
                     ? setAddStepButtonDisabled(true)
                     : setAddStepButtonDisabled(false);
