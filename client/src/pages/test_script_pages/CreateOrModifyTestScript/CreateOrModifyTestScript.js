@@ -35,9 +35,9 @@ function CreateOrModifyTestScript() {
     const cardChanged = useRef(false);
     const [isUserModifyingSteps, setIsUserModifyingSteps] = useState(false);
     const [isAddOrModifyStepsButtonDisabled, setIsAddOrModifyStepsButtonDisabled] = useState(false);
-    const [isAddStepButtonDisabled, setAddStepButtonDisabled] = useState(false);
+    const [isAddStepButtonDisabled, setIsAddStepButtonDisabled] = useState(false);
     const [isRemoveStepButtonDisabled, setRemoveStepButtonDisabled] = useState(true);
-    const [isSubmitOrModifyButtonDisabled, setSubmitOrModifyButtonDisabled] = useState(true);
+    const [isSubmitOrModifyButtonDisabled, setIsSubmitOrModifyButtonDisabled] = useState(true);
     const testScriptID = useRef("");
     const [displayFadingBalls, setDisplayFadingBalls] = useState(false);
     const async = useRef(false);
@@ -209,22 +209,24 @@ function CreateOrModifyTestScript() {
                 if (formProps["testScriptName"].trim() !== "" && formProps["testScriptDescription"].trim() !== "" && formProps["testScriptPrimaryWorkstream"].trim() !== ""
                     && formProps["ownerFirstName"].trim() !== "" && formProps["ownerLastName"].trim() !== "") {
                     setIsAddOrModifyStepsButtonDisabled(false);
-                    setSubmitOrModifyButtonDisabled(false);
-
+                    setIsSubmitOrModifyButtonDisabled(false);
                 } else {
-                    setIsAddOrModifyStepsButtonDisabled(true);
-                    setSubmitOrModifyButtonDisabled(true);
+                    pageFunctionality === "modify" ? setIsAddOrModifyStepsButtonDisabled(false) : setIsAddOrModifyStepsButtonDisabled(true);
+                    setIsSubmitOrModifyButtonDisabled(true);
                 }
                 testScriptSteps.length && !testScriptSteps.slice(-1)[0]["description"].trim().length
-                    ? setAddStepButtonDisabled(true)
-                    : setAddStepButtonDisabled(false);
+                    ? setIsAddStepButtonDisabled(true)
+                    : setIsAddStepButtonDisabled(false);
                 testScriptSteps.length === 1
                     ? setRemoveStepButtonDisabled(true)
                     : setRemoveStepButtonDisabled(false);
                 // TODO: look into abstracting functions in useEffect hook... can this be done?
             }
         }
-    }, [rendering, pageFunctionality, isDataBeingFetched, cardChanged, isUserModifyingSteps, isValidTestScriptNameEntered, formProps, testScriptSteps, isAddStepButtonDisabled, isSubmitOrModifyButtonDisabled, isTestScriptSubmitted, handleError, setIsNewlyAddedToFalseForExistingSteps]);
+    }, [rendering, pageFunctionality, isDataBeingFetched, cardChanged, isUserModifyingSteps, isValidTestScriptNameEntered,
+        formProps, testScriptSteps, isAddStepButtonDisabled, isSubmitOrModifyButtonDisabled, isTestScriptSubmitted,
+        handleError, setIsNewlyAddedToFalseForExistingSteps]
+    );
 
     const handleChangeCard = () => {
         setRendering(true);
@@ -301,7 +303,7 @@ function CreateOrModifyTestScript() {
                 setIsValidTestScriptNameEntered(true);
                 isDataBeingFetched.current = false;
                 setRendering(true);
-                setSubmitOrModifyButtonDisabled(true);
+                setIsSubmitOrModifyButtonDisabled(true);
             } else {
                 invalidTestScriptNameError("Invalid test script name");
             }
@@ -321,7 +323,7 @@ function CreateOrModifyTestScript() {
 
     const handleSubmitOrUpdate = () => {
         isTestScriptSubmitted.current = true;
-        setSubmitOrModifyButtonDisabled(true);
+        setIsSubmitOrModifyButtonDisabled(true);
         setIsAddOrModifyStepsButtonDisabled(true);
         setDisplayFadingBalls(true);
         runWriteAsyncFunctions();
