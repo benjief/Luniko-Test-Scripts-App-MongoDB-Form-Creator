@@ -43,7 +43,7 @@ function CreateOrModifyTestScriptCard({
             }}>
             <div className="card-content">
                 <CardHeader
-                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", textAlign: "center"  }}
+                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", textAlign: "center" }}
                     title={<strong>Test Script Form</strong>} />
                 <Collapse in={true} timeout="auto" unmountOnExit>
                     <CardContent>
@@ -58,7 +58,7 @@ function CreateOrModifyTestScriptCard({
                             required={true}
                             showCharCounter={isModificationCard ? false : true}
                             requiresTextValidation={true}
-                            isValidationCaseSensitive={false}
+                            isTextValidationCaseSensitive={false}
                             invalidInputs={invalidTestScriptNames}
                             invalidInputMsg="Test script name already exists"
                             field="testScriptName" >

@@ -118,7 +118,7 @@ function MaterialTextField({
     setValue(value);
     inputValue({ field: field, value: "" });
     // if (showCharCounter && value) {
-      setInputLength(0); // TODO: test this - seems to work in specific data inputted by user scenario, but not sure about other text fields
+    setInputLength(0); // TODO: test this - seems to work in specific data inputted by user scenario, but not sure about other text fields
     // }
     if (required) {
       setErrorEnabled(true);
