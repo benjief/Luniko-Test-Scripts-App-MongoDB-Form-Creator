@@ -15,8 +15,8 @@ function ModifiableStep({
     const [height, setHeight] = React.useState(isNewlyAdded ? stepNumber === 1 ? "49px" : "0" : "432px");
     const [padding, setPadding] = React.useState(isNewlyAdded ? "0" : "10px");
     const [marginBottom, setMarginBottom] = React.useState(isNewlyAdded ? "0" : "30px");
-    const [overflow, setOverflow] = React.useState("auto");
-    const [isRemoved, setIsRemoved] = React.useState(false);
+    // const [overflow, setOverflow] = React.useState("auto");
+    // const [isRemoved, setIsRemoved] = React.useState(false);
     const stepRef = React.useRef(null);
 
     const handleModifyStepInfo = (returnedObject) => {
@@ -49,7 +49,7 @@ function ModifiableStep({
     }
 
     React.useEffect(() => {
-        if (!isRemoved && isNewlyAdded) {
+        if (isNewlyAdded) {
             setHeight("432px");
             setMarginBottom("30px");
             setPadding("10px");
@@ -58,7 +58,7 @@ function ModifiableStep({
                 setHeight("auto");
             }, 400);
         }
-    }, [isRemoved, isNewlyAdded]);
+    }, [isNewlyAdded]);
 
     return (
         <div className="step-container"
@@ -68,7 +68,7 @@ function ModifiableStep({
                 height: height,
                 padding: padding,
                 marginBottom: marginBottom,
-                overflow: overflow
+                // overflow: overflow
             }}>
             <div className="step-number">
                 Step {stepNumber}

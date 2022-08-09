@@ -9,16 +9,17 @@ function AddOrModifyStepsCard({
     existingSteps,
     addStep,
     isAddStepButtonDisabled,
+    isRemoveStepButtonDisabled,
     modifyStepInfo,
     removeStep,
-    isRemoveStepButtonDisabled,
     goBack,
 }) {
     const expanded = true;
 
     // React.useEffect(() => {
-    //     console.log(existingSteps);
-    // }, [existingSteps])
+    //     // console.log(cardRef.current.scrollTop);
+    //     cardRef.current.scrollTop = cardScrollPosition;
+    // }, [cardRef])
 
     return (
         <Card
