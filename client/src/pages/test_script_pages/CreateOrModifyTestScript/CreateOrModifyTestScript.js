@@ -7,7 +7,7 @@ import CardWrapper from "../wrappers/CardWrapper/CardWrapper";
 import CreateOrModifyTestScriptCard from "../../../components/CreateOrModifyTestScriptCard";
 import AddOrModifyStepsCard from "../../../components/AddOrModifyStepsCard";
 import EnterTestScriptNameCard from "../../../components/EnterTestScriptNameCard";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 import Axios from "axios";
 import "../../../styles/CreateOrModifyNewTestScript.css";
 import "../../../styles/InputComponents.css";
@@ -36,7 +36,7 @@ function CreateOrModifyTestScript() {
     const [isUserModifyingSteps, setIsUserModifyingSteps] = useState(false);
     const [isAddOrModifyStepsButtonDisabled, setIsAddOrModifyStepsButtonDisabled] = useState(false);
     const [isAddStepButtonDisabled, setIsAddStepButtonDisabled] = useState(false);
-    const [isRemoveStepButtonDisabled, setRemoveStepButtonDisabled] = useState(true);
+    const [isRemoveStepButtonDisabled, setIsRemoveStepButtonDisabled] = useState(true);
     const [isSubmitOrModifyButtonDisabled, setIsSubmitOrModifyButtonDisabled] = useState(true);
     const testScriptID = useRef("");
     const [displayFadingBalls, setDisplayFadingBalls] = useState(false);
@@ -218,8 +218,8 @@ function CreateOrModifyTestScript() {
                     ? setIsAddStepButtonDisabled(true)
                     : setIsAddStepButtonDisabled(false);
                 testScriptSteps.length === 1
-                    ? setRemoveStepButtonDisabled(true)
-                    : setRemoveStepButtonDisabled(false);
+                    ? setIsRemoveStepButtonDisabled(true)
+                    : setIsRemoveStepButtonDisabled(false);
                 // TODO: look into abstracting functions in useEffect hook... can this be done?
             }
         }
@@ -242,43 +242,74 @@ function CreateOrModifyTestScript() {
     const handleAddStep = () => {
         // console.log("adding step");
         let stepCount = testScriptSteps.length;
-        let uniqueID = uuidv4();
-        let newStep = { number: stepCount + 1, description: "", uniqueID: uniqueID, isNewlyCreated: true };
+        // let uniqueID = uuidv4();
+        let newStep = { number: stepCount + 1, description: "", isNewlyAdded: true };
         let tempArray = testScriptSteps;
         tempArray.push(newStep);
         setTestScriptSteps([...tempArray]);
     }
 
-    const handleUpdateStepInfo = (updateInfo) => {
+    const handleUpdateStepInfo = useCallback((updateInfo) => {
         // console.log(updateInfo);
         const stepNumber = updateInfo["number"];
         const updatedDescription = updateInfo["description"];
         const updatedDataInputtedByUser = updateInfo["dataInputtedByUser"];
-        let copyOfSteps = testScriptSteps;
-        let stepToUpdate = copyOfSteps.filter(obj => {
-            return obj["number"] === stepNumber
+        setTestScriptSteps(prevTestScriptSteps => {
+            // if (something === 1) return prevTestScriptSteps - use this if you don't want to re-render a component (will just return original)
+            let copyOfSteps = [...prevTestScriptSteps];
+            let indexOfStepToUpdate = copyOfSteps.findIndex(obj => { // original step
+                return obj["number"] === stepNumber
+            });
+            const originalStep = copyOfSteps[indexOfStepToUpdate];
+            const updatedStep = { // new object - no risk of screwing up original object (functional programming - no updating something outside of fcn)
+                ...originalStep,
+                description: updatedDescription,
+                dataInputtedByUser: updatedDataInputtedByUser
+            };
+            copyOfSteps.splice(indexOfStepToUpdate, 1, updatedStep); // updates array in place (doesn't return a new array - code on copy)
+            return copyOfSteps;
         });
-        stepToUpdate = stepToUpdate[0];
-        stepToUpdate["description"] = updatedDescription;
-        stepToUpdate["dataInputtedByUser"] = updatedDataInputtedByUser;
-        setTestScriptSteps([...copyOfSteps]);
+    }, [])
+
+    // useEffect(() => {
+    //     if (testScriptSteps.length) //state
+    //         setTestScriptSteps([1]) //setter
+    // }, [testScriptSteps])
+
+    const updateStepNumbers = (listOfSteps, newStartingIndex) => {
+        console.log("updating steps:", listOfSteps);
+        console.log("updating step numbers");
+        for (let i = 0; i < listOfSteps.length; i++) {
+            listOfSteps[i]["number"] = newStartingIndex++;
+        }
+        console.log("step numbers updated");
+        return listOfSteps;
     }
 
-    const handleRemoveStep = (stepInfo) => {
+    const updateTestScriptSteps = useCallback((startingIndex) => {
+        setTestScriptSteps(prevTestScriptSteps => {
+            let copyOfSteps = [...prevTestScriptSteps];
+            let stepsToKeep = copyOfSteps.slice(0, startingIndex - 1);
+            let stepsToReturn;
+            if (startingIndex < copyOfSteps.length) {
+                let stepsToBeUpdated = copyOfSteps.slice(startingIndex);
+                let updatedSteps = updateStepNumbers(stepsToBeUpdated, startingIndex);
+                stepsToReturn = stepsToKeep.concat(updatedSteps);
+            } else {
+                stepsToReturn = stepsToKeep;
+            }
+            return stepsToReturn;
+        });
+    }, [])
+
+    const handleRemoveStep = useCallback((stepInfo) => {
         setPageContentOpacity("0%");
-        setTimeout(async () => {
+        setTimeout(() => {
             setIsStepBeingRemoved(true);
             setPageContentOpacity("100%");
-            const stepNumber = stepInfo["number"];
-            let copyOfSteps = testScriptSteps;
-            copyOfSteps = copyOfSteps.filter(obj => {
-                return obj["number"] !== stepNumber
-            });
-            if (testScriptSteps.length) {
-                copyOfSteps = await updateStepNumbers(copyOfSteps, stepNumber);
-            }
+            const indexOfFirstStepToBeUpdated = stepInfo["number"];
             setTimeout(() => {
-                setTestScriptSteps([...copyOfSteps]);
+                updateTestScriptSteps(indexOfFirstStepToBeUpdated);
                 setPageContentOpacity("0%");
                 setTimeout(() => {
                     setIsStepBeingRemoved(false);
@@ -288,14 +319,7 @@ function CreateOrModifyTestScript() {
                 }, 300);
             }, 500);
         }, 300);
-    }
-
-    const updateStepNumbers = (listOfSteps, startingStepNumber) => {
-        for (let i = startingStepNumber - 1; i < listOfSteps.length; i++) {
-            listOfSteps[i]["number"]--;
-        }
-        return listOfSteps;
-    }
+    }, [updateTestScriptSteps])
 
     const handleRequestTestscript = () => {
         if (!isValidTestScriptNameEntered) {
@@ -460,3 +484,4 @@ function CreateOrModifyTestScript() {
 };
 
 export default CreateOrModifyTestScript;
+

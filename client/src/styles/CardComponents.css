@@ -23,9 +23,9 @@
     /* align-items: center; */
 }
 
-.MuiPaper-root::-webkit-scrollbar {
+/* .MuiPaper-root::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .MuiCardHeader-root {
     padding-top: 20px !important;

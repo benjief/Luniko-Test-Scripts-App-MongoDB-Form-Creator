@@ -41,8 +41,9 @@ function AddOrModifyStepsCard({
                     <CardContent>
                         {existingSteps.length
                             ? existingSteps.map((step) => {
+                                // console.log(step);
                                 return <ModifiableStep
-                                    key={step.uniqueID ? step.uniqueID : step._id}
+                                    key={step.number}
                                     stepNumber={step.number}
                                     stepDescription={step.description}
                                     stepDataInputtedByUser={step.dataInputtedByUser}

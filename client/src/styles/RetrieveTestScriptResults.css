@@ -41,9 +41,9 @@
     overflow-y: scroll;
 } */
 
-.view-test-script-testing-sessions-container::-webkit-scrollbar {
+/* .view-test-script-testing-sessions-container::-webkit-scrollbar {
     display: none;
-}
+} */
 
 /* .testing-session-card .card-content {
     background-image: url("../img/background_pattern_card.png");

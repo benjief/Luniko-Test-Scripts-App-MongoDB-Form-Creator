@@ -41,14 +41,15 @@ const testingSession = new mongoose.Schema({
     },
     complete: {
         type: Boolean,
-        default: false
+        default: false,
+        required: true
     },
     stoppedTestingAtStep: {
         type: Number,
     },
     failedSteps: {
         type: Array,
-        default: [] 
+        default: []
     },
     stepsWithMinorIssues: {
         type: Array,
@@ -120,7 +121,7 @@ testScript.pre('deleteOne', function (next) {
 });
 
 testingSession.pre('deleteOne', function (next) {
-    StepResponse.deleteMany({sessionID: this.getQuery()._id}).exec();
+    StepResponse.deleteMany({ sessionID: this.getQuery()._id }).exec();
     next();
 })
 

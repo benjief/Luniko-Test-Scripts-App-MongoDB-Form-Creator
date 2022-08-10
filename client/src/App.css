@@ -20,18 +20,22 @@
 }
 
 ::-webkit-scrollbar {
+  display: none;
+}
+
+/* ::-webkit-scrollbar {
   width: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: rgba(153, 153, 153, 0.589);
-  /* border: thin solid gray; */
+  border: thin solid gray;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #7d7d7d;
-}
+} */
 
 textarea:focus {
   outline: none;

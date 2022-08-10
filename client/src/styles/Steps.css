@@ -13,9 +13,9 @@
     transition: 500ms;
 }
 
-.step-container::-webkit-scrollbar {
+/* .step-container::-webkit-scrollbar {
     display: none;
-}
+} */
 
 /* .step-container:first-of-type {
     margin-top: 5px;

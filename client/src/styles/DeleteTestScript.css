@@ -9,9 +9,9 @@
     scrollbar-width: none;
 }
 
-.delete-test-script::-webkit-scrollbar {
+/* .delete-test-script::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .delete-test-script-container {
     display: flex;

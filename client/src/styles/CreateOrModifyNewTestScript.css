@@ -11,11 +11,11 @@
     scrollbar-width: none;
 }
 
-.enter-valid-test-script-name::-webkit-scrollbar,
+/* .enter-valid-test-script-name::-webkit-scrollbar,
 .create-or-modify-test-script::-webkit-scrollbar,
 .add-or-modify-steps::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .enter-valid-test-script-name-container,
 .create-or-modify-test-script-container,

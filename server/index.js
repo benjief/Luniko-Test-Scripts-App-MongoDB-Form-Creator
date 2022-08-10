@@ -45,6 +45,7 @@ app.post("/add-test-script", async (req, res) => {
 
 app.get("/get-test-script-names", async (req, res) => {
     try {
+        console.log("test");
         const testScriptNames = await TestScript.find(
             {},
             { "name_lowercase": 1, "_id": 0 }

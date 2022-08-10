@@ -9,9 +9,9 @@
     scrollbar-width: none;
 }
 
-.landing-page-options::-webkit-scrollbar {
+/* .landing-page-options::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .landing-page-options-container {
     display: flex;

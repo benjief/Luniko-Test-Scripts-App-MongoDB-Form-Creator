@@ -9,9 +9,9 @@
     scrollbar-width: none;
 }
 
-.alert-container::-webkit-scrollbar {
+/* .alert-container::-webkit-scrollbar {
     display: none;
-}
+} */
 
 .alert-container .MuiSnackbar-root {
     min-width: 98% !important;

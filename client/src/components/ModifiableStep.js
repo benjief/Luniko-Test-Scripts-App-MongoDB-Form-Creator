@@ -19,7 +19,7 @@ function ModifiableStep({
     // const [isRemoved, setIsRemoved] = React.useState(false);
     const stepRef = React.useRef(null);
 
-    const handleModifyStepInfo = (returnedObject) => {
+    const handleModifyStepInfo = React.useCallback((returnedObject) => { // without useCallback, get new function every time the component re-renders
         let updatedStep = { number: stepNumber };
         if (returnedObject.field === "description") {
             updatedStep["description"] = returnedObject["value"];
@@ -29,7 +29,7 @@ function ModifiableStep({
             updatedStep["description"] = stepDescription;
         }
         modifyStepInfo(updatedStep);
-    }
+    }, [modifyStepInfo, stepDataInputtedByUser, stepDescription, stepNumber]) // function will only be re-created when one of these dependent variables changes
 
     const handleRemoveStep = () => {
         // setHeight(stepRef.current?.clientHeight + "px");
