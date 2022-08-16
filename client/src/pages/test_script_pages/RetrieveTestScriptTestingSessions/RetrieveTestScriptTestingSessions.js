@@ -26,7 +26,9 @@ function RetrieveTestScriptTestingSessions() {
     });
     const [isValidTestScriptNameEntered, setIsValidTestScriptNameEntered] = useState(false);
     const testScriptID = useRef("");
-    const [testingSessions, setTestingSessions] = useState([]);
+    // const [testingSessions, setTestingSessions] = useState([]);
+    const testingSessions = useRef([]);
+    const [numTestingSessions, setNumTestingSessions] = useState(testingSessions.current.length);
     const async = useRef(false);
     const [isErrorThrown, setIsErrorThrown] = useState(false);
     const [alert, setAlert] = useState(false);
@@ -131,7 +133,9 @@ function RetrieveTestScriptTestingSessions() {
                     .then(res => {
                         // console.log(res.data);
                         async.current = false;
-                        setTestingSessions(res.data);
+                        // setTestingSessions([...res.data]);
+                        testingSessions.current = [...res.data];
+                        setNumTestingSessions(testingSessions.current.length);
                     })
             } catch (e) {
                 console.log(e);
@@ -153,13 +157,13 @@ function RetrieveTestScriptTestingSessions() {
             if (!isValidTestScriptNameEntered) {
                 formProps["testScriptName"].trim().length ? setIsRequestTestScriptButtonDisabled(false) : setIsRequestTestScriptButtonDisabled(true);
             }
-            if (testScriptID.current.length && !testingSessions.length) {
+            if (testScriptID.current.length && !numTestingSessions) {
                 setTimeout(() => {
                     navigate("/");
                 }, 3000)
             }
         }
-    }, [rendering, isDataBeingFetched, formProps, isValidTestScriptNameEntered, testScriptID, testingSessions.length, navigate, handleError]);
+    }, [rendering, isDataBeingFetched, formProps, isValidTestScriptNameEntered, testScriptID, numTestingSessions, navigate, handleError]);
 
     const handleRequestTestScript = () => { // TODO: make this more direct
         if (!isValidTestScriptNameEntered) {
@@ -209,30 +213,34 @@ function RetrieveTestScriptTestingSessions() {
         }
     }
 
-    const updateTestingSessionsAfterRemoval = (testingSessionID) => {
+    const filterTestingSessions = (testingSessionID) => {
+        let copyOfTestingSessions = testingSessions.current.filter((val) => {
+            return val._id !== testingSessionID;
+        });
+        testingSessions.current = copyOfTestingSessions;
+        setNumTestingSessions(testingSessions.current.length);
+    }
+
+    const updateTestingSessionsAfterRemoval = useCallback((testingSessionID) => {
         setTimeout(() => {
             setPageContentOpacity("0%");
-            if (testingSessions.length <= 1) {
+            if (numTestingSessions <= 1) {
                 setPageMessageOpacity("0%");
                 setTimeout(() => {
-                    setTestingSessions(testingSessions.filter((val) => {
-                        return val._id !== testingSessionID;
-                    }));
+                    filterTestingSessions(testingSessionID);
                 }, 300);
                 setTimeout(() => {
                     setPageMessageOpacity("100%");
                 }, 300);
             } else {
-                setTestingSessions(testingSessions.filter((val) => {
-                    return val._id !== testingSessionID;
-                }));
+                filterTestingSessions(testingSessionID);
             }
             setTimeout(() => {
                 async.current = false;
                 setPageContentOpacity("100%");
             }, 300);
         }, 500);
-    }
+    }, [numTestingSessions])
 
     return (
         <Fragment>
@@ -252,14 +260,14 @@ function RetrieveTestScriptTestingSessions() {
                     rendering={rendering}
                     isErrorThrown={isErrorThrown}
                     isUserRetrievingTestingSessions={true}
-                    doTestingSessionsExist={testingSessions.length ? true : false}
+                    doTestingSessionsExist={numTestingSessions ? true : false}
                     pageMessageOpacity={pageMessageOpacity}
                     pageContentOpacity={pageContentOpacity}
                     testScriptName={formProps["testScriptName"]}
                     isTestingSessionBeingDeleted={async.current}>
-                    {testingSessions.length
+                    {numTestingSessions
                         ? <ViewTestingSessionsCard
-                            testingSessions={testingSessions}
+                            testingSessions={testingSessions.current}
                             async={async.current}
                             deleteTestingSession={deleteTestingSession}>
                         </ViewTestingSessionsCard>

@@ -22,7 +22,7 @@
 }
 
 .enter-valid-load-sheet-name .MuiInputLabel-shrink {
-    background-color: var(--lunikoDarkGrey) !important;
+    background-color: var(--lunikoMidGrey) !important;
 }
 
 .MuiInputLabel-root.Mui-error {

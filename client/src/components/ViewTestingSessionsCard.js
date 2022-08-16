@@ -25,7 +25,7 @@ function ViewTestingSessionsCard({
             <Card
             className="view-testing-sessions-card"
                 sx={{
-                    height: "calc(100vh - 216.52px)",
+                    maxHeight: "calc(100vh - 216.52px)",
                     overflowY: "scroll",
                     borderRadius: "10px",
                     boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
