@@ -84,7 +84,7 @@
 .cancel-button:disabled,
 .add-or-modify-steps-button:disabled,
 .submit-or-update-test-script-button:disabled {
-/* .add-step-button:disabled .back-button:disabled { */
+    /* .add-step-button:disabled .back-button:disabled { */
     background-color: #BFBFBF;
 }
 

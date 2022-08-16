@@ -35,8 +35,9 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #7d7d7d;
-} */
+}
 
+*/
 textarea:focus {
   outline: none;
 }

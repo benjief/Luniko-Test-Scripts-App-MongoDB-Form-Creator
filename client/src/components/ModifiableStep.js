@@ -96,7 +96,7 @@ function ModifiableStep({
                     placeholder="Description"
                     inputValue={handleModifyStepInfo}
                     multiline={true}
-                    required={true}
+                    // required={true}
                     showCharCounter={true}>
                 </MaterialTextField>
             </div>
