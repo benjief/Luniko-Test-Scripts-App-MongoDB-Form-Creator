@@ -36,7 +36,7 @@ function CreateOrModifyTestScript() {
     const testScriptSteps = useRef([{ number: 1, description: "", dataInputtedByUser: "" }]);
     const [numStepsInTestScript, setNumStepsInTestScript] = useState(testScriptSteps.current.length);
     const cardChanged = useRef(false);
-    const [cardScrollPosition, setCardScrollPosition] = useState("0px");
+    const [cardScrollPosition, setCardScrollPosition] = useState(0);
     const [isUserModifyingSteps, setIsUserModifyingSteps] = useState(false);
     const [isAddOrModifyStepsButtonDisabled, setIsAddOrModifyStepsButtonDisabled] = useState(false);
     // const [isAddStepButtonDisabled, setIsAddStepButtonDisabled] = useState(false);
@@ -338,7 +338,7 @@ function CreateOrModifyTestScript() {
         let stepsWithUpdatedNumbers = updateStepNumbers(stepsToBeUpdated, insertedAtStep + 2);
         stepsToReturn = unchangedSteps.concat(stepsWithUpdatedNumbers);
         testScriptSteps.current = [...stepsToReturn];
-        setCardScrollPosition(String(parseInt(cardScrollPosition) + 480));
+        setCardScrollPosition(cardScrollPosition + 480);
         console.log("updated steps after add:", testScriptSteps.current);
         // return stepsToReturn;
         // });

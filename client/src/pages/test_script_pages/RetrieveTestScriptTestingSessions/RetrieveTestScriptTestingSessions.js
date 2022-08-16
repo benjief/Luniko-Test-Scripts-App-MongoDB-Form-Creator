@@ -25,6 +25,7 @@ function RetrieveTestScriptTestingSessions() {
         testScriptName: "",
     });
     const [isValidTestScriptNameEntered, setIsValidTestScriptNameEntered] = useState(false);
+    const [cardScrollPosition, setCardScrollPosition] = useState(0);
     const testScriptID = useRef("");
     // const [testingSessions, setTestingSessions] = useState([]);
     const testingSessions = useRef([]);
@@ -269,7 +270,10 @@ function RetrieveTestScriptTestingSessions() {
                         ? <ViewTestingSessionsCard
                             testingSessions={testingSessions.current}
                             async={async.current}
-                            deleteTestingSession={deleteTestingSession}>
+                            deleteTestingSession={deleteTestingSession}
+                            setCardScrollPosition={setCardScrollPosition}
+                            cardScrollPosition={cardScrollPosition}
+                        >
                         </ViewTestingSessionsCard>
                         : <div></div>}
                 </CardWrapper >

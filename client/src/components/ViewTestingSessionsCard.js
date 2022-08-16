@@ -9,21 +9,30 @@ function ViewTestingSessionsCard({
     testingSessions,
     async,
     deleteTestingSession,
+    setCardScrollPosition,
+    cardScrollPosition,
 }) {
     const expanded = true;
+    const cardRef = React.useRef(null);
 
-    // React.useEffect(() => {
-    //     console.log(existingSteps);
-    // }, [existingSteps])
+    React.useEffect(() => {
+        cardRef.current.scrollTop = cardScrollPosition;
+    }, [cardRef, cardScrollPosition])
 
-    const goBack = () => {
+    const handleOnScroll = () => {
+        setCardScrollPosition(cardRef.current.scrollTop);
+    }
+
+    const handleGoBack = () => {
         window.location.reload();
     }
 
     return (
         <div>
             <Card
-            className="view-testing-sessions-card"
+                ref={cardRef}
+                onScroll={handleOnScroll}
+                className="view-testing-sessions-card"
                 sx={{
                     maxHeight: "calc(100vh - 216.52px)",
                     overflowY: "scroll",
@@ -66,7 +75,7 @@ function ViewTestingSessionsCard({
             </Card >
             <button
                 className="back-button"
-                onClick={goBack}>
+                onClick={handleGoBack}>
                 Back
             </button>
         </div>
@@ -77,12 +86,16 @@ ViewTestingSessionsCard.propTypes = {
     testingSessions: PropTypes.array,
     async: PropTypes.bool,
     deleteTestingSession: PropTypes.func,
+    setCardScrollPosition: PropTypes.func,
+    cardScrollPosition: PropTypes.number,
 }
 
 ViewTestingSessionsCard.defaultProps = {
     testingSessions: [],
     async: false,
     deleteTestingSession: () => { },
+    setCardScrollPosition: () => { },
+    cardScrollPosition: 0,
 }
 
 export default ViewTestingSessionsCard;

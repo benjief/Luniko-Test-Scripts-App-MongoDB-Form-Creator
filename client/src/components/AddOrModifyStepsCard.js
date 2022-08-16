@@ -27,11 +27,11 @@ function AddOrModifyStepsCard({
     }, [cardRef, cardScrollPosition])
 
     const handleOnScroll = () => {
-        setCardScrollPosition(String(cardRef.current.scrollTop));
+        setCardScrollPosition(cardRef.current.scrollTop);
     }
 
     const handleGoBack = () => {
-        setCardScrollPosition(String(cardRef.current.scrollTop));
+        setCardScrollPosition(cardRef.current.scrollTop);
         goBack();
     }
 
@@ -102,7 +102,7 @@ AddOrModifyStepsCard.propTypes = {
     addOrRemoveStep: PropTypes.func,
     // removeStep: PropTypes.func,
     setCardScrollPosition: PropTypes.func,
-    cardScrollPosition: PropTypes.string,
+    cardScrollPosition: PropTypes.number,
     goBack: PropTypes.func,
 }
 
@@ -115,7 +115,7 @@ AddOrModifyStepsCard.defaultProps = {
     addOrRemoveStep: () => { },
     // removeStep: () => { },
     setCardScrollPosition: () => { },
-    cardScrollPosition: "0px",
+    cardScrollPosition: 0,
     goBack: () => { },
 }
 
