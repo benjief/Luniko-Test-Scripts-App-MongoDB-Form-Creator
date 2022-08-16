@@ -39,7 +39,7 @@
 .cancel-button,
 .add-or-modify-steps-button,
 .submit-or-update-test-script-button,
-.add-step-button,
+/* .add-step-button, */
 .back-button {
     padding: 10px;
     margin-bottom: 10px;
@@ -56,6 +56,10 @@
     box-shadow: 2px 2px 4px rgba(43, 43, 43, 0.6);
 }
 
+.cancel-button, .back-button {
+    margin-bottom: 0 !important;
+}
+
 /* .add-step-button {
     margin-top: 10px;
 } */
@@ -70,7 +74,7 @@
 .cancel-button:not(:disabled),
 .add-or-modify-steps-button,
 .submit-or-update-test-script-button:not(:disabled),
-.add-step-button:not(:disabled),
+/* .add-step-button:not(:disabled), */
 .back-button:not(:disabled) {
     background-color: var(--lunikoBlue);
 }
@@ -79,8 +83,8 @@
 .submit-or-update-test-script-name-button:disabled,
 .cancel-button:disabled,
 .add-or-modify-steps-button:disabled,
-.submit-or-update-test-script-button:disabled,
-.add-step-button:disabled .back-button:disabled {
+.submit-or-update-test-script-button:disabled {
+/* .add-step-button:disabled .back-button:disabled { */
     background-color: #BFBFBF;
 }
 
@@ -93,7 +97,7 @@
 .cancel-button:not(:disabled):hover,
 .add-or-modify-steps-button:not(:disabled):hover,
 .submit-or-update-test-script-button:not(:disabled):hover,
-.add-step-button:not(:disabled):hover,
+/* .add-step-button:not(:disabled):hover, */
 .back-button:not(:disabled):hover {
     background-color: var(--lunikoOrange) !important;
 }

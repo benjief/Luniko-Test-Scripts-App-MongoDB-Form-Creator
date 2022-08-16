@@ -17,7 +17,7 @@ function CardWrapper({
     pageContentOpacity,
     testScriptName,
     isTestingSessionBeingDeleted,
-    isStepBeingRemoved,
+    isStepBeingAddedOrRemoved,
 }) {
 
     return (
@@ -65,7 +65,7 @@ function CardWrapper({
                         : isUserModifyingSteps
                             ? <div className="add-or-modify-steps-container"
                                 style={{ opacity: pageContentOpacity, transition: "0.3s" }}>
-                                {isStepBeingRemoved
+                                {isStepBeingAddedOrRemoved
                                     ? < div className="fading-balls-container-testing-session-deletion">
                                         <FadingBalls
                                             className="spinner"
@@ -109,7 +109,7 @@ CardWrapper.propTypes = {
     pageContentOpacity: PropTypes.string,
     testScriptName: PropTypes.string,
     isTestingSessionBeingDeleted: PropTypes.bool,
-    isStepBeingRemoved: PropTypes.bool,
+    isStepBeingAddedOrRemoved: PropTypes.bool,
     // isUserViewingTestingSessionDetails: PropTypes.bool,
     // setter: PropTypes.func,
     // myObject: PropTypes.shape({
@@ -131,7 +131,7 @@ CardWrapper.defaultProps = {
     pageContentOpacity: "100%",
     testScriptName: "",
     isTestingSessionBeingDeleted: false,
-    isStepBeingRemoved: false,
+    isStepBeingAddedOrRemoved: false,
     // setter: null
 }
 

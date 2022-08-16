@@ -39,9 +39,9 @@ function TestingSessionCard({
     const [expanded, setExpanded] = React.useState(false);
     const word = failedSteps.length > 1 ? "steps" : "step";
     const testingSessionRef = React.useRef(null);
-    const [opacity, setOpacity] = React.useState("100%"); // TODO: remove this
-    const [height, setHeight] = React.useState(testingSessionRef.current?.clientHeight + "px"); // TODO: remove this
-    const [marginBottom, setMarginBottom] = React.useState("20px"); // TODO: remove this
+    // const [opacity, setOpacity] = React.useState("100%"); // TODO: remove this
+    // const [height, setHeight] = React.useState(testingSessionRef.current?.clientHeight + "px"); // TODO: remove this
+    // const [marginBottom, setMarginBottom] = React.useState("20px"); // TODO: remove this
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -66,21 +66,44 @@ function TestingSessionCard({
         <Card
             ref={testingSessionRef}
             sx={{
-                opacity: opacity,
-                height: height,
+                opacity: "100%",
+                // height: testingSessionRef.current?.clientHeight + "px",
                 // maxHeight: expanded ? "calc(100vh - 166.52px)" : height,
                 overflowY: "scroll",
                 borderRadius: "10px",
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
                 transition: "1s",
                 backgroundColor: "var(--lunikoLightGrey)",
-                marginBottom: marginBottom
+                marginBottom: "20px",
             }}>
             <div className="card-content">
-                <CardHeader
-                    titleTypographyProps={{ color: "rgba(0, 0, 0, 0.7)", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "12pt", textAlign: "center" }}
-                    title={"Testing Session " + testingSessionID}>
-                </CardHeader>
+                <div className="testing-session-title">
+                    <CardHeader
+                        titleTypographyProps={{ color: "rgba(0, 0, 0, 0.7)", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "12pt", textAlign: "center" }}
+                        title={"Testing Session " + testingSessionID}>
+                    </CardHeader>
+                    <MaterialDialog
+                        className="material-dialog-delete"
+                        exteriorButton={
+                            <button className="delete-testing-session-button"
+                                type="submit"
+                                disabled={isDeleteButtonDisabled}>
+                            </button>
+                            // <SubmitButton
+                            //     className="delete-testing-session-button"
+                            //     submitButtonText={"Delete"}
+                            //     isSubmitButtonDisabled={isDeleteButtonDisabled}
+                            //         /*handleOnClick={true}
+                            //         handleOnClickFunction={requestTestScript}*/>
+                            // </SubmitButton>
+                        }
+                        inactiveButtonText="Cancel"
+                        displayActiveButton={true}
+                        activeButtonFunction={handleDeleteTestingSession}
+                        activeButtonText="Delete"
+                        dialogDescription={<p>Are you sure you want to permanently delete this testing session? This action cannot be undone.</p>}>
+                    </MaterialDialog>
+                </div>
                 <Typography paragraph className="testing-session-result">
                     <span id="testing-session-result-header">
                         <strong>Result</strong>
@@ -138,23 +161,6 @@ function TestingSessionCard({
                             <strong>Date Submitted</strong><br />
                             {submissionDate.toString()}
                         </Typography>
-                        <MaterialDialog
-                            className="material-dialog-delete"
-                            exteriorButton={
-                                <SubmitButton
-                                    className="delete-testing-session-button"
-                                    submitButtonText={"Delete"}
-                                    isSubmitButtonDisabled={isDeleteButtonDisabled}
-                                        /*handleOnClick={true}
-                                        handleOnClickFunction={requestTestScript}*/>
-                                </SubmitButton>
-                            }
-                            inactiveButtonText="Cancel"
-                            displayActiveButton={true}
-                            activeButtonFunction={handleDeleteTestingSession}
-                            activeButtonText="Delete"
-                            dialogDescription={<p>Are you sure you want to permanently delete this testing session? This action cannot be undone.</p>}>
-                        </MaterialDialog>
                         {/* <button
                             className="delete-testing-session-button"
                             onClick={handleDeleteTestingSession}

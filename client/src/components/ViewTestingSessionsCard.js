@@ -21,52 +21,55 @@ function ViewTestingSessionsCard({
     }
 
     return (
-        <Card
-            sx={{
-                maxHeight: "calc(100vh - 166.52px)",
-                overflowY: "scroll",
-                borderRadius: "10px",
-                boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
-                transition: "0.5s",
-                backgroundColor: "var(--lunikoDarkGrey)",
-                marginBottom: "20px"
-            }}>
-            <div className="card-content">
-                <CardHeader
-                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif" }}
-                    title={<strong>Submitted Testing Sessions</strong>}
-                />
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent>
-                        {testingSessions.length
-                            ? testingSessions.map((testingSession) => {
-                                return <div className="testing-session-card" key={new Date(testingSession.updatedAt)}>
-                                    <TestingSessionCard
-                                        // key={new Date(testingSession.updatedAt)}
-                                        testingSessionID={testingSession._id}
-                                        submitter={testingSession.tester}
-                                        completed={testingSession.complete}
-                                        terminatedAtStep={testingSession.stoppedTestingAtStep}
-                                        result={testingSession.pass}
-                                        failedSteps={testingSession.failedSteps}
-                                        stepsWithMinorIssues={testingSession.stepsWithMinorIssues}
-                                        responsesWithAttachedContent={testingSession.responses}
-                                        submissionDate={new Date(testingSession.updatedAt)}
-                                        deleteTestingSession={deleteTestingSession}
-                                        isDeleteButtonDisabled={async}>
-                                    </TestingSessionCard>
-                                </div>
-                            })
-                            : <div></div>}
-                        <button
-                            className="back-button"
-                            onClick={goBack}>
-                            Back
-                        </button>
-                    </CardContent>
-                </Collapse>
-            </div>
-        </Card >
+        <div>
+            <Card
+            className="view-testing-sessions-card"
+                sx={{
+                    height: "calc(100vh - 216.52px)",
+                    overflowY: "scroll",
+                    borderRadius: "10px",
+                    boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
+                    transition: "0.5s",
+                    backgroundColor: "var(--lunikoMidGrey)",
+                    marginBottom: "20px"
+                }}>
+                <div className="card-content">
+                    <CardHeader
+                        titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif" }}
+                        title={<strong>Submitted Testing Sessions</strong>}
+                    />
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                        <CardContent>
+                            {testingSessions.length
+                                ? testingSessions.map((testingSession) => {
+                                    return <div className="testing-session-card" key={new Date(testingSession.updatedAt)}>
+                                        <TestingSessionCard
+                                            // key={new Date(testingSession.updatedAt)}
+                                            testingSessionID={testingSession._id}
+                                            submitter={testingSession.tester}
+                                            completed={testingSession.complete}
+                                            terminatedAtStep={testingSession.stoppedTestingAtStep}
+                                            result={testingSession.pass}
+                                            failedSteps={testingSession.failedSteps}
+                                            stepsWithMinorIssues={testingSession.stepsWithMinorIssues}
+                                            responsesWithAttachedContent={testingSession.responses}
+                                            submissionDate={new Date(testingSession.updatedAt)}
+                                            deleteTestingSession={deleteTestingSession}
+                                            isDeleteButtonDisabled={async}>
+                                        </TestingSessionCard>
+                                    </div>
+                                })
+                                : <div></div>}
+                        </CardContent>
+                    </Collapse>
+                </div>
+            </Card >
+            <button
+                className="back-button"
+                onClick={goBack}>
+                Back
+            </button>
+        </div>
     );
 }
 

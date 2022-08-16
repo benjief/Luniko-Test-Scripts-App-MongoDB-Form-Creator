@@ -2,10 +2,10 @@
     display: flex;
     flex-direction: column;
     /* row-gap: 15px; */
-    /* padding: 10px !important; */
+    padding: 10px !important;
     border-radius: 10px;
     /* align-items: center; */
-    /* margin-bottom: 20px; */
+    margin-bottom: 20px;
     background-color: var(--lunikoLightGrey);
     box-shadow: 1px 1px 4px rgba(43, 43, 43, 0.6);
     /* background-color: white; */
@@ -21,6 +21,14 @@
     margin-top: 5px;
 } */
 
+
+.step-title {
+    display: grid;
+    margin-bottom: 20px;
+    grid-template-rows: 70% 30%;
+    justify-items: center;
+}
+
 .step-number {
     /* min-width: 11.7%;
     position: relative;
@@ -28,7 +36,7 @@
     color: rgba(0, 0, 0, 0.7);
     font-size: 12pt;
     font-weight: 700;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
 }
 
 /* .step-description {
@@ -43,30 +51,51 @@
     top: 16.5px;
 } */
 
-.step-description .MuiBox-root {
-    /* margin-bottom: 0 !important; */
-    /* position: relative; */
-    /* top: 11px; */
-}
+/* .step-description .MuiBox-root {
+    margin-bottom: 0 !important;
+    position: relative;
+    top: 11px;
+} */
 
 /* .step-data-inputted-by-user {
     align-self: center;
     min-width: 95%;
 } */
 
-.remove-step-button {
+.add-step-button, .remove-step-button {
     width: 22px;
     min-height: 22px;
-    cursor: pointer;
     background-repeat: no-repeat;
     background-size: 22px 22px;
     background-position: center;
     background-color: transparent;
     border: none;
+    /* box-shadow: none !important; */
+}
+
+.add-step-button {
+    background-image: url("../img/+_icon_blue.png");
+    transition: 150ms;
+    cursor: pointer;
+}
+
+.add-step-button:hover {
+    background-image: url("../img/+_icon_orange.png");
+}
+
+.remove-step-button {
+    /* position: relative;
+    left: -33px; */
+    transition: 150ms;
 }
 
 .remove-step-button:not(:disabled) {
     background-image: url("../img/remove_icon_active.png");
+    cursor: pointer;
+}
+
+.remove-step-button:not(:disabled):hover {
+    background-image: url("../img/x_icon_red.png");
 }
 
 .remove-step-button:disabled {

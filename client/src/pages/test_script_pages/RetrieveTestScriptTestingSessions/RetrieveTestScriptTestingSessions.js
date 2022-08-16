@@ -159,7 +159,7 @@ function RetrieveTestScriptTestingSessions() {
                 }, 3000)
             }
         }
-    }, [rendering, isDataBeingFetched, formProps, isValidTestScriptNameEntered, testScriptID, testingSessions.length, handleError]);
+    }, [rendering, isDataBeingFetched, formProps, isValidTestScriptNameEntered, testScriptID, testingSessions.length, navigate, handleError]);
 
     const handleRequestTestScript = () => { // TODO: make this more direct
         if (!isValidTestScriptNameEntered) {

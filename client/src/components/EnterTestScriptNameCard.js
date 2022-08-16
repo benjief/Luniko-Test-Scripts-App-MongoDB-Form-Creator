@@ -33,7 +33,7 @@ function EnterTestScriptNameCard({
                 borderRadius: "10px",
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
                 transition: "0.5s",
-                backgroundColor: "var(--lunikoDarkGrey)",
+                backgroundColor: "var(--lunikoMidGrey)",
                 marginBottom: "20px"
             }}>
             <div className="load-sheet-name-card-content">
