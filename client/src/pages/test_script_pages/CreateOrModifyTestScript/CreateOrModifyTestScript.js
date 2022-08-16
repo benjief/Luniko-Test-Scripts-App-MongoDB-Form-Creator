@@ -338,10 +338,11 @@ function CreateOrModifyTestScript() {
         let stepsWithUpdatedNumbers = updateStepNumbers(stepsToBeUpdated, insertedAtStep + 2);
         stepsToReturn = unchangedSteps.concat(stepsWithUpdatedNumbers);
         testScriptSteps.current = [...stepsToReturn];
+        setCardScrollPosition(String(parseInt(cardScrollPosition) + 480));
         console.log("updated steps after add:", testScriptSteps.current);
         // return stepsToReturn;
         // });
-    }, [])
+    }, [cardScrollPosition])
 
     const removeTestScriptStep = useCallback((startingIndex) => {
         // setTestScriptSteps(prevTestScriptSteps => {
