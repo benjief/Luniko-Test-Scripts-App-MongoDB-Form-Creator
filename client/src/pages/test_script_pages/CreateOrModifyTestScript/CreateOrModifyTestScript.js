@@ -159,18 +159,22 @@ function CreateOrModifyTestScript() {
         }
 
         const populateTestScriptInformation = (testScriptInformation) => {
-            setFormProps(
-                prev => ({
-                    ...prev,
-                    "testScriptName": testScriptInformation.name,
-                    "testScriptDescription": testScriptInformation.description,
-                    "testScriptPrimaryWorkstream": testScriptInformation.primaryWorkstream,
-                    "ownerFirstName": testScriptInformation.owner["firstName"],
-                    "ownerLastName": testScriptInformation.owner["lastName"],
-                })
-            );
-            testScriptID.current = testScriptInformation._id;
-            async.current = false;
+            if (testScriptInformation) {
+                setFormProps(
+                    prev => ({
+                        ...prev,
+                        "testScriptName": testScriptInformation.name,
+                        "testScriptDescription": testScriptInformation.description,
+                        "testScriptPrimaryWorkstream": testScriptInformation.primaryWorkstream,
+                        "ownerFirstName": testScriptInformation.owner["firstName"],
+                        "ownerLastName": testScriptInformation.owner["lastName"],
+                    })
+                );
+                testScriptID.current = testScriptInformation._id;
+                async.current = false;
+            } else {
+                handleError("r");
+            }
         }
 
         const fetchTestScriptSteps = async (testScriptID) => {
