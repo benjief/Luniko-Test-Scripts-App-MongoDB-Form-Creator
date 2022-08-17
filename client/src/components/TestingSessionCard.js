@@ -84,6 +84,7 @@ function TestingSessionCard({
                     </CardHeader>
                     <MaterialDialog
                         className="material-dialog-delete"
+                        isDialogDisabled={isDeleteButtonDisabled}
                         exteriorButton={
                             <button className="delete-testing-session-button"
                                 type="submit"

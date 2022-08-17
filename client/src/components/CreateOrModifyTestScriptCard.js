@@ -130,6 +130,7 @@ function CreateOrModifyTestScriptCard({
             </button>
             {stepsWithoutDescription.length
                 ? <MaterialDialog
+                    isDialogDisabled={isSubmitOrModifyButtonDisabled}
                     exteriorButton=
                     {
                         <SubmitButton

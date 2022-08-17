@@ -15,11 +15,14 @@ function MaterialDialog({
     activeButtonText,
     dialogTitle,
     dialogDescription,
+    isDialogDisabled,
 }) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
-        setOpen(true);
+        if (!isDialogDisabled) {
+            setOpen(true);
+        }
     };
 
     const handleClose = () => {
@@ -73,6 +76,7 @@ MaterialDialog.propTypes = {
     activeButtonText: PropTypes.string,
     dialogTitle: PropTypes.string,
     dialogDescription: PropTypes.object,
+    isDialogDisabled: PropTypes.bool,
 }
 
 MaterialDialog.defaultProps = {
@@ -84,6 +88,7 @@ MaterialDialog.defaultProps = {
     activeButtonText: "",
     dialogTitle: "",
     dialogDescription: {},
+    isDialogDisabled: false,
 }
 
 export default MaterialDialog;

@@ -87,6 +87,7 @@ function EnterTestScriptNameCard({
             {isDeletionForm
                 ? <MaterialDialog
                     className="material-dialog-delete"
+                    isDialogDisabled={isSubmitButtonDisabled}
                     exteriorButton={
                         <SubmitButton
                             className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
