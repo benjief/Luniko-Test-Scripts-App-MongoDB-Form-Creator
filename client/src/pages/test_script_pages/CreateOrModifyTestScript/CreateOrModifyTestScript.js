@@ -373,11 +373,9 @@ function CreateOrModifyTestScript() {
                 setPageContentOpacity("0%");
                 setTimeout(() => {
                     setIsStepBeingAddedOrRemoved(false);
-                    setTimeout(() => {
-                        setPageContentOpacity("100%");
-                    }, 200);
+                    setPageContentOpacity("100%");
                 }, 300);
-            }, 500);
+            }, 300);
         }, 300);
     }, [addTestScriptStep, removeTestScriptStep, setNumStepsInTestScript])
 
@@ -541,6 +539,7 @@ function CreateOrModifyTestScript() {
                             submitOrModifyTestScript={handleSubmitOrUpdate}
                             isSubmitOrModifyButtonDisabled={isSubmitOrModifyButtonDisabled}
                             isCancelButtonDisabled={async.current}
+                            testScriptSteps={testScriptSteps.current}
                             displayFadingBalls={displayFadingBalls}>
                         </CreateOrModifyTestScriptCard>}
                 </CardWrapper>

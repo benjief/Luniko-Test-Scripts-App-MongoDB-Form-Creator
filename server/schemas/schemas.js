@@ -13,7 +13,7 @@ const step = new mongoose.Schema({
     description: {
         type: String,
         maxlength: 1000,
-        required: true
+        // required: true
     },
     dataInputtedByUser: {
         type: String,

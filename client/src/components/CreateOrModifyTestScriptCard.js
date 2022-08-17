@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
 import MaterialTextField from './MaterialTextField';
 import SubmitButton from './SubmitButton';
+import MaterialDialog from './MaterialDialog';
 function CreateOrModifyTestScriptCard({
     setFormProps,
     isModificationCard,
@@ -21,8 +22,18 @@ function CreateOrModifyTestScriptCard({
     submitOrModifyTestScript,
     isSubmitOrModifyButtonDisabled,
     isCancelButtonDisabled,
+    testScriptSteps,
     displayFadingBalls,
 }) {
+    const [stepsWithoutDescription, setStepsWithoutDescription] = React.useState("");
+
+    React.useEffect(() => {
+        let copyOfSteps = testScriptSteps.filter((val) => {
+            return val.description.length === 0;
+        });
+
+        setStepsWithoutDescription(copyOfSteps.map(obj => obj.number).join(", "));
+    }, [testScriptSteps])
 
     const handleOnChange = (returnedObject) => {
         setFormProps(
@@ -117,14 +128,38 @@ function CreateOrModifyTestScriptCard({
                 disabled={isAddOrModifyStepsButtonDisabled}>
                 Add/Modify Steps
             </button>
-            <SubmitButton
+            {stepsWithoutDescription.length
+                ? <MaterialDialog
+                    exteriorButton=
+                    {
+                        <SubmitButton
+                            className="submit-or-update-test-script-button"
+                            isSubmitButtonDisabled={isSubmitOrModifyButtonDisabled}
+                            displayFadingBalls={displayFadingBalls}>
+                        </SubmitButton>
+                    }
+                    inactiveButtonText="Cancel"
+                    displayActiveButton={true}
+                    activeButtonFunction={submitOrModifyTestScript}
+                    activeButtonText="Submit"
+                    dialogDescription={<p>You are attempting to submit a test script in which the following steps are missing a description: {stepsWithoutDescription}</p>}>
+                </MaterialDialog>
+                : <SubmitButton
+                    className={"submit-or-update-test-script-button"}
+                    submitButtonText={isModificationCard ? "Update" : "Submit"}
+                    displayFadingBalls={displayFadingBalls}
+                    handleOnClick={true}
+                    handleOnClickFunction={submitOrModifyTestScript}
+                    isSubmitButtonDisabled={isSubmitOrModifyButtonDisabled}>
+                </SubmitButton>}
+            {/* <SubmitButton
                 className={"submit-or-update-test-script-button"}
                 submitButtonText={isModificationCard ? "Update" : "Submit"}
                 displayFadingBalls={displayFadingBalls}
                 handleOnClick={true}
                 handleOnClickFunction={submitOrModifyTestScript}
                 isSubmitButtonDisabled={isSubmitOrModifyButtonDisabled}>
-            </SubmitButton>
+            </SubmitButton> */}
             <Link to={`/`}>
                 <button
                     className="cancel-button"
@@ -151,6 +186,8 @@ CreateOrModifyTestScriptCard.propTypes = {
     isSubmitOrModifyButtonDisabled: PropTypes.bool,
     isCancelButtonDisabled: PropTypes.bool,
     displayFadingBalls: PropTypes.bool,
+    testScriptSteps: PropTypes.array,
+    hasUserLeftStepsEmpty: PropTypes.bool,
 }
 
 CreateOrModifyTestScriptCard.defaultProps = {
@@ -168,6 +205,8 @@ CreateOrModifyTestScriptCard.defaultProps = {
     isSubmitOrModifyButtonDisabled: true,
     isCancelButtonDisabled: false,
     displayFadingBalls: false,
+    testScriptSteps: [],
+    hasUserLeftStepsEmpty: false,
 }
 
 export default CreateOrModifyTestScriptCard;

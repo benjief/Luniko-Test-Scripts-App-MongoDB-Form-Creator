@@ -27,34 +27,34 @@ function EnterTestScriptNameCard({
 
     return (
         <div>
-        <Card
-            sx={{
-                minHeight: "150px",
-                overflowY: "scroll",
-                borderRadius: "10px",
-                boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
-                transition: "0.5s",
-                backgroundColor: "var(--lunikoMidGrey)",
-                marginBottom: "20px"
-            }}>
-                
-            <div className="load-sheet-name-card-content">
-                <CardHeader
-                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt", textAlign: "center" }}
-                    title={<strong>Please enter a valid test script name</strong>} />
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent>                   
-                        <MaterialTextField
-                            className="test-script-name"
-                            label="Test Script Name"
-                            inputValue={handleOnChange}
-                            multiline={false}
-                            required={false}
-                            type="text"
-                            authenticationField={true}
-                            field={"testScriptName"}>
-                        </MaterialTextField>
-                        {/* <SubmitButton
+            <Card
+                sx={{
+                    minHeight: "150px",
+                    overflowY: "scroll",
+                    borderRadius: "10px",
+                    boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
+                    transition: "0.5s",
+                    backgroundColor: "var(--lunikoMidGrey)",
+                    marginBottom: "20px"
+                }}>
+
+                <div className="load-sheet-name-card-content">
+                    <CardHeader
+                        titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt", textAlign: "center" }}
+                        title={<strong>Please enter a valid test script name</strong>} />
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                        <CardContent>
+                            <MaterialTextField
+                                className="test-script-name"
+                                label="Test Script Name"
+                                inputValue={handleOnChange}
+                                multiline={false}
+                                required={false}
+                                type="text"
+                                authenticationField={true}
+                                field={"testScriptName"}>
+                            </MaterialTextField>
+                            {/* <SubmitButton
                             className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
                             submitButtonText={isDeletionForm ? "Delete" : "Submit"}
                             isSubmitButtonDisabled={isSubmitButtonDisabled}
@@ -62,7 +62,7 @@ function EnterTestScriptNameCard({
                             handleOnClick={true}
                             handleOnClickFunction={requestTestScript}>
                         </SubmitButton> */}
-                        {/* <button
+                            {/* <button
                             className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
                             onClick={requestTestScript}
                             disabled={isSubmitButtonDisabled}>
@@ -80,37 +80,37 @@ function EnterTestScriptNameCard({
                                     ? "Delete"
                                     : "Submit"}
                         </button> */}
-                    </CardContent>
-                </Collapse>
-            </div>
-        </Card >
-        {isDeletionForm
-                            ? <MaterialDialog
-                            className="material-dialog-delete"
-                                exteriorButton={
-                                    <SubmitButton
-                                        className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
-                                        submitButtonText={isDeletionForm ? "Delete" : "Submit"}
-                                        isSubmitButtonDisabled={isSubmitButtonDisabled}
-                                        displayFadingBalls={displayFadingBalls}
+                        </CardContent>
+                    </Collapse>
+                </div>
+            </Card >
+            {isDeletionForm
+                ? <MaterialDialog
+                    className="material-dialog-delete"
+                    exteriorButton={
+                        <SubmitButton
+                            className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
+                            submitButtonText={isDeletionForm ? "Delete" : "Submit"}
+                            isSubmitButtonDisabled={isSubmitButtonDisabled}
+                            displayFadingBalls={displayFadingBalls}
                                         /*handleOnClick={true}
                                         handleOnClickFunction={requestTestScript}*/>
-                                    </SubmitButton>
-                                }
-                                inactiveButtonText="Cancel"
-                                displayActiveButton={true}
-                                activeButtonFunction={requestTestScript}
-                                activeButtonText="Delete"
-                                dialogDescription={<p>Are you sure you want to permanently delete this test script? This action cannot be undone.</p>}>
-                            </MaterialDialog>
-                            : <SubmitButton
-                                className="submit-test-script-name-button"
-                                submitButtonText="Submit"
-                                isSubmitButtonDisabled={isSubmitButtonDisabled}
-                                displayFadingBalls={displayFadingBalls}
-                                handleOnClick={true}
-                                handleOnClickFunction={requestTestScript}>
-                            </SubmitButton>}
+                        </SubmitButton>
+                    }
+                    inactiveButtonText="Cancel"
+                    displayActiveButton={true}
+                    activeButtonFunction={requestTestScript}
+                    activeButtonText="Delete"
+                    dialogDescription={<p>Are you sure you want to permanently delete this test script? This action cannot be undone.</p>}>
+                </MaterialDialog>
+                : <SubmitButton
+                    className="submit-test-script-name-button"
+                    submitButtonText="Submit"
+                    isSubmitButtonDisabled={isSubmitButtonDisabled}
+                    displayFadingBalls={displayFadingBalls}
+                    handleOnClick={true}
+                    handleOnClickFunction={requestTestScript}>
+                </SubmitButton>}
         </div>
     );
 }
@@ -129,7 +129,6 @@ EnterTestScriptNameCard.defaultProps = {
     isSubmitButtonDisabled: true,
     isDeletionForm: false,
     displayFadingBalls: false,
-    isMaterialDialogActive: false,
 }
 
 export default EnterTestScriptNameCard;
