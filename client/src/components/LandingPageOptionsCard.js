@@ -21,8 +21,8 @@ function LandingPageOptionsCard() {
             }}>
             <div className="card-content">
                 <CardHeader
-                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "10.5pt", textAlign: "center"  }}
-                    title={<strong>Please choose an option below</strong>}/>
+                    titleTypographyProps={{ color: "white", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", textAlign: "center" }}
+                    title={<strong>Please choose an option below</strong>} />
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>
                         <Link to={"/create-or-modify-test-script/create"}>

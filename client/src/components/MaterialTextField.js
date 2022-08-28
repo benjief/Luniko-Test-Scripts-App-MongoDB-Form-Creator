@@ -69,7 +69,7 @@ function MaterialTextField({
 
   const checkTextInputValidity = React.useCallback((input) => {
     input = isTextValidationCaseSensitive ? input : input.toLowerCase();
-    if (invalidInputs.includes(input)) {
+    if (invalidInputs.includes(input.trim())) {
       invalidInputMsg === ""
         ? setDisplayedHelperText("Invalid input")
         : setDisplayedHelperText(invalidInputMsg);
@@ -164,24 +164,23 @@ function MaterialTextField({
         setErrorEnabled(true);
         setDisplayedHelperText("Required Field");
       }
-    },
-    [required],
+    }, [required]
   )
 
   const handleOnKeyDown = React.useCallback(
-    (evt) => { // TODO: make this a separate function
+    (event) => {
       if (type === "number") {
-        if (["e", "E"].includes(evt.key)) {
-          evt.preventDefault();
+        if (["e", "E"].includes(event.key)) {
+          event.preventDefault();
         }
         if (!fractionsAllowed) {
-          if (["."].includes(evt.key)) {
-            evt.preventDefault();
+          if (["."].includes(event.key)) {
+            event.preventDefault();
           }
         }
       }
     },
-    [fractionsAllowed, type],
+    [fractionsAllowed, type]
   )
 
   const inputProps = React.useMemo(() => ({ // like useCallback, but for any variable - only returns a new object when the value of characterLimit changes
@@ -212,7 +211,7 @@ function MaterialTextField({
           disabled={disabled}
           inputProps={inputProps}
           helperText={showCharCounter ? !errorEnabled ? displayedHelperText !== ""
-            ? [displayedHelperText, ". Limit: ", inputLength, "/", characterLimit].join('') : ["Limit: ", inputLength, "/", characterLimit].join('')
+            ? [displayedHelperText, ". Limit: ", inputLength, "/", characterLimit].join("") : ["Limit: ", inputLength, "/", characterLimit].join('')
             : displayedHelperText
             : displayedHelperText} />
       </div>

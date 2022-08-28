@@ -79,7 +79,7 @@ function TestingSessionCard({
             <div className="card-content">
                 <div className="testing-session-title">
                     <CardHeader
-                        titleTypographyProps={{ color: "rgba(0, 0, 0, 0.7)", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", fontSize: "12pt", textAlign: "center" }}
+                        titleTypographyProps={{ color: "rgba(0, 0, 0, 0.7)", fontFamily: "'Raleway', Verdana, Geneva, Tahoma, sans-serif", textAlign: "center" }}
                         title={"Testing Session " + testingSessionID}>
                     </CardHeader>
                     <MaterialDialog

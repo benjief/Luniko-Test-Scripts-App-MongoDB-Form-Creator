@@ -10,7 +10,7 @@ import EnterTestScriptNameCard from "../../../components/EnterTestScriptNameCard
 // import { v4 as uuidv4 } from "uuid";
 import Axios from "axios";
 // import { Beforeunload } from "react-beforeunload";
-import "../../../styles/CreateOrModifyNewTestScript.css";
+import "../../../styles/CreateOrModifyTestScript.css";
 import "../../../styles/InputComponents.css";
 import "../../../styles/CardComponents.css";
 import "../../../styles/SelectorComponents.css";
@@ -41,7 +41,7 @@ function CreateOrModifyTestScript() {
     const [isAddOrModifyStepsButtonDisabled, setIsAddOrModifyStepsButtonDisabled] = useState(false);
     // const [isAddStepButtonDisabled, setIsAddStepButtonDisabled] = useState(false);
     const [isRemoveStepButtonDisabled, setIsRemoveStepButtonDisabled] = useState(true);
-    const [isSubmitOrModifyButtonDisabled, setIsSubmitOrModifyButtonDisabled] = useState(true);
+    const [isSubmitOrUpdateButtonDisabled, setIsSubmitOrUpdateButtonDisabled] = useState(true);
     const testScriptID = useRef("");
     const [displayFadingBalls, setDisplayFadingBalls] = useState(false);
     const async = useRef(false);
@@ -81,7 +81,7 @@ function CreateOrModifyTestScript() {
         setTimeout(() => {
             setAlert(true);
         }, delay);
-    }, [alertType, rendering, loadErrorMessage, writeErrorMessage]);
+    }, [setIsErrorThrown, rendering, writeErrorMessage]);
 
     const handleAlertClosed = () => {
         setAlert(false);
@@ -223,10 +223,10 @@ function CreateOrModifyTestScript() {
                 if (formProps["testScriptName"].trim() !== "" && formProps["testScriptDescription"].trim() !== "" && formProps["testScriptPrimaryWorkstream"].trim() !== ""
                     && formProps["ownerFirstName"].trim() !== "" && formProps["ownerLastName"].trim() !== "") {
                     setIsAddOrModifyStepsButtonDisabled(false);
-                    setIsSubmitOrModifyButtonDisabled(false);
+                    setIsSubmitOrUpdateButtonDisabled(false);
                 } else {
                     pageFunctionality === "modify" ? setIsAddOrModifyStepsButtonDisabled(false) : setIsAddOrModifyStepsButtonDisabled(true);
-                    setIsSubmitOrModifyButtonDisabled(true);
+                    setIsSubmitOrUpdateButtonDisabled(true);
                 }
                 // testScriptSteps.length && !testScriptSteps.slice(-1)[0]["description"].trim().length
                 //     ? setIsAddStepButtonDisabled(true)
@@ -239,7 +239,7 @@ function CreateOrModifyTestScript() {
             }
         }
     }, [rendering, pageFunctionality, isDataBeingFetched, cardChanged, isUserModifyingSteps, isValidTestScriptNameEntered,
-        formProps, /*testScriptSteps.length,*/ testScriptSteps, numStepsInTestScript, /*isAddStepButtonDisabled,*/ isSubmitOrModifyButtonDisabled, isTestScriptSubmitted,
+        formProps, /*testScriptSteps.length,*/ testScriptSteps, numStepsInTestScript, /*isAddStepButtonDisabled,*/ isSubmitOrUpdateButtonDisabled, isTestScriptSubmitted,
         handleError, /*setIsNewlyAddedToFalseForExistingSteps*/]
     );
 
@@ -408,7 +408,7 @@ function CreateOrModifyTestScript() {
                 setIsValidTestScriptNameEntered(true);
                 isDataBeingFetched.current = false;
                 setRendering(true);
-                setIsSubmitOrModifyButtonDisabled(true);
+                setIsSubmitOrUpdateButtonDisabled(true);
             } else {
                 invalidTestScriptNameError("Invalid test script name");
             }
@@ -428,7 +428,7 @@ function CreateOrModifyTestScript() {
 
     const handleSubmitOrUpdate = () => {
         isTestScriptSubmitted.current = true;
-        setIsSubmitOrModifyButtonDisabled(true);
+        setIsSubmitOrUpdateButtonDisabled(true);
         setIsAddOrModifyStepsButtonDisabled(true);
         setDisplayFadingBalls(true);
         runWriteAsyncFunctions();
@@ -540,8 +540,8 @@ function CreateOrModifyTestScript() {
                             existingOwnerLastName={formProps["ownerLastName"]}
                             handleTransitionToStepsPage={handleChangeCard}
                             isAddOrModifyStepsButtonDisabled={isAddOrModifyStepsButtonDisabled}
-                            submitOrModifyTestScript={handleSubmitOrUpdate}
-                            isSubmitOrModifyButtonDisabled={isSubmitOrModifyButtonDisabled}
+                            submitOrUpdateTestScript={handleSubmitOrUpdate}
+                            isSubmitOrUpdateButtonDisabled={isSubmitOrUpdateButtonDisabled}
                             isCancelButtonDisabled={async.current}
                             testScriptSteps={testScriptSteps.current}
                             displayFadingBalls={displayFadingBalls}>
@@ -564,12 +564,10 @@ function CreateOrModifyTestScript() {
                                 </div>
                             </div>
                         </div>}
-                </Fragment>
-            }
+                </Fragment>}
         </Fragment >
         // </Beforeunload>
     )
 };
 
 export default CreateOrModifyTestScript;
-

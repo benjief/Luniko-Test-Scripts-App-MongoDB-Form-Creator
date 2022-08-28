@@ -21,24 +21,22 @@ function LandingPage() {
             setTransitionElementVisibility("hidden");
             invalidTestScriptNameError("");
         }
-    }, [invalidTestScriptNameError, rendering, setTransitionElementOpacity, setTransitionElementVisibility]);
+    }, [invalidTestScriptNameError, rendering]);
 
     return (
         <Fragment>
-            <div
+            {/* <div
                 className="transition-element"
                 style={{
                     opacity: transitionElementOpacity,
                     visibility: transitionElementVisibility
                 }}>
-            </div>
+            </div> */}
             <LoadingWrapper
                 rendering={rendering}
                 transitionElementOpacity={transitionElementOpacity}
                 transitionElementVisibility={transitionElementVisibility}>
             </LoadingWrapper>
-            {/* <NavBar>
-                </NavBar> */}
             <div className="landing-page-options">
                 <div className="page-message">
                     Welcome!

@@ -19,8 +19,8 @@ function CreateOrModifyTestScriptCard({
     existingOwnerLastName,
     handleTransitionToStepsPage,
     isAddOrModifyStepsButtonDisabled,
-    submitOrModifyTestScript,
-    isSubmitOrModifyButtonDisabled,
+    submitOrUpdateTestScript,
+    isSubmitOrUpdateButtonDisabled,
     isCancelButtonDisabled,
     testScriptSteps,
     displayFadingBalls,
@@ -45,7 +45,7 @@ function CreateOrModifyTestScriptCard({
         <div>
             <Card
                 sx={{
-                    height: "calc(100vh - 336.52px)",
+                    minHeight: "calc(100vh - 336.52px)",
                     overflowY: "scroll",
                     borderRadius: "10px",
                     boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
@@ -66,7 +66,6 @@ function CreateOrModifyTestScriptCard({
                                 placeholder="Test Script Name"
                                 defaultValue={existingTestScriptName}
                                 inputValue={handleOnChange}
-                                multiline={false}
                                 required={true}
                                 showCharCounter={isModificationCard ? false : true}
                                 requiresTextValidation={true}
@@ -93,7 +92,6 @@ function CreateOrModifyTestScriptCard({
                                 placeholder="Primary Workstream"
                                 defaultValue={existingTestScriptPrimaryWorkstream}
                                 inputValue={handleOnChange}
-                                multiline={false}
                                 required={true}
                                 showCharCounter={true}
                                 field="testScriptPrimaryWorkstream" >
@@ -103,9 +101,7 @@ function CreateOrModifyTestScriptCard({
                                 placeholder="Owner First Name"
                                 defaultValue={existingOwnerFirstName}
                                 inputValue={handleOnChange}
-                                multiline={false}
                                 required={true}
-                                showCharCounter={false}
                                 field="ownerFirstName" >
                             </MaterialTextField>
                             <MaterialTextField
@@ -113,9 +109,7 @@ function CreateOrModifyTestScriptCard({
                                 placeholder="Owner Last Name"
                                 defaultValue={existingOwnerLastName}
                                 inputValue={handleOnChange}
-                                multiline={false}
                                 required={true}
-                                showCharCounter={false}
                                 field="ownerLastName" >
                             </MaterialTextField>
                         </CardContent>
@@ -130,18 +124,18 @@ function CreateOrModifyTestScriptCard({
             </button>
             {stepsWithoutDescription.length
                 ? <MaterialDialog
-                    isDialogDisabled={isSubmitOrModifyButtonDisabled}
+                    isDialogDisabled={isSubmitOrUpdateButtonDisabled}
                     exteriorButton=
                     {
                         <SubmitButton
                             className="submit-or-update-test-script-button"
-                            isSubmitButtonDisabled={isSubmitOrModifyButtonDisabled}
+                            isSubmitButtonDisabled={isSubmitOrUpdateButtonDisabled}
                             displayFadingBalls={displayFadingBalls}>
                         </SubmitButton>
                     }
                     inactiveButtonText="Cancel"
                     displayActiveButton={true}
-                    activeButtonFunction={submitOrModifyTestScript}
+                    activeButtonFunction={submitOrUpdateTestScript}
                     activeButtonText="Submit"
                     dialogDescription={<p>You are attempting to submit a test script in which the following steps are missing a description: {stepsWithoutDescription}</p>}>
                 </MaterialDialog>
@@ -150,8 +144,8 @@ function CreateOrModifyTestScriptCard({
                     submitButtonText={isModificationCard ? "Update" : "Submit"}
                     displayFadingBalls={displayFadingBalls}
                     handleOnClick={true}
-                    handleOnClickFunction={submitOrModifyTestScript}
-                    isSubmitButtonDisabled={isSubmitOrModifyButtonDisabled}>
+                    handleOnClickFunction={submitOrUpdateTestScript}
+                    isSubmitButtonDisabled={isSubmitOrUpdateButtonDisabled}>
                 </SubmitButton>}
             {/* <SubmitButton
                 className={"submit-or-update-test-script-button"}
@@ -183,8 +177,8 @@ CreateOrModifyTestScriptCard.propTypes = {
     existingOwnerLastName: PropTypes.string,
     handleTransitionToStepsPage: PropTypes.func,
     isAddOrModifyStepsButtonDisabled: PropTypes.bool,
-    submitOrModifyTestScript: PropTypes.func,
-    isSubmitOrModifyButtonDisabled: PropTypes.bool,
+    submitOrUpdateTestScript: PropTypes.func,
+    isSubmitOrUpdateButtonDisabled: PropTypes.bool,
     isCancelButtonDisabled: PropTypes.bool,
     displayFadingBalls: PropTypes.bool,
     testScriptSteps: PropTypes.array,
@@ -202,8 +196,8 @@ CreateOrModifyTestScriptCard.defaultProps = {
     existingOwnerLastName: "",
     handleTransitionToStepsPage: () => { },
     isAddOrModifyStepsButtonDisabled: false,
-    submitOrModifyTestScript: () => { },
-    isSubmitOrModifyButtonDisabled: true,
+    submitOrUpdateTestScript: () => { },
+    isSubmitOrUpdateButtonDisabled: true,
     isCancelButtonDisabled: false,
     displayFadingBalls: false,
     testScriptSteps: [],

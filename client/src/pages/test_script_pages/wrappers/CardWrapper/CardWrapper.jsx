@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import React from 'react'
-import FadingBalls from 'react-cssfx-loading/lib/FadingBalls';
+import PropTypes from "prop-types";
+import React from "react"
+import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 
-// const CREATE_VIEW = 'CREATE_VIEW'
+// const CREATE_VIEW = "CREATE_VIEW"
 
 function CardWrapper({
     children,
@@ -116,7 +116,7 @@ CardWrapper.propTypes = {
     //     age: PropTypes.number
     // }),
     // arr: PropTypes.arrayOf(PropTypes.string),
-    // somethingElse: PropTypes.oneOf([CREATE_VIEW, 'Modify'])
+    // somethingElse: PropTypes.oneOf([CREATE_VIEW, "Modify"])
 }
 
 CardWrapper.defaultProps = {

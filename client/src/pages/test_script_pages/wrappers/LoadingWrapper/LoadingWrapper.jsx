@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import React, { Fragment } from 'react';
-import NavBar from '../../../../components/Navbar';
-import Hypnosis from 'react-cssfx-loading/lib/Hypnosis';
+import PropTypes from "prop-types";
+import React, { Fragment } from "react";
+import NavBar from "../../../../components/Navbar";
+import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
 // import "../../../styles/TestScriptTestingPage.css";
 
 function LoadingWrapper({

@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import MaterialAlert from '../../../../components/MaterialAlert';
+import PropTypes from "prop-types";
+import React from "react";
+import MaterialAlert from "../../../../components/MaterialAlert";
 
 function AlertWrapper({
     alert,
