@@ -26,6 +26,7 @@ function CreateOrModifyTestScriptCard({
     displayFadingBalls,
 }) {
     const [stepsWithoutDescription, setStepsWithoutDescription] = React.useState("");
+    const formUpdated = React.useRef(false);
 
     React.useEffect(() => {
         let copyOfSteps = testScriptSteps.filter((val) => {
@@ -39,6 +40,7 @@ function CreateOrModifyTestScriptCard({
         setFormProps(
             prev => ({ ...prev, [returnedObject.field]: returnedObject.value })
         );
+        formUpdated.current = true;
     }
 
     return (
@@ -145,7 +147,7 @@ function CreateOrModifyTestScriptCard({
                     displayFadingBalls={displayFadingBalls}
                     handleOnClick={true}
                     handleOnClickFunction={submitOrUpdateTestScript}
-                    isSubmitButtonDisabled={isSubmitOrUpdateButtonDisabled}>
+                    isSubmitButtonDisabled={isSubmitOrUpdateButtonDisabled || (isModificationCard && !formUpdated.current)}>
                 </SubmitButton>}
             {/* <SubmitButton
                 className={"submit-or-update-test-script-button"}
