@@ -60,22 +60,19 @@
 }
 
 #alert-dialog-description {
-    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
-    font-size: 13pt;
-    padding-bottom: 0 !important
+    font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12pt;
+    padding-bottom: 0;
 }
 
 .material-dialog-inactive-button, .material-dialog-active-button {
-    /* background-color: var(--lunikoBlue) !important; */
     border-radius: 3px !important;
-    /* color: white !important; */
     color: var(--lunikoBlue) !important;
     font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
-    font-size: 12.2pt !important;
-    font-weight: 600 !important;
+    font-size: 1.75ch !important;
+    font-weight: 700 !important;
     text-transform: none !important;
     padding: 2px 10px 2px 10px !important;
-    /* width: 90px !important; */
 }
 
 .material-dialog-exterior-button-container {
