@@ -23,6 +23,7 @@
 
 .alert-container .MuiPaper-root {
     display: grid;
+    justify-items: start;
     grid-template-columns: 90% 10%;
     /* flex-direction: row !important; */
     font-family: "Raleway", Verdana, Geneva, Tahoma, sans-serif !important;
@@ -37,7 +38,7 @@
 .alert-container .MuiSnackbarContent-action {
     padding-left: 0;
     /* margin-left: 0; */
-    margin-right: 0;
+    /* margin-right: 0; */
 }
 
 .success-alert .MuiPaper-root {
