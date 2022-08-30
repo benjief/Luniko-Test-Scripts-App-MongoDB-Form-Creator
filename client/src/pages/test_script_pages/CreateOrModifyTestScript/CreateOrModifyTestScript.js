@@ -408,7 +408,7 @@ function CreateOrModifyTestScript() {
                 setIsValidTestScriptNameEntered(true);
                 isDataBeingFetched.current = false;
                 setRendering(true);
-                setIsSubmitOrUpdateButtonDisabled(true);
+                setIsRequestTestScriptButtonDisabled(true);
             } else {
                 invalidTestScriptNameError("Invalid test script name");
             }
