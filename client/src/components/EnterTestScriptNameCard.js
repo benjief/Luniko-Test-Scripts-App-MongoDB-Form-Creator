@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { useValidationErrorUpdate } from '../pages/test_script_pages/Context/ValidationErrorContext';
+import { useValidationErrorUpdate } from '../pages/TestScriptPages/Context/ValidationErrorContext';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';

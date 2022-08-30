@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useValidationError } from '../pages/test_script_pages/Context/ValidationErrorContext';
+import { useValidationError } from '../pages/TestScriptPages/Context/ValidationErrorContext';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';

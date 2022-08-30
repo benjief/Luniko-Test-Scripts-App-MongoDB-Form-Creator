@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
-import LoadingWrapper from "../test_script_pages/wrappers/LoadingWrapper/LoadingWrapper";
+import LoadingWrapper from "../TestScriptPages/wrappers/LoadingWrapper/LoadingWrapper";
 import LandingPageOptionsCard from "../../components/LandingPageOptionsCard";
-import { useValidationErrorUpdate } from "../test_script_pages/Context/ValidationErrorContext";
+import { useValidationErrorUpdate } from "../TestScriptPages/Context/ValidationErrorContext";
 import "../../styles/InputComponents.css"
 import "../../styles/LandingPage.css";
 
