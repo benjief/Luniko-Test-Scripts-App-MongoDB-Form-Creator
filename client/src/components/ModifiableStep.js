@@ -8,28 +8,15 @@ function ModifiableStep({
     stepDataInputtedByUser,
     modifyStepInfo,
     addOrRemoveStep,
-    // removeStep,
     removeDisabled,
-    // isNewlyAdded,
 }) {
-    // const [opacity, setOpacity] = React.useState(isNewlyAdded ? "0" : "100%");
-    // const [height, setHeight] = React.useState(isNewlyAdded ? stepNumber === 1 ? "49px" : "0" : "432px");
-    // const [padding, setPadding] = React.useState(isNewlyAdded ? "0" : "10px");
-    // const [marginBottom, setMarginBottom] = React.useState(isNewlyAdded ? "0" : "30px");
-    // const [overflow, setOverflow] = React.useState("auto");
-    // const [isRemoved, setIsRemoved] = React.useState(false);
-    // const stepRef = React.useRef(null);
 
     const handleModifyStepInfo = React.useCallback((returnedObject) => { // without useCallback, get new function every time the component re-renders
-        // console.log("returned object:", returnedObject);
         let updatedStep = { number: stepNumber };
         if (returnedObject.field === "description") {
             updatedStep["description"] = returnedObject["value"];
-            // updatedStep["dataInputtedByUser"] = stepDataInputtedByUser;
         } else {
-            // console.log(stepDescription);
             updatedStep["dataInputtedByUser"] = returnedObject["value"];
-            // updatedStep["description"] = stepDescription;
         }
         modifyStepInfo(updatedStep);
     }, [modifyStepInfo, stepNumber]) // function will only be re-created when one of these dependent variables changes
@@ -38,45 +25,8 @@ function ModifiableStep({
         operation === "add" ? addOrRemoveStep({ number: stepNumber }, "add") : addOrRemoveStep({ number: stepNumber }, "remove");
     }
 
-    // const handleRemoveStep = () => {
-    //     // setHeight(stepRef.current?.clientHeight + "px");
-    //     // setIsRemoved(true);
-    //     // if (!removeDisabled) {
-    //     //     setOpacity("0%");
-    //     //     setTimeout(() => {
-    //     //         setOverflow("hidden");
-    //     //         setMarginBottom("0");
-    //     //         setPadding("0");
-    //     //         setHeight("0");
-    //     //     }, 400);
-    //     // setTimeout(() => {
-    //     // removeStep({ number: stepNumber });
-    //     // }, 800); // this seems to be the magic number so that the animation for removing a step remains smooth
-    //     // }
-    // }
-
-    // React.useEffect(() => {
-    //     if (isNewlyAdded) {
-    //         setHeight("432px");
-    //         setMarginBottom("30px");
-    //         setPadding("10px");
-    //         setTimeout(() => {
-    //             setOpacity("100%");
-    //             setHeight("auto");
-    //         }, 400);
-    //     }
-    // }, [isNewlyAdded]);
-
     return (
-        <div className="step-container"
-            /*ref={stepRef}
-            style={{
-                opacity: opacity,
-                height: height,
-                padding: padding,
-                marginBottom: marginBottom,
-                // overflow: overflow
-            }}*/>
+        <div className="step-container">
             <div className="step-title">
                 <div className="step-number">
                     Step {stepNumber}
@@ -96,7 +46,6 @@ function ModifiableStep({
                     placeholder="Description"
                     inputValue={handleModifyStepInfo}
                     multiline={true}
-                    // required={true}
                     showCharCounter={true}>
                 </MaterialTextField>
             </div>
@@ -128,9 +77,7 @@ ModifiableStep.propTypes = {
     stepDataInputtedByUser: PropTypes.string,
     modifyStepInfo: PropTypes.func,
     addOrRemoveStep: PropTypes.func,
-    // removeStep: PropTypes.func,
     removeDisabled: PropTypes.bool,
-    // isNewlyAdded: PropTypes.bool,
 }
 
 ModifiableStep.defaultProps = {
@@ -139,9 +86,7 @@ ModifiableStep.defaultProps = {
     stepDataInputtedByUser: "",
     modifyStepInfo: () => { },
     addOrRemoveStep: () => { },
-    // removeStep: () => { },
     removeDisabled: true,
-    // isNewlyAdded: true,
 }
 
 export default ModifiableStep;

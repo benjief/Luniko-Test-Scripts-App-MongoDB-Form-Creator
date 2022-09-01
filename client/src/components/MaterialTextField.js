@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useValidationError } from '../pages/TestScriptPages/Context/ValidationErrorContext';
+import { useValidationError } from '../pages/ConversionChecklistPages/Context/ValidationErrorContext';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -9,29 +9,29 @@ const sx = {
 }
 
 function MaterialTextField({
-  field,
+  field, // name of the field being input
   className,
-  label,
-  helperText,
-  characterLimit,
-  placeholder,
-  defaultValue,
-  inputValue,
-  multiline,
-  type,
-  required,
-  showCharCounter,
-  requiresTextValidation,
-  isTextValidationCaseSensitive,
-  invalidInputs,
-  invalidInputMsg,
-  authenticationField,
-  minValue,
-  maxValue,
-  negativeNumbersAllowed,
-  zerosAllowed,
-  fractionsAllowed,
-  disabled = false,
+  label,  // text displayed inside of the text input before the user has input anything
+  helperText, // text to be displayed underneath the input in case of an error; TODO: figure this out
+  characterLimit, // character limit to be imposed on the text input
+  placeholder, // text displayed inside of the text input after the user has entered something
+  defaultValue, // input to be held by the component upon initial render
+  inputValue, // callback function that provides input to the component containing this component
+  multiline, // whether or not this input is multiline
+  type, // the type of input being entered (e.g. "text" or "number")
+  required, // whether or not this is a required field
+  showCharCounter, // whether or not a character counter is displayed underneath the input field
+  requiresTextValidation, // whether or not text validation should be enabled
+  isTextValidationCaseSensitive, // whether or not text validation (if enabled) is case sensitive
+  invalidInputs, // array of invalid inputs (these should be the same type of input as the field itself)
+  invalidInputMsg, // message to be displayed under the field if the user enters invalid input
+  isAuthenticationField, // whether or not the field needs to be authenticated (e.g. if input already exists in the database and can't be used)
+  minValue, // minimum allowed value for number inputs
+  maxValue, // maximum allowed value for number inputs
+  negativeNumbersAllowed, // whether or not negative numbers are allowed for number inputs
+  zerosAllowed, // whether or not zero is allowed for number inputs
+  fractionsAllowed, // whether or not non-whole numbers are allowed for number inputs
+  isDisabled, // whether or not the field is disabled
 }) {
   const [value, setValue] = React.useState(defaultValue);
   const [isErrorEnabled, setIsErrorEnabled] = React.useState(false);
@@ -68,12 +68,12 @@ function MaterialTextField({
   }, [field, inputValue])
 
   const checkTextInputValidity = React.useCallback((input) => {
-    input = isTextValidationCaseSensitive ? input : input.toLowerCase();
-    if (invalidInputs.includes(input.trim())) {
+    let comparisonInput = isTextValidationCaseSensitive ? input : input.toLowerCase();
+    if (invalidInputs.includes(comparisonInput.trim())) {
       invalidInputMsg === ""
         ? setDisplayedHelperText("Invalid input")
         : setDisplayedHelperText(invalidInputMsg);
-      handleEmptyValue(input);
+      handleEmptyValue(comparisonInput);
     } else {
       handleValidValue(input);
     }
@@ -112,17 +112,16 @@ function MaterialTextField({
   }, [handleInvalidNumber, handleValidValue, maxValue, minValue, negativeNumbersAllowed, zerosAllowed])
 
   React.useEffect(() => {
-    if (authenticationField) {
+    if (isAuthenticationField) {
       if (authenticationError.length) {
         setIsErrorEnabled(true);
         setDisplayedHelperText(authenticationError);
       } else {
         setIsErrorEnabled(false);
         setDisplayedHelperText("");
-        // }
       }
     }
-  }, [authenticationField, authenticationError, isErrorEnabled, value]) // TODO: check need for firstRender
+  }, [isAuthenticationField, authenticationError, isErrorEnabled, value])
 
   const handleOnSubmit = React.useCallback(
     (event) => {
@@ -208,7 +207,7 @@ function MaterialTextField({
           error={isErrorEnabled}
           required={required}
           placeholder={placeholder}
-          disabled={disabled}
+          disabled={isDisabled}
           inputProps={inputProps}
           helperText={showCharCounter ? !isErrorEnabled ? displayedHelperText !== ""
             ? [displayedHelperText, ". Limit: ", inputLength, "/", characterLimit].join("") : ["Limit: ", inputLength, "/", characterLimit].join('')
@@ -219,8 +218,6 @@ function MaterialTextField({
   );
 }
 
-
-
 MaterialTextField.propTypes = {
   field: PropTypes.string,
   className: PropTypes.string,
@@ -228,7 +225,10 @@ MaterialTextField.propTypes = {
   helperText: PropTypes.string,
   characterLimit: PropTypes.number,
   placeholder: PropTypes.string,
-  defaultValue: PropTypes.string,
+  defaultValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
   inputValue: PropTypes.func,
   multiline: PropTypes.bool,
   type: PropTypes.string,
@@ -238,13 +238,13 @@ MaterialTextField.propTypes = {
   isValidationCaseSensitive: PropTypes.bool,
   invalidInputs: PropTypes.array,
   invalidInputMsg: PropTypes.string,
-  authenticationField: PropTypes.bool,
+  isAuthenticationField: PropTypes.bool,
   minValue: PropTypes.number,
   maxValue: PropTypes.number,
   negativeNumbersAllowed: PropTypes.bool,
   zerosAllowed: PropTypes.bool,
   fractionsAllowed: PropTypes.bool,
-  disabled: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 }
 
 MaterialTextField.defaultProps = {
@@ -264,7 +264,7 @@ MaterialTextField.defaultProps = {
   isTextValidationCaseSensitive: true,
   invalidInputs: [],
   invalidInputMsg: "",
-  authenticationField: false,
+  isAuthenticationField: false,
   minValue: Number.MIN_SAFE_INTEGER,
   maxValue: Number.MAX_SAFE_INTEGER,
   negativeNumbersAllowed: true,

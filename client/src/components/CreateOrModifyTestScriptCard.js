@@ -63,7 +63,7 @@ function CreateOrModifyTestScriptCard({
                         <CardContent>
                             <MaterialTextField
                                 label="Test Script Name"
-                                disabled={isModificationCard}
+                                isDisabled={isModificationCard}
                                 characterLimit={100}
                                 placeholder="Test Script Name"
                                 defaultValue={existingTestScriptName}

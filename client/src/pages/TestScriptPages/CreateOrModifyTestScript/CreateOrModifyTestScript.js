@@ -15,6 +15,10 @@ import "../../../styles/SelectorComponents.css";
 import "../../../styles/AlertComponents.css";
 import "../../../styles/Steps.css";
 
+/**
+ * This page allows users to create or modify test scripts. Test script names must be different than any other test script name already written to the database.
+ * @returns a page housing all of the components needed to implement the above functionality.
+ */
 function CreateOrModifyTestScript() {
     const [rendering, setRendering] = useState(true);
     const { pageFunctionality } = useParams();
@@ -59,56 +63,46 @@ function CreateOrModifyTestScript() {
 
     const navigate = useNavigate();
 
+    /**
+     * Displays an alert with the correct type of error (success or error). 
+     * @param {string} errorType 
+     */
     const handleError = useCallback((errorType) => {
         setIsErrorThrown(true);
         alertType.current = "error-alert";
         errorType === "r"
-            ? alertMessage.current = loadErrorMessage
-            : alertMessage.current = writeErrorMessage;
-
-        // Delay is set up just in case an error is generated before the is fully-displayed
-        // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
-        let delay = 0; // TODO: test this and amend if necessary
+            ? alertMessage.current = loadErrorMessage // read error message
+            : alertMessage.current = writeErrorMessage; // write error message
 
         if (rendering) {
             setRendering(false);
         }
 
-        setTimeout(() => {
-            setAlert(true);
-        }, delay);
+        setAlert(true);
+
     }, [setIsErrorThrown, rendering, writeErrorMessage]);
 
+    /**
+     * Closes an alert that is on display and redirects the user to the app homepage.
+     */
     const handleAlertClosed = () => {
         setAlert(false);
         navigate("/");
     }
 
     useEffect(() => {
+        /**
+         * Calls functions that gather information required for the initial page load. Once all required information is gathered, rendering is set to false and the page is displayed.
+         */
         const runPrimaryReadAsyncFunctions = async () => {
             isDataBeingFetched.current = true;
             await fetchTestScriptNamesAlreadyInDB();
-            // await deleteTestScript("62bdd1bb2e74fb0276522634"); // TODO: here to test deletion functions in server side code
             setRendering(false);
         }
 
-        // const deleteTestScript = async (idOfTestScriptToDelete) => {
-        //     if (!async.current) {
-        //         try {
-        //             async.current = true;
-        //             await Axios.delete(`https://test-scripts-app-creator.herokuapp.com/delete-test-script/${idOfTestScriptToDelete}`, {
-        //                 timeout: 5000
-        //             })
-        //                 .then(res => {
-        //                     console.log("test script deleted");
-        //                     console.log(res);
-        //                 });
-        //         } catch (e) {
-        //             console.log(e);
-        //         }
-        //     }
-        // }
-
+        /**
+         * Fetches test script names that are already stored in the database and writes them to testScriptNamesAlreadyInDB.
+         */
         const fetchTestScriptNamesAlreadyInDB = async () => {
             console.log("fetching existing test script names");
             try {
@@ -119,7 +113,6 @@ function CreateOrModifyTestScript() {
                     .then(res => {
                         testScriptNamesAlreadyInDB.current = res.data.map(({ name_lowercase }) => name_lowercase);
                         async.current = false;
-                        // console.log(testScriptNamesAlreadyInDB.current);
                     });
             } catch (e) {
                 console.log(e);
@@ -127,13 +120,21 @@ function CreateOrModifyTestScript() {
             }
         }
 
+        /**
+         * Calls functions that fetch and write information required for displaying a previously-submitted test script.
+         * @param {string} testScriptName - the test script name corresponding to the test script for which information is being fetched.
+         */
         const runSecondaryReadAsyncFunctions = async (testScriptName) => {
             isDataBeingFetched.current = true;
             await fetchTestScriptInformation(testScriptName);
-            await fetchTestScriptSteps(testScriptID.current);
+            await fetchAndWriteTestScriptSteps(testScriptID.current);
             setRendering(false);
         }
 
+        /**
+         * Fetches test script information from the database.
+         * @param {string} testScriptName - the test script name corresponding to the test script for which information is being fetched.
+         */
         const fetchTestScriptInformation = async (testScriptName) => {
             try {
                 async.current = true;
@@ -149,6 +150,10 @@ function CreateOrModifyTestScript() {
             }
         }
 
+        /**
+         * Writes test script information to formProps, in addition to writing the loaded test script's ID to the testScriptID prop.
+         * @param {object} testScriptInformation - test script information object returned by Axios from the database.
+         */
         const populateTestScriptInformation = (testScriptInformation) => {
             if (testScriptInformation) {
                 setFormProps(
@@ -168,7 +173,11 @@ function CreateOrModifyTestScript() {
             }
         }
 
-        const fetchTestScriptSteps = async (testScriptID) => {
+        /**
+         * Fetches steps associated with the currently-loaded test script from the database and writes them to testScriptSteps. numStepsInTestScript is then set to the number of steps fetched.
+         * @param {string} testScriptID  - ID of the currently-loaded test script.
+         */
+        const fetchAndWriteTestScriptSteps = async (testScriptID) => {
             if (!async.current) {
                 try {
                     async.current = true;
@@ -188,6 +197,7 @@ function CreateOrModifyTestScript() {
         }
 
         if (rendering) {
+            // runs fetch/write functions, depending on the page's state
             if ((pageFunctionality === "create" && !isDataBeingFetched.current)
                 || (pageFunctionality === "modify" && !isValidTestScriptNameEntered && !isDataBeingFetched.current)) {
                 runPrimaryReadAsyncFunctions();
@@ -197,15 +207,13 @@ function CreateOrModifyTestScript() {
                 }
             }
             if (cardChanged.current) {
-                // setTestScriptSteps(updatedSteps.current);
                 cardChanged.current = false;
                 setRendering(false);
             }
         } else {
+            // makes page visible
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
-            // console.log("updated steps:", updatedSteps.current);
-            // console.log(testScriptSteps);
             if (pageFunctionality === "modify" && !isValidTestScriptNameEntered) {
                 formProps["testScriptName"].trim().length ? setIsRequestTestScriptButtonDisabled(false) : setIsRequestTestScriptButtonDisabled(true);
             } else if (!isTestScriptSubmitted.current) {
@@ -226,6 +234,9 @@ function CreateOrModifyTestScript() {
         formProps, testScriptSteps, numStepsInTestScript, isSubmitOrUpdateButtonDisabled, isTestScriptSubmitted, handleError]
     );
 
+    /**
+     * Handles the card change when a user flips back and forth between manipulating steps and other test script information. A brief period of rendering is forced in between each card to make the application appear more consistent.
+     */
     const handleChangeCard = () => {
         setRendering(true);
         cardChanged.current = true;
@@ -236,6 +247,10 @@ function CreateOrModifyTestScript() {
         }
     }
 
+    /**
+     * Updates step information when the user changes said step's properties (namely, its "Description" or "Data Inputted by User" fields).
+     * @param {object} updateInfo - object containing the step's updated information. Only one field can be updated at a time, and so only that field is present in this object (that comes the MaterialTextField.js component via AddOrModifyStepsCard.js).
+     */
     const handleUpdateStepInfo = useCallback((updateInfo) => {
         // console.log("update info:", updateInfo)
         const stepNumber = updateInfo["number"];
@@ -244,7 +259,7 @@ function CreateOrModifyTestScript() {
             return obj["number"] === stepNumber
         });
         const originalStep = copyOfSteps[indexOfStepToUpdate];
-        const updatedStep = { // new object - no risk of screwing up original object (functional programming - no updating something outside of fcn)
+        const updatedStep = { // new object - no risk of messing up original object (functional programming - no updating something outside of function)
             ...originalStep,
             description: updateInfo["description"] ? updateInfo["description"] : originalStep["description"],
             dataInputtedByUser: updateInfo["dataInputtedByUser"] ? updateInfo["dataInputtedByUser"] : originalStep["dataInputtedByUser"]
@@ -252,11 +267,12 @@ function CreateOrModifyTestScript() {
         testScriptSteps.current.splice(indexOfStepToUpdate, 1, updatedStep);
     }, [])
 
-    // useEffect(() => {
-    //     if (testScriptSteps.length) //state
-    //         setTestScriptSteps([1]) //setter
-    // }, [testScriptSteps])
-
+    /**
+     * Updates step numbers for a test script's steps when a step is added or removed.
+     * @param {array} listOfSteps - the array of steps for which step numbers need to be updated.
+     * @param {*} newStartingIndex - the index at which the set of steps should start after the function has run. This increases by one after each iteration of the for loop.
+     * @returns the list of steps with updated step numbers.
+     */
     const updateStepNumbers = (listOfSteps, newStartingIndex) => {
         console.log("updating step numbers");
         for (let i = 0; i < listOfSteps.length; i++) {
@@ -266,25 +282,32 @@ function CreateOrModifyTestScript() {
         return listOfSteps;
     }
 
+    /**
+     * Adds a new step to the test script's collection of steps. Note that the page's vertical scroll position is modified after the addition of a new step.
+     * @param {number} insertedAtStep - the step number after which the new step is to be inserted.
+     */
     const addTestScriptStep = useCallback((insertedAtStep) => {
         let copyOfSteps = [...testScriptSteps.current];
         let unchangedSteps = copyOfSteps.slice(0, insertedAtStep);
-        // console.log("unchanged steps before:", unchangedSteps);
         let newStep = { number: insertedAtStep + 1, description: "", dataInputtedByUser: "" };
         unchangedSteps.push(newStep);
-        // console.log("unchanged steps after:", unchangedSteps);
         let stepsToReturn;
         let stepsToBeUpdated = copyOfSteps.slice(insertedAtStep);
         let stepsWithUpdatedNumbers = updateStepNumbers(stepsToBeUpdated, insertedAtStep + 2);
         stepsToReturn = unchangedSteps.concat(stepsWithUpdatedNumbers);
         testScriptSteps.current = [...stepsToReturn];
         setCardScrollPosition(cardScrollPosition + 480);
-        console.log("updated steps after add:", testScriptSteps.current);
+        // console.log("updated steps after add:", testScriptSteps.current);
     }, [cardScrollPosition])
 
+    /**
+     *
+     * Removes a step from the test script's collection of steps. Note that the page's vertical scroll position is modified after the removal of a step.
+     * @param {number} startingIndex - the index of the step after the step being removed.
+     */
     const removeTestScriptStep = useCallback((startingIndex) => {
         let copyOfSteps = [...testScriptSteps.current];
-        let stepsToKeep = copyOfSteps.slice(0, startingIndex - 1);
+        let stepsToKeep = copyOfSteps.slice(0, startingIndex - 1); // steps before the step to be removed should remain untouched
         let stepsToReturn;
         if (startingIndex < copyOfSteps.length) {
             let stepsToBeUpdated = copyOfSteps.slice(startingIndex);
@@ -296,6 +319,11 @@ function CreateOrModifyTestScript() {
         testScriptSteps.current = [...stepsToReturn];
     }, [])
 
+    /**
+     * This function is mnostly here to animate a loading screen when a step is being added or removed. It is quite convoluted, but I haven't yet thought of a better way to handle this. However, it is also responsible for coordinating the calling of the specific add/remove step functions (above) with the correct indices.
+     * @param {object} stepInfo - object containing step information for the step to be removed, or the step before the step to be added (since the step to be added doesn't yet exist).
+     * @param {string} operation - "add" or "remove" depending on what operation is to be carried out by this function.
+     */
     const handleAddOrRemoveStep = useCallback((stepInfo, operation) => {
         setPageContentOpacity("0%");
         setTimeout(() => {
@@ -314,6 +342,9 @@ function CreateOrModifyTestScript() {
         }, 300);
     }, [addTestScriptStep, removeTestScriptStep, setNumStepsInTestScript])
 
+    /**
+     * When the user requests a test script name that has previously been written to the database, that test script name is validated (through a call to validateTestScriptNameEntered). If the test script name entered is indeed valid, setValidTestScriptName is set to true, as is rendering, and the "request test script" button is disabled. Then, the useEffect hook carries out secondary read async functions to fetch/write all of the necessary test script information to the page. If the test script name entered isn't valid, an error message is displayed.
+     */
     const handleRequestTestscript = () => {
         if (!isValidTestScriptNameEntered) {
             if (validateTestScriptNameEntered()) {
@@ -328,6 +359,10 @@ function CreateOrModifyTestScript() {
     }
 
     // adapted from https://stackoverflow.com/questions/60440139/check-if-a-string-contains-exact-match
+    /**
+     * Compares the test script name entered by the user to test script names obtained by the page's primary read functions. If the entered test script name is matched against the set of valid test script names, the function returns true. If not, it returns false.
+     * @returns true if the entered test script name is matched against the set of valid test script names, false otherwise.
+     */
     const validateTestScriptNameEntered = () => {
         for (let i = 0; i < testScriptNamesAlreadyInDB.current.length; i++) {
             let escapeRegExpMatch = formProps["testScriptName"].replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -338,6 +373,9 @@ function CreateOrModifyTestScript() {
         return false;
     }
 
+    /**
+     * When the user clicks on the submit (or update) button, the isTestScriptSubmitted prop is set to true, and said button is disabled (to prevent multiple submission clicks). A set of fading balls is then displayed (to indicate that the page is working on a request), and the page's write functions are triggered through runWriteAysncFunctions.
+     */
     const handleSubmitOrUpdate = () => {
         isTestScriptSubmitted.current = true;
         setIsSubmitOrUpdateButtonDisabled(true);
@@ -346,6 +384,9 @@ function CreateOrModifyTestScript() {
         runWriteAsyncFunctions();
     }
 
+    /**
+     * Runs functions that either write a new test script to the database, or update an existing test script (if the user is updating an already-existing test script). An alert is displayed once all of the called functions have run.
+     */
     const runWriteAsyncFunctions = async () => {
         pageFunctionality === "create"
             ? await addTestScriptToDB()
@@ -353,6 +394,9 @@ function CreateOrModifyTestScript() {
         setAlert(true);
     }
 
+    /**
+     * Creates a new record by writing submitted test script information to the database.
+     */
     const addTestScriptToDB = async () => {
         async.current = true;
         try {
@@ -373,6 +417,9 @@ function CreateOrModifyTestScript() {
         }
     }
 
+    /**
+     * Updates a test script record in the database with newly-submitted information. Note that all information is overwritten, even if a particular field hasn't actually been changed.
+     */
     const updateTestScriptInDB = async () => {
         async.current = true;
         try {

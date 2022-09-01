@@ -42,7 +42,6 @@ app.post("/add-test-script", async (req, res) => {
     }
 });
 
-
 app.get("/get-test-script-names", async (req, res) => {
     try {
         console.log("test");
