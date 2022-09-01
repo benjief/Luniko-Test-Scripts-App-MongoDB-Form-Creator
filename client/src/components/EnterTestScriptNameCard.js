@@ -10,7 +10,7 @@ import SubmitButton from './SubmitButton';
 import MaterialDialog from './MaterialDialog';
 
 /**
- * Card that allows users to retrieve checklist information from the database by entering a valid load sheet name. Note that the validity of a load sheet name is determined by the page that contains this card.
+ * Card that allows users to retrieve test script information from the database by entering a valid load sheet name. Note that the validity of a test script name is determined by the page that contains this card.
  * @returns said card.
  */
 function EnterTestScriptNameCard({

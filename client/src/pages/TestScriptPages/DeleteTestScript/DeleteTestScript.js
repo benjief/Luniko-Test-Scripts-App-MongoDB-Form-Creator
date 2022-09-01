@@ -76,14 +76,14 @@ function DeleteTestScript() {
          */
         const runPrimaryReadAsyncFunctions = async () => {
             isDataBeingFetched.current = true;
-            await fetchTestScriptNamesAlreadyInDB();
+            await fetchAndWriteTestScriptNamesAlreadyInDB();
             setRendering(false);
         }
 
         /**
          * Fetches test script names that are already stored in the database and writes them to testScriptNamesAlreadyInDB.
          */
-        const fetchTestScriptNamesAlreadyInDB = async () => { // TODO: abstract this function
+        const fetchAndWriteTestScriptNamesAlreadyInDB = async () => { // TODO: abstract this function
             try {
                 async.current = true;
                 await Axios.get("https://test-scripts-app-creator.herokuapp.com/get-test-script-names", {
