@@ -2,29 +2,32 @@ import PropTypes from "prop-types";
 import React from "react"
 import FadingBalls from "react-cssfx-loading/lib/FadingBalls";
 
-// const CREATE_VIEW = "CREATE_VIEW"
+// TODO: study this - const CREATE_VIEW = "CREATE_VIEW"
 
+/**
+ * Component that structures this application's test script-related pages (i.e. CreateOrModifyTestScript.js, DeleteTestScript.js and RetrieveTestScriptTestingSessions.js).
+ * @returns said component.
+ */
 function CardWrapper({
-    children,
-    rendering,
-    alert,
-    isErrorThrown,
-    isUserModifyingSteps,
-    isUserRetrievingTestingSessions,
-    isUserDeletingTestScript,
-    doTestingSessionsExist,
-    pageMessageOpacity,
-    pageContentOpacity,
-    testScriptName,
-    isTestingSessionBeingDeleted,
-    isStepBeingAddedOrRemoved,
+    children, // components to be displayed within the structured divs below
+    rendering, // whether or not the page is rendering
+    alert, // whether or not an alert is being displayed on the page
+    isErrorThrown, // whether or not an error has been thrown on the page
+    isUserModifyingSteps, // whether or not the user is currently modifying steps
+    isUserRetrievingTestingSessions, // whether or not the user is currently retrieving testing sessions for a test script
+    isUserDeletingTestScript, // whether or not the user is currently deleting a test script
+    doTestingSessionsExist, // whether or not any testing sessions have been submitted for a particular test script
+    pageMessageOpacity, // opacity of the page message (sits at the top of the page)
+    pageContentOpacity, // opacity of the page content (sits below the page message)
+    testScriptName, // name of the test script for which testing sessions have been retrieved
+    isTestingSessionBeingDeleted, // whether or not a testing session is currently being removed from the database (triggers a change in page content)
+    isStepBeingAddedOrRemoved, // whether or not a step is currently being added or removed from a test script (triggers a change in page content)
 }) {
-
     return (
         rendering || alert
             ? <div></div>
             : isErrorThrown
-                ? <div></div> // TODO: test this!
+                ? <div></div>
                 : <div className={isUserModifyingSteps
                     ? "add-or-modify-steps"
                     : isUserRetrievingTestingSessions
@@ -95,7 +98,6 @@ function CardWrapper({
     )
 };
 
-// TODO: example prop types (document these elsewhere)
 CardWrapper.propTypes = {
     children: PropTypes.node.isRequired,
     rendering: PropTypes.bool,
@@ -110,6 +112,7 @@ CardWrapper.propTypes = {
     testScriptName: PropTypes.string,
     isTestingSessionBeingDeleted: PropTypes.bool,
     isStepBeingAddedOrRemoved: PropTypes.bool,
+    // TODO: the code below is for future reference - document it somewhere
     // isUserViewingTestingSessionDetails: PropTypes.bool,
     // setter: PropTypes.func,
     // myObject: PropTypes.shape({

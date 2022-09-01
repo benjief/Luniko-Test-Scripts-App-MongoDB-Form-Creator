@@ -1,23 +1,18 @@
 const express = require("express");
 const morgan = require("morgan");
-// const { urlencoded, json } = require("body-parser");
 const cors = require("cors");
 
 const app = express();
 
 const connect = require("./connect");
 const { Step, TestingSession, StepResponse, TestScript } = require("./schemas/schemas");
-// const e = require("express");
 
-// import { test } from "./test";
 // import { deleteStepResponseImage } from "./firebase/config";
 
 // Middleware
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(urlencoded({ extended: true }));
-// app.use(json());
 app.use(cors());
 
 // Queries
@@ -100,47 +95,6 @@ app.get("/get-test-script-testing-sessions/:testScriptID", async (req, res) => {
     }
 });
 
-// app.get("/get-test-script-testing-sessions/:testScriptID", async (req, res) => {
-//     const testScriptID = req.params.testScriptID;
-//     try {
-//         console.log(testScriptID);
-//         const testingSessions = await TestingSession.find(
-//             { testScriptID: testScriptID }
-//         ).sort({ updatedAt: 'desc' }).lean().exec();
-//         res.status(200).json(testingSessions);
-//     } catch (e) {
-//         res.status(500).send;
-//     }
-// });
-
-// app.get("/get-testing-session-responses/:testingSessionID", async (req, res) => {
-//     const testingSessionID = req.params.testingSessionID;
-//     try {
-//         // console.log("getting responses for:", testingSessionID);
-//         const responses = await StepResponse.find(
-//             { sessionID: testingSessionID }
-//         ).lean().exec();
-//         await addStepNumberAndDescription(responses);
-//         res.status(200).json(responses);
-//     } catch (e) {
-//         res.status(500).send;
-//     }
-// });
-
-// app.get("/get-testing-session-responses/:testingSessionID", async (req, res) => {
-//     const testingSessionID = req.params.testingSessionID;
-//     try {
-//         // console.log("getting responses for:", testingSessionID);
-//         const responses = await StepResponse.find(
-//             { sessionID: testingSessionID }
-//         ).lean().exec();
-//         await addStepNumber(responses);
-//         res.status(200).json(responses);
-//     } catch (e) {
-//         res.status(500).send;
-//     }
-// });
-
 app.put("/update-test-script", async (req, res) => {
     console.log("updating");
     const testScriptOwner = req.body.testScriptOwner;
@@ -201,29 +155,38 @@ app.delete("/delete-testing-session/:testingSessionID", async (req, res) => {
 });
 
 // Helper functions
+/**
+ * Calls addTestScriptIDToSteps (so that all steps contain a reference to the test script they are being submitted for) before creating step documents for each step in stepsToAdd.
+ * @param {string} testScriptID - the ID of the test script that the steps being added to the database are a part of.
+ * @param {array} stepsToAdd - array of steps for which database documents are to be written.
+ */
 const addSteps = async (testScriptID, stepsToAdd) => {
-    console.log(stepsToAdd);
-    console.log("adding IDs to steps")
+    // console.log(stepsToAdd);
+    // console.log("adding IDs to steps")
     addTestScriptIDToSteps(testScriptID, stepsToAdd);
-    console.log("adding steps");
+    // console.log("adding steps");
     try {
         await Step.create(stepsToAdd);
     } catch (e) {
         console.log(e);
     }
-    // const updatedTestScript = await TestScript.updateOne(
-    //     { name: testScriptName },
-    //     { $set: { steps: steps } },
-    //     { new: true }
-    // );
 }
 
+/**
+ * Adds the correct test script ID to all steps in stepsToAdd array.
+ * @param {string} testScriptID - the ID of the test script that the steps being added to the database are a part of.
+ * @param {array} stepsToAdd - array of steps for which an ID attribute is to be written.
+ */
 const addTestScriptIDToSteps = (testScriptID, stepsToAdd) => {
     for (let i = 0; i < stepsToAdd.length; i++) {
         stepsToAdd[i]["testScriptID"] = testScriptID;
     }
 }
 
+/**
+ * Fetches testing session responses from the database for an array of testing sessions. Note that step numbers (not directly stored in step response documents) are retrieved during this process with a call to addStepNumberToStepResponses.
+ * @param {array} testingSessions - array of testing sessions for which results are to be fetched.
+ */
 const getTestingSessionResponses = async (testingSessions) => {
     for (let i = 0; i < testingSessions.length; i++) {
         try {
@@ -238,6 +201,10 @@ const getTestingSessionResponses = async (testingSessions) => {
     }
 }
 
+/**
+ * Retrieves and adds a step number attribute (stored in step documents) to step response documents.
+ * @param {array} stepResponses - array of step responses to which step numbers are to be retrieved/added.
+ */
 const addStepNumberToStepResponses = async (stepResponses) => {
     for (let i = 0; i < stepResponses.length; i++) {
         try {
@@ -274,6 +241,10 @@ const addStepNumberToStepResponses = async (stepResponses) => {
 //     }
 // }
 
+/**
+ * Deletes step documents associated with a particular test script from the database.
+ * @param {string} testScriptID - ID of the test script document for which steps are to be removed from the database.
+ */
 const deleteStepsAssociatedWithTestScript = async (testScriptID) => {
     try {
         await Step.deleteMany({ testScriptID: testScriptID });
@@ -286,10 +257,14 @@ const deleteStepsAssociatedWithTestScript = async (testScriptID) => {
 //     const { deleteStepResponseImage } = await import("./firebase/config.mjs");
 // }
 
+/**
+ * Retrieves step responses to delete for a given testing session and removes any images associated with said step responses from Google Firebase Cloud Storage (through calls to deleteStepResponseImage, a function dynamically imported from config.mjs in the firebase folder).
+ * @param {string} testingSessionID - ID of the testing session for which associated images are to be removed from Google Firebase Cloud Storage.
+ */
 const deleteImagesAssociatedWithTestingSession = async (testingSessionID) => {
     try {
-        const { deleteStepResponseImage } = await import("./firebase/config.mjs"); // dynamically import firebase function
-        console.log("module loaded");
+        const { deleteStepResponseImage } = await import("./firebase/config.mjs"); // dynamically imported firebase function
+        // console.log("module loaded");
         const stepResponsesToDelete = await StepResponse.find(
             { sessionID: testingSessionID },
             { "uploadedImage": 1 }
@@ -306,11 +281,13 @@ const deleteImagesAssociatedWithTestingSession = async (testingSessionID) => {
 }
 
 connect()
+    // local connection code
     // .then(() => app.listen(5000, () => {
     //     console.log("Yay! Your server is running on http://localhost:5000!");
     // }))
     // .catch(e => console.error(e));
 
+    // Heroku connection code
     .then(() => app.listen(process.env.PORT || 5000, () => {
         console.log("Yay! Your server is running on port 5000!");
     }))

@@ -6,29 +6,42 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
+/**
+ * Dialog button/popup combination customized from the original Material UI component that can be found here: https://mui.com/material-ui/react-dialog/.
+ * @returns said dialog.
+ */
 function MaterialDialog({
     className,
-    exteriorButton,
-    inactiveButtonText,
-    displayActiveButton,
-    activeButtonFunction,
-    activeButtonText,
-    dialogTitle,
-    dialogDescription,
-    isDialogDisabled,
+    exteriorButton, // button users will click on to display the dialog contained in this component
+    inactiveButtonText, // text displayed inside of the dialog popup for the button used to close said dialog popup
+    displayActiveButton, // whether or not an active button (i.e. a button that calls the function below) should be displayed inside of the dialog popup
+    activeButtonFunction, // function to be called when the user clicks on the active button inside of the dialog popup
+    activeButtonText, // text displayed inside of the dialog popup for the active button that calls a function
+    dialogTitle, // title text displayed inside of the dialog popup
+    dialogDescription, // description text displayed inside of the dialog popup
+    isDialogDisabled, // whether or not the dialog is disabled
 }) {
     const [open, setOpen] = React.useState(false);
 
+    /**
+     * Opens the dialog popup.
+     */
     const handleClickOpen = () => {
         if (!isDialogDisabled) {
             setOpen(true);
         }
     };
 
+    /**
+     * Closes the dialog popup.
+     */
     const handleClose = () => {
         setOpen(false);
     };
 
+    /**
+     * Closes the dialog popup before calling the active button function (if it's set be displayed). 
+     */
     const handleOnClickActiveButton = () => {
         handleClose();
         activeButtonFunction();
@@ -44,8 +57,7 @@ function MaterialDialog({
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
+                aria-describedby="alert-dialog-description">
                 <DialogTitle id="alert-dialog-title">
                     {dialogTitle}
                 </DialogTitle>

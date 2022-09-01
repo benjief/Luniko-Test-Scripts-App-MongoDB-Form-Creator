@@ -13,6 +13,10 @@ import MaterialImageDialog from './MaterialImageDialog';
 // import SubmitButton from './SubmitButton';
 import MaterialDialog from './MaterialDialog';
 
+/** 
+ * Function used to expand the card (comes pre-packaged with this component).
+ * @params props 
+ */
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
     return <IconButton {...other} />;
@@ -23,52 +27,40 @@ const ExpandMore = styled((props) => {
         duration: theme.transitions.duration.shortest,
     }),
 }));
+
+/**
+ * Card that displays fields of interest corresponding to a user's testing session for a particular test script. 
+ * @returns said card.
+ */
 function TestingSessionCard({
-    testingSessionID,
-    submitter,
-    completed,
-    terminatedAtStep,
-    result,
-    failedSteps,
-    stepsWithMinorIssues,
-    responsesWithAttachedContent,
-    submissionDate,
-    deleteTestingSession,
-    isDeleteButtonDisabled,
+    testingSessionID, // ID of the testing session
+    submitter, // object containing the details of the tester
+    completed, // whether or not all steps in the testing session were completed by the tester
+    terminatedAtStep, // the last step completed in the testing session
+    result, // whether the test script passed or failed
+    failedSteps, // array containing any steps marked as failed by the user during the testing session
+    stepsWithMinorIssues, // array containing any steps marked as containing minor issues by the user during the testing session
+    responsesWithAttachedContent, // array of steps to which the user attached comments or images
+    submissionDate, // date the testing session was submitted
+    deleteTestingSession, // function that handles deletion of a testing session and all of its content (i.e. stored images)
+    isDeleteButtonDisabled, // whether or not the "delete testing session" button is disabled
 }) {
     const [expanded, setExpanded] = React.useState(false);
     const word = failedSteps.length > 1 ? "steps" : "step";
     const testingSessionRef = React.useRef(null);
-    // const [opacity, setOpacity] = React.useState("100%"); // TODO: remove this
-    // const [height, setHeight] = React.useState(testingSessionRef.current?.clientHeight + "px"); // TODO: remove this
-    // const [marginBottom, setMarginBottom] = React.useState("20px"); // TODO: remove this
 
+    /**
+     * Handles expansion/contraction of the card.
+     */
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-
-    const handleDeleteTestingSession = () => {
-        deleteTestingSession(testingSessionID);
-        // setTimeout(() => {
-        // setHeight(testingSessionRef.current?.clientHeight + "px");
-        // setOpacity("0%");
-        // // }, 0);
-        // setTimeout(() => {
-        //     setMarginBottom("0");
-        //     setHeight("0");
-        // }, 10);
-        // setTimeout(() => {
-        //     deleteTestingSession(testingSessionID);
-        // }, 500);
-    }
 
     return (
         <Card
             ref={testingSessionRef}
             sx={{
                 opacity: "100%",
-                // height: testingSessionRef.current?.clientHeight + "px",
-                // maxHeight: expanded ? "calc(100vh - 166.52px)" : height,
                 overflowY: "scroll",
                 borderRadius: "10px",
                 boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
@@ -90,17 +82,10 @@ function TestingSessionCard({
                                 type="submit"
                                 disabled={isDeleteButtonDisabled}>
                             </button>
-                            // <SubmitButton
-                            //     className="delete-testing-session-button"
-                            //     submitButtonText={"Delete"}
-                            //     isSubmitButtonDisabled={isDeleteButtonDisabled}
-                            //         /*handleOnClick={true}
-                            //         handleOnClickFunction={requestTestScript}*/>
-                            // </SubmitButton>
                         }
                         inactiveButtonText="Cancel"
                         displayActiveButton={true}
-                        activeButtonFunction={handleDeleteTestingSession}
+                        activeButtonFunction={() => deleteTestingSession(testingSessionID)}
                         activeButtonText="Delete"
                         dialogDescription={<p>Are you sure you want to permanently delete this testing session? This action cannot be undone.</p>}>
                     </MaterialDialog>
@@ -162,12 +147,6 @@ function TestingSessionCard({
                             <strong>Date Submitted</strong><br />
                             {submissionDate.toString()}
                         </Typography>
-                        {/* <button
-                            className="delete-testing-session-button"
-                            onClick={handleDeleteTestingSession}
-                            disabled={deleteButtonDisabled}>
-                            Delete
-                        </button> */}
                     </CardContent>
                 </Collapse>
             </div>

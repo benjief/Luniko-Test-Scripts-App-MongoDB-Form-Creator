@@ -8,26 +8,34 @@ import Collapse from '@mui/material/Collapse';
 import MaterialTextField from './MaterialTextField';
 import SubmitButton from './SubmitButton';
 import MaterialDialog from './MaterialDialog';
+
+/**
+ * Card that houses all of the fields required to create or modify a test script.
+ * @returns said card.
+ */
 function CreateOrModifyTestScriptCard({
-    setFormProps,
-    isModificationCard,
+    setFormProps, // function to handle setting form props
+    isModificationCard, // whether or not the card is being used to update a test script
     existingTestScriptName,
-    invalidTestScriptNames,
+    invalidTestScriptNames, // array containing test script names that can't be used (i.e. already exist in the database)
     existingTestScriptDescription,
     existingTestScriptPrimaryWorkstream,
     existingOwnerFirstName,
     existingOwnerLastName,
-    handleTransitionToStepsPage,
-    isAddOrModifyStepsButtonDisabled,
-    submitOrUpdateTestScript,
-    isSubmitOrUpdateButtonDisabled,
-    isCancelButtonDisabled,
-    testScriptSteps,
-    displayFadingBalls,
+    handleTransitionToStepsPage, // function to handle switching between cards (e.g. between the main test script props and test script step modification)
+    isAddOrModifyStepsButtonDisabled, // whether or not the add/modify steps button is disabled
+    submitOrUpdateTestScript, // function to handle test script submission/updating
+    isSubmitOrUpdateButtonDisabled,  // whether or not the submit (or update) button is disabled
+    isCancelButtonDisabled, // whether or not the cancel button is disabled
+    testScriptSteps, // array of existing test script steps
+    displayFadingBalls, // whether or not fading balls are displayed (to indicate that the page is writing test script information)
 }) {
     const [stepsWithoutDescription, setStepsWithoutDescription] = React.useState("");
     const formUpdated = React.useRef(false);
 
+    /**
+     * This hook used here to keep a record of step numbers that the user hasn't input a description for. These are used in a warning message, if the user decides to submit (or update) the test script with steps that are devoid of a description.
+     */
     React.useEffect(() => {
         let copyOfSteps = testScriptSteps.filter((val) => {
             return val.description.length === 0;
@@ -36,6 +44,10 @@ function CreateOrModifyTestScriptCard({
         setStepsWithoutDescription(copyOfSteps.map(obj => obj.number).join(", "));
     }, [testScriptSteps])
 
+    /**
+     * Handles changes to a card field (form prop). The corresponding field (form prop) in the page housing this card is updated with the value entered.
+     * @param {object} returnedObject - the object containing the field to be updated and the value to which that field should be updated.
+     */
     const handleOnChange = (returnedObject) => {
         setFormProps(
             prev => ({ ...prev, [returnedObject.field]: returnedObject.value })
@@ -124,6 +136,7 @@ function CreateOrModifyTestScriptCard({
                 disabled={isAddOrModifyStepsButtonDisabled}>
                 Add/Modify Steps
             </button>
+            {/* Different warning messages are displayed to the user, depending on the state of the test script's testScriptSteps array when they click on submit or update. */}
             {stepsWithoutDescription.length
                 ? <MaterialDialog
                     isDialogDisabled={isSubmitOrUpdateButtonDisabled}

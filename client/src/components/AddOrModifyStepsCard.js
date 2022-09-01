@@ -7,29 +7,36 @@ import Collapse from '@mui/material/Collapse';
 import ModifiableStep from './ModifiableStep';
 
 const expanded = true;
+
+/**
+ * Card that houses all of the fields required to create or modify test script steps.
+ * @returns said card.
+ */
 function AddOrModifyStepsCard({
-    existingSteps,
-    // addStep,
-    // isAddStepButtonDisabled,
-    isRemoveStepButtonDisabled,
-    modifyStepInfo,
-    addOrRemoveStep,
-    // removeStep,
-    setCardScrollPosition,
-    cardScrollPosition,
-    goBack,
+    existingSteps, // array of existing test script steps
+    isRemoveStepButtonDisabled, // whether or not the remove step step button is disabled
+    modifyStepInfo, // function to modify the information associated with a step
+    addOrRemoveStep, // function used to add/remove steps
+    setCardScrollPosition, // function used to set the card's vertical scroll position
+    cardScrollPosition, // number specifying the card's current vertical scroll position
+    goBack, // function that handles redirecting the user back to where they came from (less intuitive here, since we're switching cards as opposed to moving between pages)
 }) {
-    const cardRef = React.useRef(null);
+    const cardRef = React.useRef(null); // used to get/set the card's vertical scroll position (see useEffect hook below)
 
     React.useEffect(() => {
-        // console.log(cardRef.current.scrollTop);
         cardRef.current.scrollTop = cardScrollPosition;
     }, [cardRef, cardScrollPosition])
 
+    /**
+     * Sets the cardScrollPosition prop in the parent component when the user scrolls up or down.
+     */
     const handleOnScroll = () => {
         setCardScrollPosition(cardRef.current.scrollTop);
     }
 
+    /**
+     * Sets the cardScrollPosition prop in the parent component and calls goBack (in this case, switching between cards).
+     */
     const handleGoBack = () => {
         setCardScrollPosition(cardRef.current.scrollTop);
         goBack();
@@ -58,7 +65,6 @@ function AddOrModifyStepsCard({
                         <CardContent>
                             {existingSteps.length
                                 ? existingSteps.map((step) => {
-                                    // console.log(step);
                                     return <ModifiableStep
                                         key={step.number}
                                         stepNumber={step.number}
@@ -66,20 +72,12 @@ function AddOrModifyStepsCard({
                                         stepDataInputtedByUser={step.dataInputtedByUser}
                                         modifyStepInfo={modifyStepInfo}
                                         addOrRemoveStep={addOrRemoveStep}
-                                        // removeStep={removeStep}
-                                        removeDisabled={isRemoveStepButtonDisabled}
-                                    /*isNewlyAdded={step.isNewlyAdded}*/>
+                                        removeDisabled={isRemoveStepButtonDisabled}>
                                     </ModifiableStep>
                                 })
                                 : <div className="no-steps-placeholder">
                                     You haven't added any steps yet!
                                 </div>}
-                            {/* <button
-                            className="add-step-button"
-                            onClick={addStep}
-                            disabled={isAddStepButtonDisabled}>
-                            Add Step
-                        </button> */}
                         </CardContent>
                     </Collapse>
                 </div>
@@ -94,13 +92,11 @@ function AddOrModifyStepsCard({
 }
 
 AddOrModifyStepsCard.propTypes = {
-    existingSteps: PropTypes.array, // TODO: make this more specific (see CardWrapper.jsx)
+    existingSteps: PropTypes.array,
     addStep: PropTypes.func,
-    // isAddStepButtonDisabled: PropTypes.bool,
     isRemoveStepButtonDisabled: PropTypes.bool,
     modifyStepInfo: PropTypes.func,
     addOrRemoveStep: PropTypes.func,
-    // removeStep: PropTypes.func,
     setCardScrollPosition: PropTypes.func,
     cardScrollPosition: PropTypes.number,
     goBack: PropTypes.func,
@@ -109,11 +105,9 @@ AddOrModifyStepsCard.propTypes = {
 AddOrModifyStepsCard.defaultProps = {
     existingSteps: [],
     addStep: () => { },
-    // isAddStepButtonDisabled: true,
     isRemoveStepButtonDisabled: false,
     modifyStepInfo: () => { },
     addOrRemoveStep: () => { },
-    // removeStep: () => { },
     setCardScrollPosition: () => { },
     cardScrollPosition: 0,
     goBack: () => { },

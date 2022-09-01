@@ -2,16 +2,24 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import MaterialTextField from './MaterialTextField';
 
+/**
+ * Individual modifiable step that houses all necessary test script step information.
+ * @returns said modifiable step.
+ */
 function ModifiableStep({
-    stepNumber,
-    stepDescription,
-    stepDataInputtedByUser,
-    modifyStepInfo,
-    addOrRemoveStep,
-    removeDisabled,
+    stepNumber, // number of the step in the test script
+    stepDescription, // step's description
+    stepDataInputtedByUser, // step's data to be input by the user
+    modifyStepInfo, // function to handle step information modification (in the parent component)
+    addOrRemoveStep, // function to handle adding/removing a step (in the parent component)
+    removeDisabled, // whether or not the remove button for a step is disabled (this button is only disabled if this step is the last one remaining in a test script's set of steps)
 }) {
 
-    const handleModifyStepInfo = React.useCallback((returnedObject) => { // without useCallback, get new function every time the component re-renders
+    /**
+     * Sends changes to a step field back to the parent component, so that these changes can be written to this step (since its information is stored there... I'm not sure how much sense this makes, but that's how things are at the moment). 
+     * @param {object} returnedObject -  object containing the step's updated information. Only one field can be updated at a time, and so only that field is present in this object.
+     */
+    const handleModifyStepInfo = React.useCallback((returnedObject) => {
         let updatedStep = { number: stepNumber };
         if (returnedObject.field === "description") {
             updatedStep["description"] = returnedObject["value"];
@@ -19,8 +27,12 @@ function ModifiableStep({
             updatedStep["dataInputtedByUser"] = returnedObject["value"];
         }
         modifyStepInfo(updatedStep);
-    }, [modifyStepInfo, stepNumber]) // function will only be re-created when one of these dependent variables changes
+    }, [modifyStepInfo, stepNumber])
 
+    /**
+     * Calls the addOrRemoveStep function provided by the parent component, with the operation specified by the button the user clicked on, and the step number.
+     * @param {string} operation - "add" or "remove" depending on what button has been clicked on.
+     */
     const handleAddOrRemoveStep = (operation) => {
         operation === "add" ? addOrRemoveStep({ number: stepNumber }, "add") : addOrRemoveStep({ number: stepNumber }, "remove");
     }

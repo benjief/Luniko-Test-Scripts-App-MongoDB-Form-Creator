@@ -8,16 +8,25 @@ import Collapse from '@mui/material/Collapse';
 import MaterialTextField from './MaterialTextField';
 import SubmitButton from './SubmitButton';
 import MaterialDialog from './MaterialDialog';
+
+/**
+ * Card that allows users to retrieve checklist information from the database by entering a valid load sheet name. Note that the validity of a load sheet name is determined by the page that contains this card.
+ * @returns said card.
+ */
 function EnterTestScriptNameCard({
-    setFormProps,
-    requestTestScript,
-    isSubmitButtonDisabled,
-    isDeletionForm,
-    displayFadingBalls,
+    setFormProps, // function to handle setting form props
+    requestTestScript, // function to handle the user requesting a test script
+    isSubmitButtonDisabled, // whether or not the submit button is disabled
+    isDeletionForm, // whether or not this card is being used in a test script deletion form
+    displayFadingBalls, // whether or not fading balls are displayed (to indicate that the page is writing checklist information)
 }) {
     const expanded = true;
-    const invalidTestScriptNameError = useValidationErrorUpdate();
+    const invalidTestScriptNameError = useValidationErrorUpdate(); // context variable
 
+    /**
+     * Handles changes to a card field (form prop). The corresponding field (form prop) in the page housing this card is updated with the value entered. Note that because we're dealing with test script names here, we need to eliminate any white space from the user-entered string and make it lower case. This allows the string to be properly compared to test script names that already exist in the database on the page containing this card (i.e. all the strings being compared to are lower case and don't contain any outside white space).
+     * @param {object} returnedObject - the object containing the field to be updated and the value to which that field should be updated.
+     */
     const handleOnChange = (returnedObject) => {
         invalidTestScriptNameError("");
         setFormProps(
@@ -52,36 +61,11 @@ function EnterTestScriptNameCard({
                                 authenticationField={true}
                                 field={"testScriptName"}>
                             </MaterialTextField>
-                            {/* <SubmitButton
-                            className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
-                            submitButtonText={isDeletionForm ? "Delete" : "Submit"}
-                            isSubmitButtonDisabled={isSubmitButtonDisabled}
-                            displayFadingBalls={displayFadingBalls}
-                            handleOnClick={true}
-                            handleOnClickFunction={requestTestScript}>
-                        </SubmitButton> */}
-                            {/* <button
-                            className={isDeletionForm ? "delete-test-script-button" : "submit-test-script-name-button"}
-                            onClick={requestTestScript}
-                            disabled={isSubmitButtonDisabled}>
-                            {displayFadingBalls
-                                ? <div className="fading-balls-container">
-                                    <FadingBalls
-                                        className="spinner"
-                                        color="white"
-                                        width="9px"
-                                        height="9px"
-                                        duration="0.5s"
-                                    />
-                                </div>
-                                : isDeletionForm
-                                    ? "Delete"
-                                    : "Submit"}
-                        </button> */}
                         </CardContent>
                     </Collapse>
                 </div>
             </Card >
+            {/* This component uses a Material Dialog if it is being used in a deletion form. This is to warn users that deletion is irreversible. */}
             {isDeletionForm
                 ? <MaterialDialog
                     className="material-dialog-delete"

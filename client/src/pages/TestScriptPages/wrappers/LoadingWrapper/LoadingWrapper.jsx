@@ -2,17 +2,15 @@ import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import NavBar from "../../../../components/Navbar";
 import Hypnosis from "react-cssfx-loading/lib/Hypnosis";
-// import "../../../styles/TestScriptTestingPage.css";
 
+/**
+ * Component that renders while a page is loading. Essentially a spinning spiral that fits the Luniko branding theme.
+ * @returns said component.
+ */
 function LoadingWrapper({
-    // children,
-    rendering,
-    transitionElementOpacity,
-    transitionElementVisibility,
-    // activeError,
-    // alert,
-    // isValidTestScriptNameEntered,
-    // isUserCurrentlyTesting,
+    rendering, // whether or not the page is loading
+    transitionElementOpacity, // opacity of the transition element (a blank component that fades out when a page has finished loading)
+    transitionElementVisibility, // visibility of the transition element 
 }) {
     return (
         <Fragment>

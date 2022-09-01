@@ -64,7 +64,7 @@ function CreateOrModifyTestScript() {
     const navigate = useNavigate();
 
     /**
-     * Displays an alert with the correct type of error (success or error). 
+     * Displays an alert with the correct type of error. 
      * @param {string} errorType 
      */
     const handleError = useCallback((errorType) => {
@@ -103,8 +103,7 @@ function CreateOrModifyTestScript() {
         /**
          * Fetches test script names that are already stored in the database and writes them to testScriptNamesAlreadyInDB.
          */
-        const fetchTestScriptNamesAlreadyInDB = async () => {
-            console.log("fetching existing test script names");
+        const fetchTestScriptNamesAlreadyInDB = async () => { // TODO: abstract this function
             try {
                 async.current = true;
                 await Axios.get("https://test-scripts-app-creator.herokuapp.com/get-test-script-names", {
@@ -175,7 +174,7 @@ function CreateOrModifyTestScript() {
 
         /**
          * Fetches steps associated with the currently-loaded test script from the database and writes them to testScriptSteps. numStepsInTestScript is then set to the number of steps fetched.
-         * @param {string} testScriptID  - ID of the currently-loaded test script.
+         * @param {string} testScriptID - ID of the currently-loaded test script.
          */
         const fetchAndWriteTestScriptSteps = async (testScriptID) => {
             if (!async.current) {
@@ -320,7 +319,7 @@ function CreateOrModifyTestScript() {
     }, [])
 
     /**
-     * This function is mnostly here to animate a loading screen when a step is being added or removed. It is quite convoluted, but I haven't yet thought of a better way to handle this. However, it is also responsible for coordinating the calling of the specific add/remove step functions (above) with the correct indices.
+     * This function is mostly here to animate a loading screen when a step is being added or removed. It is quite convoluted, but I haven't yet thought of a better way to handle this. However, it is also responsible for coordinating the calling of the specific add/remove step functions (above) with the correct indices.
      * @param {object} stepInfo - object containing step information for the step to be removed, or the step before the step to be added (since the step to be added doesn't yet exist).
      * @param {string} operation - "add" or "remove" depending on what operation is to be carried out by this function.
      */
@@ -363,7 +362,7 @@ function CreateOrModifyTestScript() {
      * Compares the test script name entered by the user to test script names obtained by the page's primary read functions. If the entered test script name is matched against the set of valid test script names, the function returns true. If not, it returns false.
      * @returns true if the entered test script name is matched against the set of valid test script names, false otherwise.
      */
-    const validateTestScriptNameEntered = () => {
+    const validateTestScriptNameEntered = () => { // TODO: abstract this function
         for (let i = 0; i < testScriptNamesAlreadyInDB.current.length; i++) {
             let escapeRegExpMatch = formProps["testScriptName"].replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
             if (new RegExp(`(?:^|s|$)${escapeRegExpMatch}(?:^|s|$)`).test(testScriptNamesAlreadyInDB.current[i])) {

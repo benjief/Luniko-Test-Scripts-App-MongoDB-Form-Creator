@@ -4,24 +4,25 @@ import { useValidationErrorUpdate } from "../Context/ValidationErrorContext";
 import Axios from "axios";
 import LoadingWrapper from "../wrappers/LoadingWrapper";
 import AlertWrapper from "../wrappers/AlertWrapper";
-// import CardWrapper from "../wrappers/CardWrapper";
+import CardWrapper from "../wrappers/CardWrapper";
 import EnterTestScriptNameCard from "../../../components/EnterTestScriptNameCard"
-// import TestingSessionCard from "../../../components/TestingSessionCard";
 import "../../../styles/DeleteTestScript.css";
 import "../../../styles/InputComponents.css";
 import "../../../styles/CardComponents.css";
 import "../../../styles/SelectorComponents.css";
 import "../../../styles/AlertComponents.css";
-import CardWrapper from "../wrappers/CardWrapper/CardWrapper";
-// import "../../../styles/DialogComponents.css";
 
+/**
+ * This page allows users to delete test scripts from the database. Doing so will also delete any associated steps and testing sessions. Images in Google Firebase Cloud Storage that are attached to any of the testing sessions being deleted will also be removed.
+ * @returns a page housing all of the components needed to implement the above functionality.
+ */
 function DeleteTestScript() {
     const [rendering, setRendering] = useState(true);
     const [transitionElementOpacity, setTransitionElementOpacity] = useState("100%");
     const [transtitionElementVisibility, setTransitionElementVisibility] = useState("visible");
     const invalidTestScriptNameError = useValidationErrorUpdate();
     const [isDeleteTestScriptButtonDisabled, setIsDeleteTestScriptButtonDisabled] = useState(true);
-    const [formProps, setFormProps] = useState({ // TODO: rename this so you can actually use it here without it looking weird (e.g. testScriptProps)
+    const [formProps, setFormProps] = useState({
         testScriptName: "",
     });
     const [isValidTestScriptNameEntered, setIsValidTestScriptNameEntered] = useState(false);
@@ -42,6 +43,10 @@ function DeleteTestScript() {
 
     const navigate = useNavigate();
 
+    /**
+     * Displays an alert with the correct type of error. 
+     * @param {string} errorType  
+     */
     const handleError = useCallback((errorType) => {
         setIsErrorThrown(true);
         alertType.current = "error-alert";
@@ -49,19 +54,16 @@ function DeleteTestScript() {
             ? alertMessage.current = loadErrorMessage
             : alertMessage.current = deleteErrorMessage;
 
-        // Delay is set up just in case an error is generated before the is fully-displayed
-        // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
-        let delay = 0; // TODO: test this and amend if necessary
-
         if (rendering) {
             setRendering(false);
         }
 
-        setTimeout(() => {
-            setAlert(true);
-        }, delay);
+        setAlert(true);
     }, [alertType, rendering]);
 
+    /**
+     * Closes an alert that is on display and redirects the user to the app homepage.
+     */
     const handleAlertClosed = () => {
         console.log("closing alert");
         navigate("/");
@@ -69,14 +71,19 @@ function DeleteTestScript() {
     }
 
     useEffect(() => {
+        /**
+         * Calls functions that gather information required for the initial page load. Once all required information is gathered, rendering is set to false and the page is displayed.
+         */
         const runPrimaryReadAsyncFunctions = async () => {
             isDataBeingFetched.current = true;
             await fetchTestScriptNamesAlreadyInDB();
             setRendering(false);
         }
 
-        const fetchTestScriptNamesAlreadyInDB = async () => {
-            console.log("fetching existing test script names");
+        /**
+         * Fetches test script names that are already stored in the database and writes them to testScriptNamesAlreadyInDB.
+         */
+        const fetchTestScriptNamesAlreadyInDB = async () => { // TODO: abstract this function
             try {
                 async.current = true;
                 await Axios.get("https://test-scripts-app-creator.herokuapp.com/get-test-script-names", {
@@ -93,10 +100,12 @@ function DeleteTestScript() {
         }
 
         if (rendering) {
+            // runs fetch/write functions, depending on the page's state
             if (!isValidTestScriptNameEntered && !isDataBeingFetched.current) {
                 runPrimaryReadAsyncFunctions();
             }
         } else {
+            // makes page visible
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
             if (!isValidTestScriptNameEntered) {
@@ -105,15 +114,17 @@ function DeleteTestScript() {
         }
     }, [rendering, isDataBeingFetched, formProps, isValidTestScriptNameEntered, testScriptID, handleError]);
 
-    const handleDeleteTestScript = async () => { // TODO: make this more direct
+    /**
+     * When the user requests to delete a test script that has previously been written to the database, that test script's name is validated (through a call to validateTestScriptNameEntered). If the test script name entered is indeed valid, setValidTestScriptName is set to true, and functions are called to delete the test script and its associated testing sessions, before a successful deletion alert is displayed. If the test script name entered isn't valid, an error message is displayed.
+     */
+    const handleDeleteTestScript = async () => {
         if (!isValidTestScriptNameEntered) {
             if (validateTestScriptNameEntered()) {
                 setIsValidTestScriptNameEntered(true);
                 isDataBeingFetched.current = false;
-                // setRendering(true);
                 setIsDeleteTestScriptButtonDisabled(true);
                 setDisplayFadingBalls(true);
-                await runSecondaryReadAsyncFunctions(formProps["testScriptName"])
+                await runSecondaryReadAsyncFunctions(formProps["testScriptName"]);
                 for (let i = 0; i < testingSessions.current.length; i++) {
                     await deleteTestingSession(testingSessions.current[i]._id);
                 }
@@ -126,7 +137,11 @@ function DeleteTestScript() {
     }
 
     // adapted from https://stackoverflow.com/questions/60440139/check-if-a-string-contains-exact-match
-    const validateTestScriptNameEntered = () => {
+    /**
+     * Compares the test script name entered by the user to test script names obtained by the page's primary read functions. If the entered test script name is matched against the set of valid test script names, the function returns true. If not, it returns false.
+     * @returns true if the entered test script name is matched against the set of valid test script names, false otherwise.
+     */
+    const validateTestScriptNameEntered = () => { // TODO: abstract this function
         for (let i = 0; i < testScriptNamesAlreadyInDB.current.length; i++) {
             let escapeRegExpMatch = formProps["testScriptName"].replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
             if (new RegExp(`(?:^|s|$)${escapeRegExpMatch}(?:^|s|$)`).test(testScriptNamesAlreadyInDB.current[i])) {
@@ -136,13 +151,21 @@ function DeleteTestScript() {
         return false;
     }
 
+    /**
+     * Calls functions that fetch and write information required for deleting a test script from the database. 
+     * @param {string} testScriptName - the test script name corresponding to the test script being deleted.
+     */
     const runSecondaryReadAsyncFunctions = async (testScriptName) => {
         isDataBeingFetched.current = true;
-        await fetchTestScriptID(testScriptName);
-        await fetchTestScriptTestingSessions();
+        await fetchAndWriteTestScriptID(testScriptName);
+        await fetchAndWriteTestScriptTestingSessions();
     }
 
-    const fetchTestScriptID = async (testScriptName) => {
+    /**
+     * Fetches the ID of the test script to be deleted and writes it to testScriptID.
+     * @param {string} testScriptName - the test script name corresponding to the test script being deleted.
+     */
+    const fetchAndWriteTestScriptID = async (testScriptName) => {
         try {
             async.current = true;
             await Axios.get(`https://test-scripts-app-creator.herokuapp.com/get-test-script/${testScriptName}`, {
@@ -158,14 +181,16 @@ function DeleteTestScript() {
         }
     }
 
-    const fetchTestScriptTestingSessions = async () => {
+    /**
+     * Fetches testing sessions attached to the test script to be deleted (using its previously-fetched and written ID) and writes them to testingSessions.
+     */
+    const fetchAndWriteTestScriptTestingSessions = async () => {
         try {
             async.current = true;
             await Axios.get(`https://test-scripts-app-creator.herokuapp.com/get-test-script-testing-sessions/${testScriptID.current}`, {
                 timeout: 5000
             })
                 .then(res => {
-                    // console.log(res.data);
                     testingSessions.current = res.data;
                     async.current = false;
                 })
@@ -175,6 +200,10 @@ function DeleteTestScript() {
         }
     }
 
+    /**
+     * Deletes the specified testing session from the database.
+     * @param {string} testingSessionID - ID of the testing session to be deleted.
+     */
     const deleteTestingSession = async (testingSessionID) => {
         if (!async.current) {
             try {
@@ -183,7 +212,6 @@ function DeleteTestScript() {
                     timeout: 5000
                 })
                     .then(res => {
-                        console.log(res);
                         async.current = false;
                     });
             } catch (e) {
@@ -193,6 +221,9 @@ function DeleteTestScript() {
         }
     }
 
+    /**
+     * Deletes the test script specified by the user from the database.
+     */
     const deleteTestScript = async () => {
         if (!async.current) {
             try {
@@ -237,24 +268,6 @@ function DeleteTestScript() {
                     displayFadingBalls={displayFadingBalls}>
                 </EnterTestScriptNameCard>
             </CardWrapper>
-            {/* {isErrorThrown
-                ? <div></div>
-                : <div className="enter-valid-test-script-name">
-                    <div className="enter-valid-test-script-name-container">
-                        <div className="page-message">
-                            Enter the Name of the Test Script to Delete Below:
-                        </div>
-                        <div className="enter-valid-test-script-name-card">
-                            <EnterTestScriptNameCard
-                                setFormProps={setFormProps}
-                                requestTestScript={handleDeleteTestScript}
-                                isSubmitButtonDisabled={isDeleteTestScriptButtonDisabled}
-                                isDeletionForm={true}
-                                displayFadingBalls={displayFadingBalls}>
-                            </EnterTestScriptNameCard>
-                        </div>
-                    </div>
-                </div>} */}
         </Fragment >
     )
 };

@@ -5,24 +5,35 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
 import TestingSessionCard from './TestingSessionCard';
+
+/**
+ * Card that displays all testing sessions submitted for a particular test script.
+ * @returns said card.
+ */
 function ViewTestingSessionsCard({
-    testingSessions,
-    async,
-    deleteTestingSession,
-    setCardScrollPosition,
-    cardScrollPosition,
+    testingSessions, // array containing all submitted testing sessions
+    async, // whether or not an asynchronous call is being made by the parent component
+    deleteTestingSession, // function that handles deletion of a testing session and all of its content (i.e. stored images)
+    setCardScrollPosition, // function used to set the card's vertical scroll position
+    cardScrollPosition, // number specifying the card's current vertical scroll position
 }) {
     const expanded = true;
-    const cardRef = React.useRef(null);
+    const cardRef = React.useRef(null); // used to get/set the card's vertical scroll position (see useEffect hook below)
 
     React.useEffect(() => {
         cardRef.current.scrollTop = cardScrollPosition;
     }, [cardRef, cardScrollPosition])
 
+    /**
+     * Sets the cardScrollPosition prop in the parent component when the user scrolls up or down.
+     */
     const handleOnScroll = () => {
         setCardScrollPosition(cardRef.current.scrollTop);
     }
 
+    /**
+     * Redirects the user to the test script name entry form if the card's back button is clicked.
+     */
     const handleGoBack = () => {
         window.location.reload();
     }
@@ -49,11 +60,11 @@ function ViewTestingSessionsCard({
                     />
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
+                            {/* Testing session information is mapped to TestingSessionCard components. */}
                             {testingSessions.length
                                 ? testingSessions.map((testingSession) => {
                                     return <div className="testing-session-card" key={new Date(testingSession.updatedAt)}>
                                         <TestingSessionCard
-                                            // key={new Date(testingSession.updatedAt)}
                                             testingSessionID={testingSession._id}
                                             submitter={testingSession.tester}
                                             completed={testingSession.complete}

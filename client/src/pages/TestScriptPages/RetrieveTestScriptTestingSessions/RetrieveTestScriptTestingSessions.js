@@ -7,7 +7,6 @@ import AlertWrapper from "../wrappers/AlertWrapper";
 import CardWrapper from "../wrappers/CardWrapper";
 import EnterTestScriptNameCard from "../../../components/EnterTestScriptNameCard"
 import ViewTestingSessionsCard from "../../../components/ViewTestingSessionsCard";
-// import TestingSessionCard from "../../../components/TestingSessionCard";
 import "../../../styles/RetrieveTestScriptResults.css";
 import "../../../styles/InputComponents.css";
 import "../../../styles/CardComponents.css";
@@ -15,19 +14,22 @@ import "../../../styles/SelectorComponents.css";
 import "../../../styles/AlertComponents.css";
 import "../../../styles/DialogComponents.css";
 
+/**
+ * This page allows users to view details pertaining to all of the testing sessions submitted for a test script stored in the database. If no testing sessions have yet been submitted for a particular test script, a message stating this will be displayed before the user is redirected back to the application landing page.
+ * @returns a page housing all of the components needed to implement the above functionality.
+ */
 function RetrieveTestScriptTestingSessions() {
     const [rendering, setRendering] = useState(true);
     const [transitionElementOpacity, setTransitionElementOpacity] = useState("100%");
     const [transtitionElementVisibility, setTransitionElementVisibility] = useState("visible");
     const invalidTestScriptNameError = useValidationErrorUpdate();
     const [isRequestTestScriptButtonDisabled, setIsRequestTestScriptButtonDisabled] = useState(true);
-    const [formProps, setFormProps] = useState({ // TODO: rename this so you can actually use it here without it looking weird (e.g. testScriptProps)
+    const [formProps, setFormProps] = useState({
         testScriptName: "",
     });
     const [isValidTestScriptNameEntered, setIsValidTestScriptNameEntered] = useState(false);
     const [cardScrollPosition, setCardScrollPosition] = useState(0);
     const testScriptID = useRef("");
-    // const [testingSessions, setTestingSessions] = useState([]);
     const testingSessions = useRef([]);
     const [numTestingSessions, setNumTestingSessions] = useState(testingSessions.current.length);
     const async = useRef(false);
@@ -39,49 +41,50 @@ function RetrieveTestScriptTestingSessions() {
     const isDataBeingFetched = useRef(false);
     const [pageMessageOpacity, setPageMessageOpacity] = useState("100%");
     const [pageContentOpacity, setPageContentOpacity] = useState("100%");
-    // const [displayFadingBalls, setDisplayFadingBalls] = useState(false);
 
     const loadErrorMessage = "Apologies! We've encountered an error. Please attempt to re-load this page.";
     const deleteErrorMessage = "Apologies! We were unable to remove the requested testing session. Please try again.";
 
     const navigate = useNavigate();
 
+    /**
+     * Displays an alert with the correct type of error. 
+     * @param {string} errorType 
+     */
     const handleError = useCallback((errorType) => {
         setIsErrorThrown(true);
-        // alertType.current = "error-alert";
         alertMessage.current = loadErrorMessage;
         errorType === "r"
-            ? alertMessage.current = loadErrorMessage
-            : alertMessage.current = deleteErrorMessage;
-
-        // Delay is set up just in case an error is generated before the is fully-displayed
-        // let delay = transitionElementOpacity === "100%" ? 500 : rendering ? 500 : 0;
-        let delay = 0; // TODO: test this and amend if necessary
+            ? alertMessage.current = loadErrorMessage // read error message
+            : alertMessage.current = deleteErrorMessage; // deletion error message
 
         if (rendering) {
             setRendering(false);
         }
 
-        setTimeout(() => {
-            setAlert(true);
-        }, delay);
+        setAlert(true);
     }, [rendering]);
 
     const handleAlertClosed = () => {
         console.log("closing alert");
         navigate("/");
-        setIsErrorThrown(false); // TODO: test this... is it needed anymore?
+        setIsErrorThrown(false);
     }
 
     useEffect(() => {
+        /**
+         * Calls functions that gather information required for the initial page load. Once all required information is gathered, rendering is set to false and the page is displayed.
+         */
         const runPrimaryReadAsyncFunctions = async () => {
             isDataBeingFetched.current = true;
             await fetchTestScriptNamesAlreadyInDB();
             setRendering(false);
         }
 
-        const fetchTestScriptNamesAlreadyInDB = async () => {
-            console.log("fetching existing test script names");
+        /**
+         * Fetches test script names that are already stored in the database and writes them to testScriptNamesAlreadyInDB.
+         */
+        const fetchTestScriptNamesAlreadyInDB = async () => { // TODO: abstract this function
             try {
                 async.current = true;
                 await Axios.get("https://test-scripts-app-creator.herokuapp.com/get-test-script-names", {
@@ -97,14 +100,22 @@ function RetrieveTestScriptTestingSessions() {
             }
         }
 
+        /**
+         * Calls functions that fetch and write information required for displaying testing sessions associated with a test script.
+         * @param {string} testScriptName - the test script name corresponding to the test script for which testing session information is being fetched.
+         */
         const runSecondaryReadAsyncFunctions = async (testScriptName) => {
             isDataBeingFetched.current = true;
-            await fetchTestScriptID(testScriptName);
-            await fetchTestScriptTestingSessions();
+            await fetchAndWriteTestScriptNameAndID(testScriptName);
+            await fetchAndWriteTestScriptTestingSessions();
             setRendering(false);
         }
 
-        const fetchTestScriptID = async (testScriptName) => {
+        /**
+         * Fetches the ID and properly-capitalized name of the test script for which testing session information is being retrieved and writes it to testScriptID. Test scripts are stored in the database with a lowercase name attribute and a properly-capitalized name attribute ("properly capitalized" meaning exactly how the user entered the name).
+         * @param {string} testScriptName - the (all lowercase) test script name corresponding to the test script for which testing session information is being retrieved.
+         */
+        const fetchAndWriteTestScriptNameAndID = async (testScriptName) => {
             try {
                 async.current = true;
                 await Axios.get(`https://test-scripts-app-creator.herokuapp.com/get-test-script/${testScriptName}`, {
@@ -125,16 +136,18 @@ function RetrieveTestScriptTestingSessions() {
             }
         }
 
-        const fetchTestScriptTestingSessions = async () => {
+        /**
+         * Fetches testing sessions associated with the currently-loaded test script from the database and writes them to testingSessions. numTestingSessions is then set to the number of sessions fetched. This prop is used to determine when to redirect the user back to the application landing page (i.e. if no testing sessions are available to view for a particular test script).
+         * @param {string} testScriptID - ID of the currently-loaded test script.
+         */
+        const fetchAndWriteTestScriptTestingSessions = async () => {
             try {
                 async.current = true;
                 await Axios.get(`https://test-scripts-app-creator.herokuapp.com/get-test-script-testing-sessions/${testScriptID.current}`, {
                     timeout: 5000
                 })
                     .then(res => {
-                        // console.log(res.data);
                         async.current = false;
-                        // setTestingSessions([...res.data]);
                         testingSessions.current = [...res.data];
                         setNumTestingSessions(testingSessions.current.length);
                     })
@@ -145,6 +158,7 @@ function RetrieveTestScriptTestingSessions() {
         }
 
         if (rendering) {
+            // runs fetch/write functions, depending on the page's state
             if (!isValidTestScriptNameEntered && !isDataBeingFetched.current) {
                 runPrimaryReadAsyncFunctions();
             } else if (isValidTestScriptNameEntered) {
@@ -153,6 +167,7 @@ function RetrieveTestScriptTestingSessions() {
                 }
             }
         } else {
+            // makes page visible
             setTransitionElementOpacity("0%");
             setTransitionElementVisibility("hidden");
             if (!isValidTestScriptNameEntered) {
@@ -166,7 +181,10 @@ function RetrieveTestScriptTestingSessions() {
         }
     }, [rendering, isDataBeingFetched, formProps, isValidTestScriptNameEntered, testScriptID, numTestingSessions, navigate, handleError]);
 
-    const handleRequestTestScript = () => { // TODO: make this more direct
+    /**
+     * When the user requests a test script name that has previously been written to the database, that test script name is validated (through a call to validateTestScriptNameEntered). If the test script name entered is indeed valid, setValidTestScriptName is set to true, as is rendering, and the "request test script" button is disabled. Then, the useEffect hook carries out secondary read async functions to fetch/write all of the necessary testing session information to the page. If the test script name entered isn't valid, an error message is displayed.
+     */
+    const handleRequestTestScript = () => {
         if (!isValidTestScriptNameEntered) {
             if (validateTestScriptNameEntered()) {
                 setIsValidTestScriptNameEntered(true);
@@ -180,7 +198,11 @@ function RetrieveTestScriptTestingSessions() {
     }
 
     // adapted from https://stackoverflow.com/questions/60440139/check-if-a-string-contains-exact-match
-    const validateTestScriptNameEntered = () => {
+    /**
+     * Compares the test script name entered by the user to test script names obtained by the page's primary read functions. If the entered test script name is matched against the set of valid test script names, the function returns true. If not, it returns false.
+     * @returns true if the entered test script name is matched against the set of valid test script names, false otherwise.
+     */
+    const validateTestScriptNameEntered = () => { // TODO: abstract this function
         for (let i = 0; i < testScriptNamesAlreadyInDB.current.length; i++) {
             let escapeRegExpMatch = formProps["testScriptName"].replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
             if (new RegExp(`(?:^|s|$)${escapeRegExpMatch}(?:^|s|$)`).test(testScriptNamesAlreadyInDB.current[i])) {
@@ -190,6 +212,10 @@ function RetrieveTestScriptTestingSessions() {
         return false;
     }
 
+    /**
+     * Deletes the specified testing session from the database. A series of timeouts are set to animate a loading screen when a testing session is being removed. A call to updateTestingSessionsAfterRemoval is made once a testing session has been deleted.
+     * @param {string} testingSessionID - ID of the testing session to be deleted.
+     */
     const deleteTestingSession = (testingSessionID) => {
         if (!async.current) {
             try {
@@ -201,11 +227,13 @@ function RetrieveTestScriptTestingSessions() {
                         timeout: 5000
                     })
                         .then(res => {
-                            console.log(res);
                             updateTestingSessionsAfterRemoval(testingSessionID);
-                            // setDisplayFadingBalls(false);
+                        })
+                        .catch(e => {
+                            console.log("error caught:", e)
+                            handleError("d");
                         });
-                    updateTestingSessionsAfterRemoval(testingSessionID);
+                    // updateTestingSessionsAfterRemoval(testingSessionID);
                 }, 300);
             } catch (e) {
                 console.log(e);
@@ -214,6 +242,10 @@ function RetrieveTestScriptTestingSessions() {
         }
     }
 
+    /**
+     * Removes a testing session from the testingSessions array.
+     * @param {string} testingSessionID - ID of the testing session to be removed from the testingSessions array.
+     */
     const filterTestingSessions = (testingSessionID) => {
         let copyOfTestingSessions = testingSessions.current.filter((val) => {
             return val._id !== testingSessionID;
@@ -222,6 +254,10 @@ function RetrieveTestScriptTestingSessions() {
         setNumTestingSessions(testingSessions.current.length);
     }
 
+    /**
+     * Coordinates removal of the deleted testing session with an animated message housed at the top of the page. If no more testing sessions are available to view for the currently-loaded test script (i.e. the user has deleted all of them), a message is displayed informing the user of this, and they are redirected back to the application landing page. This function is responsible for fading the page message in and out at intervals that make the transition look somewhat presentable.
+     * @param {string} testingSessionID - ID of the testing session that has been deleted from the database (through a previous call to deleteTestingSession).
+     */
     const updateTestingSessionsAfterRemoval = useCallback((testingSessionID) => {
         setTimeout(() => {
             setPageContentOpacity("0%");

@@ -5,47 +5,54 @@ import DialogContent from '@mui/material/DialogContent';
 import Hypnosis from 'react-cssfx-loading/lib/Hypnosis';
 import '../styles/DialogComponents.css';
 
+/**
+ * Dialog button/popup combination, used specifically for displaying images. Customized from the original Material UI component that can be found here: https://mui.com/material-ui/react-dialog/.
+ * @returns said dialog.
+ */
 function MaterialImageDialog({
-    imageSource,
+    imageSource, // image source path
 }) {
     const [open, setOpen] = React.useState(false);
     const [rendering, setRendering] = React.useState(true);
     const [imageOpacity, setImageOpacity] = React.useState("0%");
     const [imageVisibility, setImageVisibility] = React.useState("hidden");
 
+    /**
+     * Prevents the image from being displayed if it is still being retrieved/loaded (this should be the case, but it doesn't always work for some reason).
+     */
     React.useEffect(() => {
         if (!rendering) {
-            // setTimeout(() => {
             setImageOpacity("100%");
             setImageVisibility("visible");
-            // }, 50);
         } else {
             setImageOpacity("0%");
             setImageVisibility("hidden");
         }
     }, [rendering, setImageOpacity, setImageVisibility]);
 
+    /**
+     * Opens the image dialog and sets rendering to false after one second.
+     */
     const handleClickOpen = () => {
         setOpen(true);
         setTimeout(() => {
             setRendering(false);
-            // setImageOpacity("100%");
-            // setImageVisibility("visible");
         }, 1000);
     };
 
+    /** 
+     * Closes the image dialog and sets rendering back to true for the next time the image is opened.
+    */
     const handleClose = () => {
         setOpen(false);
         setTimeout(() => {
-            // setImageOpacity("0%");
-            // setImageVisibility("hidden");
             setRendering(true);
         }, 200);
     };
 
     return (
         <span
-            className="image-dialog-container"> {/* TODO: remove unnecessary className attributes */}
+            className="image-dialog-container">
             <button
                 className="image-dialog-button"
                 onClick={handleClickOpen}>
@@ -54,11 +61,10 @@ function MaterialImageDialog({
             <Dialog
                 className="image-dialog"
                 open={open}
-                onClose={handleClose}
-            >
+                onClose={handleClose}>
                 <DialogContent>
                     <div className="image-loading-spinner"
-                        style={{ opacity: rendering ? "100%" : "0%", display: rendering ? "visible" : "hidden" }} >
+                        style={{ opacity: rendering ? "100%" : "0%", display: rendering ? "visible" : "hidden" }}>
                         <Hypnosis
                             className="spinner"
                             color="var(--lunikoOrange)"
