@@ -39,7 +39,7 @@ app.post("/add-test-script", async (req, res) => {
 
 app.get("/get-test-script-names", async (req, res) => {
     try {
-        console.log("test");
+        // console.log("test");
         const testScriptNames = await TestScript.find(
             {},
             { "name_lowercase": 1, "_id": 0 }
@@ -52,7 +52,7 @@ app.get("/get-test-script-names", async (req, res) => {
 
 app.get("/get-test-script/:testScriptName", async (req, res) => {
     const testScriptName = req.params.testScriptName;
-    console.log("fetching", testScriptName);
+    // console.log("fetching", testScriptName);
     try {
         const testScript = await TestScript.findOne(
             { name_lowercase: testScriptName },

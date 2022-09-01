@@ -15,7 +15,6 @@ function MaterialAlert({
     handleAlertClosed, // function that handles what to do when the alert is closed (either by a timeout or by the user)
     className,
 }) {
-
     // X icon - closes the alert
     const action = (
         <React.Fragment>

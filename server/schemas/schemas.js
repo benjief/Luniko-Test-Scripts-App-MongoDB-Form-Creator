@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// step schema
 const step = new mongoose.Schema({
     testScriptID: {
         type: mongoose.Schema.Types.ObjectId,
@@ -22,6 +23,7 @@ const step = new mongoose.Schema({
     }
 });
 
+// testing session schema
 const testingSession = new mongoose.Schema({
     testScriptID: {
         type: mongoose.Schema.Types.ObjectId,
@@ -57,6 +59,7 @@ const testingSession = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+// step response schema
 const stepResponse = new mongoose.Schema({
     sessionID: {
         type: mongoose.Schema.Types.ObjectId,
@@ -84,6 +87,7 @@ const stepResponse = new mongoose.Schema({
     }
 });
 
+// test script schema
 const testScript = new mongoose.Schema({
     name: {
         type: String,
@@ -113,6 +117,8 @@ const testScript = new mongoose.Schema({
     },
 }, { timestamps: true });
 
+
+// ensures that any steps associated with a test script being deleted from the database are also removed
 testScript.pre('deleteOne', function (next) {
     console.log("deleting steps associated with:", this.getQuery()._id);
     Step.deleteMany({ testScriptID: this.getQuery()._id }).exec();
@@ -120,14 +126,17 @@ testScript.pre('deleteOne', function (next) {
     next();
 });
 
+
+// ensures that any step responses associated with a testing session being deleted from the database are also removed
 testingSession.pre('deleteOne', function (next) {
     StepResponse.deleteMany({ sessionID: this.getQuery()._id }).exec();
     next();
 })
 
-
+// step numbers should be unique when scoped to a testScriptID (e.g. there shouldn't be miultiple step 1's for any particular test script)
 step.index(
-    { testScript: 1, number: 1 }
+    { testScriptID: 1, number: 1 },
+    { unique: true }
 );
 
 const Step = mongoose.model("step", step);
