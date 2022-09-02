@@ -58,7 +58,7 @@ function EnterTestScriptNameCard({
                                 label="Test Script Name"
                                 inputValue={handleOnChange}
                                 type="text"
-                                authenticationField={true}
+                                isAuthenticationField={true}
                                 field={"testScriptName"}>
                             </MaterialTextField>
                         </CardContent>

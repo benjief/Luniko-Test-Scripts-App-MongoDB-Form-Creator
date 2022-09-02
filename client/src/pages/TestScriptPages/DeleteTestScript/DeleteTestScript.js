@@ -51,8 +51,8 @@ function DeleteTestScript() {
         setIsErrorThrown(true);
         alertType.current = "error-alert";
         errorType === "r"
-            ? alertMessage.current = loadErrorMessage
-            : alertMessage.current = deleteErrorMessage;
+            ? alertMessage.current = loadErrorMessage // read error message
+            : alertMessage.current = deleteErrorMessage; // deletion error message
 
         if (rendering) {
             setRendering(false);
