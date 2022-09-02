@@ -176,7 +176,7 @@ function RetrieveTestScriptTestingSessions() {
             if (testScriptID.current.length && !numTestingSessions) {
                 setTimeout(() => {
                     navigate("/");
-                }, 3000)
+                }, 1000)
             }
         }
     }, [rendering, isDataBeingFetched, formProps, isValidTestScriptNameEntered, testScriptID, numTestingSessions, navigate, handleError]);
