@@ -182,7 +182,7 @@ function RetrieveTestScriptTestingSessions() {
     }, [rendering, isDataBeingFetched, formProps, isValidTestScriptNameEntered, testScriptID, numTestingSessions, navigate, handleError]);
 
     /**
-     * When the user requests a test script name that has previously been written to the database, that test script name is validated (through a call to validateTestScriptNameEntered). If the test script name entered is indeed valid, setValidTestScriptName is set to true, as is rendering, and the "request test script" button is disabled. Then, the useEffect hook carries out secondary read async functions to fetch/write all of the necessary testing session information to the page. If the test script name entered isn't valid, an error message is displayed.
+     * When the user requests a test script name that has previously been written to the database, that test script name is validated (through a call to validateTestScriptNameEntered). If the test script name entered is indeed valid, isValidTestScriptNameEntered is set to true, as is rendering, and the "request test script" button is disabled. Then, the useEffect hook carries out secondary read async functions to fetch/write all of the necessary testing session information to the page. If the test script name entered isn't valid, an error message is displayed.
      */
     const handleRequestTestScript = () => {
         if (!isValidTestScriptNameEntered) {

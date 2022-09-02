@@ -115,7 +115,7 @@ function DeleteTestScript() {
     }, [rendering, isDataBeingFetched, formProps, isValidTestScriptNameEntered, testScriptID, handleError]);
 
     /**
-     * When the user requests to delete a test script that has previously been written to the database, that test script's name is validated (through a call to validateTestScriptNameEntered). If the test script name entered is indeed valid, setValidTestScriptName is set to true, and functions are called to delete the test script and its associated testing sessions, before a successful deletion alert is displayed. If the test script name entered isn't valid, an error message is displayed.
+     * When the user requests to delete a test script that has previously been written to the database, that test script's name is validated (through a call to validateTestScriptNameEntered). If the test script name entered is indeed valid, isValidTestScriptNameEntered is set to true, and functions are called to delete the test script and its associated testing sessions, before a successful deletion alert is displayed. If the test script name entered isn't valid, an error message is displayed.
      */
     const handleDeleteTestScript = async () => {
         if (!isValidTestScriptNameEntered) {
@@ -131,7 +131,7 @@ function DeleteTestScript() {
                 await deleteTestScript(testScriptID.current);
                 setAlert(true);
             } else {
-                invalidTestScriptNameError("Invalid test script name");
+                invalidTestScriptNameError("Invalid test script name"); // context variable
             }
         }
     }
