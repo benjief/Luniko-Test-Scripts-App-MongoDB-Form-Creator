@@ -59,7 +59,7 @@ function CreateOrModifyTestScriptCard({
         <div>
             <Card
                 sx={{
-                    minHeight: "calc(100vh - 336.52px)",
+                    maxHeight: "calc(100vh - 336.52px)",
                     overflowY: "scroll",
                     borderRadius: "10px",
                     boxShadow: "2px 2px 6px rgba(43, 43, 43, 0.6)",
